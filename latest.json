@@ -1,0 +1,19 @@
+{
+  "id": "2026-04-07T20-44-59-029Z-premium-marketing-landing-page-for-s",
+  "createdAt": "2026-04-07T20:44:59.032Z",
+  "prompt": "Premium marketing landing page for StencilMaker AI tattoo stencil app — Cupertino meets high-end tattoo studio aesthetic",
+  "mode": null,
+  "url": null,
+  "viewport": "desktop",
+  "repoRoot": "/home/bryan/StencilMakerWebsite",
+  "cwd": "/home/bryan/StencilMakerWebsite",
+  "requestPath": "/home/bryan/StencilMakerWebsite/.aidesigner/runs/2026-04-07T20-44-59-029Z-premium-marketing-landing-page-for-s/request.json",
+  "repoContextPath": "/home/bryan/StencilMakerWebsite/.aidesigner/runs/2026-04-07T20-44-59-029Z-premium-marketing-landing-page-for-s/repo-context.json",
+  "designHtmlPath": "/home/bryan/StencilMakerWebsite/.aidesigner/runs/2026-04-07T20-44-59-029Z-premium-marketing-landing-page-for-s/design.html",
+  "previewPath": null,
+  "previewError": "Preview rendering requires puppeteer. Install it in the repo or alongside @aidesigner/agent-skills.",
+  "parentRunId": null,
+  "usage": null,
+  "transport": "mcp",
+  "remoteRunId": "588c412b-f311-4e37-8ca8-eaa2cb0b5a71"
+}
