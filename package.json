@@ -1,0 +1,40 @@
+{
+  "name": "stencilmaker-website",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "StencilMaker marketing site — Astro 5 + Tailwind v4, deployed to Cloudflare Pages.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "preview:cf": "astro build && wrangler pages dev ./dist --compatibility-date=2026-05-27",
+    "deploy": "astro build && wrangler pages deploy ./dist --project-name=stencilmaker",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.5.0",
+    "@astrojs/sitemap": "^3.4.0",
+    "astro": "^5.10.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@tailwindcss/vite": "^4.1.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.6.0",
+    "wrangler": "^4.20.0"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": ">=20.18.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
+  }
+}

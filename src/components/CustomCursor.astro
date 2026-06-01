@@ -1,0 +1,35 @@
+<div
+  class="hidden lg:block fixed w-8 h-8 rounded-full border border-paper/30 pointer-events-none z-[100] mix-blend-difference transition-transform duration-100 ease-out"
+  id="custom-cursor"
+  style="transform: translate(-50%, -50%)"
+  aria-hidden="true"
+>
+</div>
+
+<script>
+  const cursor = document.getElementById("custom-cursor");
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  if (cursor && !reduced) {
+    document.addEventListener("mousemove", (e) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+
+    const clickables = document.querySelectorAll<HTMLElement>(
+      "a, button, .cursor-pointer",
+    );
+    clickables.forEach((el) => {
+      el.addEventListener(
+        "mouseenter",
+        () => (cursor.style.transform = "translate(-50%, -50%) scale(1.5)"),
+      );
+      el.addEventListener(
+        "mouseleave",
+        () => (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
+      );
+    });
+  }
+</script>

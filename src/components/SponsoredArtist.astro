@@ -1,0 +1,158 @@
+---
+// Sponsored Artist — paid partner spotlight.
+// Split layout: framed portrait (with an orbiting indigo glow ring) on the
+// left, bio + links on the right. Scroll-reveals on entrance.
+const artist = {
+  name: "Bruno Moretti",
+  studio: "LONG LIVE TATTOO COLLECTIVE // DENVER",
+  image: "/gallery/bruno-moretti.jpg",
+  imageAlt:
+    "Portrait of Bruno Moretti, black-and-grey tattoo artist, seated among his framed dark-art prints",
+  bioLead:
+    "Argentina-born, Denver-based — tattooing since 2010. Large-scale black-and-grey freehand dark art where realism bleeds into the surreal, terror, and horror.",
+  bioQuote:
+    "After more than a decade, I still work with the same passion as when I started.",
+  tags: ["Black & Grey", "Freehand", "Dark Realism"],
+  website: "https://www.brunomorettitattoo.com",
+  instagram: "https://www.instagram.com/brunomoretti.tattoo/",
+} as const;
+---
+
+<section
+  id="sponsored-artist"
+  class="w-full py-32 bg-ink border-t border-ash/30 overflow-hidden relative"
+>
+  <div
+    class="max-w-7xl mx-auto px-8 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center"
+  >
+    <!-- Portrait + orbiting glow ring -->
+    <div class="lg:col-span-5 sa-reveal">
+      <div class="relative w-full max-w-sm mx-auto lg:mx-0">
+        <div
+          class="absolute -inset-4 rounded-sm blur-2xl opacity-50 sa-ring"
+          aria-hidden="true"
+        >
+        </div>
+
+        <div
+          class="relative aspect-[3/4] overflow-hidden bg-obsidian gallery-card group"
+        >
+          <img
+            src={artist.image}
+            alt={artist.imageAlt}
+            width="600"
+            height="800"
+            class="w-full h-full object-cover image-breathe opacity-90"
+            loading="lazy"
+            decoding="async"
+          />
+          <div
+            class="absolute inset-0 border border-ash/0 group-hover:border-stencil/50 transition-colors duration-500 m-4"
+          >
+            <div
+              class="absolute top-0 left-0 w-2 h-2 border-t border-l border-stencil opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+            </div>
+            <div
+              class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-stencil opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bio + links -->
+    <div
+      class="lg:col-span-7 flex flex-col gap-7 sa-reveal"
+      style="transition-delay: 120ms"
+    >
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 bg-obsidian border border-ash/50 rounded-full w-fit"
+      >
+        <div class="w-2 h-2 rounded-full bg-stencil animate-pulse"></div>
+        <span
+          class="text-[10px] uppercase font-mono tracking-widest text-neutral-400"
+        >
+          Sponsored Artist
+        </span>
+      </div>
+
+      <div>
+        <h2
+          class="font-display text-4xl md:text-6xl font-bold leading-none tracking-tight"
+        >
+          {artist.name}
+        </h2>
+        <p
+          class="text-xs text-neutral-500 font-mono tracking-widest mt-4"
+        >
+          {artist.studio}
+        </p>
+      </div>
+
+      <p class="font-sans text-neutral-400 text-lg leading-relaxed max-w-2xl">
+        {artist.bioLead}{" "}
+        <span class="text-neutral-300 italic">"{artist.bioQuote}"</span>
+      </p>
+
+      <div class="flex flex-wrap gap-2">
+        {
+          artist.tags.map((t) => (
+            <span class="text-[10px] uppercase font-mono tracking-widest text-neutral-400 border border-ash/50 px-3 py-1.5">
+              {t}
+            </span>
+          ))
+        }
+      </div>
+
+      <div class="flex items-center gap-4 mt-2">
+        <a
+          href={artist.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center gap-3 bg-paper text-obsidian px-6 py-4 text-sm font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors shadow-lg"
+        >
+          View Portfolio
+          <i
+            class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            aria-hidden="true"></i>
+        </a>
+        <a
+          href={artist.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${artist.name} on Instagram`}
+          class="w-12 h-12 rounded-full border border-ash flex items-center justify-center hover:bg-paper hover:text-obsidian transition-colors"
+        >
+          <i class="ph ph-instagram-logo text-xl" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // One-shot scroll reveal. Only arm the effect when motion is allowed and the
+  // IntersectionObserver API exists — otherwise content stays visible.
+  const prefersReduced = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const items = document.querySelectorAll<HTMLElement>(".sa-reveal");
+
+  if (!prefersReduced && "IntersectionObserver" in window && items.length) {
+    items.forEach((el) => el.classList.add("is-armed"));
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 },
+    );
+    items.forEach((el) => io.observe(el));
+  }
+</script>

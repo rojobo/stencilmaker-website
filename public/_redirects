@@ -1,0 +1,11 @@
+# Cloudflare Pages redirects.
+# Docs: https://developers.cloudflare.com/pages/configuration/redirects/
+
+# Legacy paths from the pre-Astro single-file site.
+/site.html        /         301
+/site             /         301
+
+# Canonical host: redirect bare/www variants to the apex.
+# (Configure the apex+www routing in the Pages dashboard;
+# these are kept here as fallbacks if you ever serve from another host.)
+# https://www.thestencilmaker.com/*   https://thestencilmaker.com/:splat   301!

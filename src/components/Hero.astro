@@ -1,0 +1,70 @@
+---
+import { SITE } from "@/consts";
+---
+
+<section
+  id="vision"
+  class="relative w-full min-h-[100svh] flex flex-col justify-center py-32 px-8 md:px-12 lg:px-24 overflow-hidden"
+>
+  <!-- Background: dark with radial glow anchored to the graphic position -->
+  <div class="absolute inset-0 z-0 bg-obsidian">
+    <div
+      class="absolute top-1/2 right-[5%] -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.10)_0%,transparent_70%)]"
+    >
+    </div>
+  </div>
+
+  <!-- Hero Graphic: positioned absolutely, right-aligned, vertically centered -->
+  <div
+    class="hidden lg:block absolute right-12 xl:right-24 top-1/2 -translate-y-1/2 z-[1] w-[380px] xl:w-[440px]"
+  >
+    <img
+      src="/assets/sm-upscaled.png"
+      alt={`${SITE.name} app showing AI-generated tattoo stencil output`}
+      width="440"
+      height="440"
+      class="w-full object-contain drop-shadow-[0_0_60px_rgba(79,70,229,0.15)]"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </div>
+
+  <div class="relative z-10 w-full max-w-7xl mx-auto">
+    <div class="flex flex-col gap-8 max-w-2xl">
+      <div
+        class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400"
+      >
+        <span class="w-8 h-px bg-stencil"></span>
+        <span>AI-Powered Tattoo Stencils</span>
+      </div>
+      <h1
+        class="font-display font-extrabold text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight uppercase text-paper"
+      >
+        Translate<br />
+        <span class="text-neutral-500">Vision.</span>
+      </h1>
+      <p
+        class="font-sans text-lg md:text-xl font-light text-neutral-300 leading-relaxed text-balance max-w-md"
+      >
+        The first AI architecture built for the demands of high-end tattoo
+        craft. Uncompromising precision. Pure lines. Zero noise.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 mt-2">
+        <a
+          href="#download"
+          class="px-7 py-4 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-8px_rgba(250,250,250,0.2)] transition-all duration-300 text-center"
+        >
+          Get Started Free
+        </a>
+        <a
+          href="#engine"
+          class="px-7 py-4 border border-ash/60 text-paper text-sm font-bold uppercase tracking-widest rounded-sm hover:border-paper/60 transition-all duration-300 text-center flex items-center justify-center gap-2"
+        >
+          <i class="ph ph-play text-base" aria-hidden="true"></i>
+          See How It Works
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

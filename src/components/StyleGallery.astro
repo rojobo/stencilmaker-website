@@ -1,0 +1,123 @@
+---
+const styles = [
+  {
+    src: "/gallery/geometry.png",
+    alt: "Sacred geometry tattoo design — Metatron's cube on shoulder, precise mathematical linework",
+    title: "Sacred Geometry",
+    blurb: "Generates precise dot-spacing grids and perfect radii.",
+    offsetMd: 0,
+  },
+  {
+    src: "/gallery/dragon.jpg",
+    alt: "Japanese dragon tattoo design — bold black scales, flowing composition on forearm",
+    title: "Japanese",
+    blurb: "Flowing composition with precise scale and wave mapping.",
+    offsetMd: 12,
+  },
+  {
+    src: "/gallery/realism.jpg",
+    alt: "Fine line rose tattoo design — delicate shading and thin linework on forearm",
+    title: "Fine Line",
+    blurb: "Ultra-thin vector translation. Preserves fragile details.",
+    offsetMd: 0,
+  },
+  {
+    src: "/gallery/tiger.jpg",
+    alt: "Hyper-realistic tiger portrait tattoo — dense topographic shading and fine detail",
+    title: "Hyper-Realism",
+    blurb: "Dense topographical maps for multi-shade wash work.",
+    offsetMd: 8,
+  },
+] as const;
+---
+
+<section
+  id="styles"
+  class="w-full py-32 bg-ink border-t border-b border-ash/30 overflow-hidden relative"
+>
+  <div
+    class="max-w-7xl mx-auto px-8 md:px-12 mb-16 flex flex-col md:flex-row justify-between items-end gap-8"
+  >
+    <div>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4">
+        10 Distinct Vocabularies.
+      </h2>
+      <p class="text-neutral-400 text-lg max-w-xl">
+        Configure the AI to generate stencils perfectly matched to your
+        specialization. From bold traditional contours to hyper-realistic
+        mapping grids.
+      </p>
+    </div>
+    <div class="flex gap-2">
+      <button
+        type="button"
+        aria-label="Scroll styles left"
+        data-scroll="left"
+        class="w-12 h-12 rounded-full border border-ash flex items-center justify-center hover:bg-paper hover:text-obsidian transition-colors"
+      >
+        <i class="ph ph-arrow-left" aria-hidden="true"></i>
+      </button>
+      <button
+        type="button"
+        aria-label="Scroll styles right"
+        data-scroll="right"
+        class="w-12 h-12 rounded-full border border-ash flex items-center justify-center hover:bg-paper hover:text-obsidian transition-colors"
+      >
+        <i class="ph ph-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="style-rail"
+    class="flex overflow-x-auto no-scrollbar gap-8 px-8 md:px-12 pb-12 snap-x snap-mandatory"
+  >
+    {
+      styles.map(({ src, alt, title, blurb, offsetMd }) => (
+        <article
+          class:list={[
+            "snap-center shrink-0 w-[85vw] md:w-[400px] flex flex-col gap-4 gallery-card group cursor-pointer",
+            offsetMd === 12 && "mt-0 md:mt-12",
+            offsetMd === 8 && "mt-0 md:mt-8",
+          ]}
+        >
+          <div class="w-full aspect-[3/4] overflow-hidden bg-obsidian relative">
+            <img
+              src={src}
+              alt={alt}
+              width="600"
+              height="800"
+              class="w-full h-full object-cover image-breathe opacity-90"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 border border-ash/0 group-hover:border-stencil/50 transition-colors duration-500 m-4">
+              <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-stencil opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-stencil opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+          </div>
+          <div>
+            <h3 class="font-display text-xl font-bold">{title}</h3>
+            <p class="text-neutral-500 text-sm mt-1">{blurb}</p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  // Wire up the left/right arrow buttons to scroll the rail.
+  const rail = document.getElementById("style-rail");
+  if (rail) {
+    const step = () => rail.clientWidth * 0.8;
+    document.querySelectorAll<HTMLButtonElement>("[data-scroll]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        rail.scrollBy({
+          left: btn.dataset.scroll === "right" ? step() : -step(),
+          behavior: "smooth",
+        });
+      });
+    });
+  }
+</script>

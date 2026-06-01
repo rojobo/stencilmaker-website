@@ -1,0 +1,156 @@
+---
+/**
+ * Lead capture form. POSTs to /api/lead which lives in src/pages/api/lead.ts.
+ * Pre-wired for Cloudflare Turnstile (anti-bot) — see DEPLOY-CLOUDFLARE.md
+ * for the env vars you need to set. Until TURNSTILE_SITE_KEY is configured,
+ * the widget is omitted gracefully and the form still submits.
+ */
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+---
+
+<section
+  id="updates"
+  class="w-full py-32 md:py-40 bg-obsidian border-t border-ash/30"
+>
+  <div class="max-w-2xl mx-auto px-8 md:px-12 text-center">
+    <div
+      class="inline-flex items-center gap-2 px-3 py-1 bg-ink border border-ash/50 rounded-full w-fit mx-auto"
+    >
+      <div class="w-2 h-2 rounded-full bg-stencil animate-pulse"></div>
+      <span class="text-[10px] uppercase font-mono tracking-widest text-neutral-400">
+        Studio Bulletin
+      </span>
+    </div>
+
+    <h2
+      class="font-display text-3xl md:text-5xl font-bold tracking-tight mt-6 mb-6 text-balance"
+    >
+      Early access to new styles.
+    </h2>
+    <p class="text-neutral-400 text-base md:text-lg mb-10 text-balance">
+      One email per month. New AI styles, case studies, and workflow demos from
+      pro artists. No spam — unsubscribe anytime.
+    </p>
+
+    <form
+      id="lead-form"
+      class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+      novalidate
+    >
+      <label for="lead-email" class="sr-only">Email address</label>
+      <input
+        id="lead-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        placeholder="you@studio.com"
+        class="flex-1 px-5 py-4 bg-ink border border-ash/60 text-paper placeholder:text-neutral-500 text-sm rounded-sm focus:outline-none focus:border-paper transition-colors"
+      />
+      <button
+        type="submit"
+        class="px-6 py-4 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Subscribe
+      </button>
+    </form>
+
+    {
+      /*
+       * Cloudflare Turnstile widget + loader. Cloudflare's deploy docs
+       * explicitly recommend AGAINST Subresource Integrity on this script
+       * because the file rotates transparently for security updates; the
+       * Cloudflare-controlled origin + CSP `connect-src` allowlist (see
+       * public/_headers) are the intended trust anchors instead.
+       */
+      turnstileSiteKey && (
+        <Fragment>
+          <div
+            class="cf-turnstile mx-auto mt-6 flex justify-center"
+            data-sitekey={turnstileSiteKey}
+            data-theme="dark"
+            data-size="flexible"
+          />
+          <script
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            async
+            defer
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer-when-downgrade"
+            is:inline
+          />
+        </Fragment>
+      )
+    }
+
+    <p
+      id="lead-status"
+      role="status"
+      aria-live="polite"
+      class="mt-6 text-sm text-neutral-500 min-h-[1.25rem]"
+    >
+    </p>
+
+    <p class="mt-8 text-[10px] uppercase font-mono tracking-widest text-neutral-600">
+      We respect your craft. We respect your inbox.
+    </p>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("lead-form") as HTMLFormElement | null;
+  const status = document.getElementById("lead-status");
+  const emailInput = document.getElementById("lead-email") as HTMLInputElement | null;
+
+  if (form && status && emailInput) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        status.textContent = "Please enter a valid email address.";
+        status.className = "mt-6 text-sm text-amber-400 min-h-[1.25rem]";
+        return;
+      }
+
+      const submitBtn = form.querySelector(
+        'button[type="submit"]',
+      ) as HTMLButtonElement;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
+      status.textContent = "";
+
+      try {
+        const tokenInput = form.querySelector(
+          'input[name="cf-turnstile-response"]',
+        ) as HTMLInputElement | null;
+
+        const res = await fetch("/api/lead", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            email,
+            source: location.pathname,
+            referrer: document.referrer || null,
+            turnstileToken: tokenInput?.value ?? null,
+          }),
+        });
+
+        if (res.ok) {
+          form.reset();
+          status.textContent = "You're on the list. Watch your inbox.";
+          status.className = "mt-6 text-sm text-emerald-400 min-h-[1.25rem]";
+        } else {
+          const body = await res.json().catch(() => ({}));
+          status.textContent = body.error ?? "Something broke. Try again in a moment.";
+          status.className = "mt-6 text-sm text-rose-400 min-h-[1.25rem]";
+        }
+      } catch {
+        status.textContent = "Network hiccup. Try again.";
+        status.className = "mt-6 text-sm text-rose-400 min-h-[1.25rem]";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Subscribe";
+      }
+    });
+  }
+</script>

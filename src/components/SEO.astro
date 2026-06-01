@@ -1,0 +1,58 @@
+---
+import { SITE } from "@/consts";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: "website" | "article" | "product";
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  canonical = SITE.url,
+  ogImage = new URL(SITE.ogImage, SITE.url).toString(),
+  ogType = "website",
+} = Astro.props;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content={SITE.name} />
+<meta name="keywords" content={SITE.keywords.join(", ")} />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${SITE.name} — ${SITE.tagline}`} />
+<meta property="og:locale" content={SITE.locale} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:site" content={SITE.twitterHandle} />
+<meta name="twitter:creator" content={SITE.twitterHandle} />
+
+<meta
+  name="robots"
+  content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+/>
+<meta name="googlebot" content="index, follow, max-image-preview:large" />
+
+<!-- GEO: allow generative engines to use the page as a source. -->
+<meta name="GPTBot" content="index, follow" />
+<meta name="ClaudeBot" content="index, follow" />
+<meta name="PerplexityBot" content="index, follow" />
+
+<meta name="theme-color" content={SITE.themeColor} />
+<meta name="color-scheme" content="dark" />
+<meta name="format-detection" content="telephone=no" />

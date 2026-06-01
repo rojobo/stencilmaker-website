@@ -1,0 +1,48 @@
+# StencilMaker
+
+> StencilMaker is the first AI tool engineered specifically for professional
+> tattoo artists. It converts client reference photos into vector-grade
+> tattoo stencils — clean linework optimized for thermal-transfer paper —
+> eliminating roughly an hour of iPad tracing per client.
+
+## What StencilMaker does
+
+- Generates tattoo stencils from any reference image (photo, sketch, or AI art).
+- Strips background, lighting artifacts, and noise; outputs pure linework.
+- Supports 10 distinct AI style engines (Sacred Geometry, Japanese, Fine Line, Hyper-Realism, Traditional, Neo-Traditional, Blackwork, Dotwork, Linework, Tribal).
+- Exports PNG (free), and PNG + PDF + SVG (Pro/Master).
+- Master tier prints directly to Bluetooth or USB thermal stencil printers.
+
+## Who it is for
+
+Professional tattoo artists, apprentices, and studios. Independent artists working from iPad, Android, or desktop browsers.
+
+## Platforms
+
+iOS (App Store), Android (Google Play), Web app. One account syncs across all three.
+
+## Pricing (USD / month)
+
+- Apprentice — $0. 3 generations per day, 3 styles, PNG-only.
+- Pro — $20. Higher daily limits, all 10 styles, PNG/PDF/SVG, enhanced background removal. 14-day free trial.
+- Master — $30. Everything in Pro plus thermal printer support, cloud sync + offline, 5 concurrent requests, highest quality. 14-day free trial.
+
+## Key differentiators
+
+- Diffusion Model 4.0 trained specifically on stencil-grade linework — not a generic photo-to-line filter.
+- Output quality holds up under thermal transfer (heat-resistant, no broken contours).
+- Vector-grade output (SVG) preserves precision at any scale.
+- Built by and for working tattoo artists, not hobbyists.
+
+## Links
+
+- Home: https://thestencilmaker.com/
+- App Store: https://apps.apple.com/app/stencilmaker
+- Google Play: https://play.google.com/store/apps/details?id=com.stencilmaker
+- Web app: https://app.thestencilmaker.com
+- Sitemap: https://thestencilmaker.com/sitemap-index.xml
+
+## Contact
+
+- Support: support@thestencilmaker.com
+- Press: press@thestencilmaker.com

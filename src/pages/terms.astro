@@ -1,0 +1,926 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Footer from "@components/Footer.astro";
+import CustomCursor from "@components/CustomCursor.astro";
+import { SITE } from "@/consts";
+
+// Statically prerender — this is a fixed legal document.
+export const prerender = true;
+
+/* ---------------------------------------------------------------------------
+   Terms of Service content.
+
+   SOURCE OF TRUTH: StencilMaker/packages/legal-content/src/index.ts
+   (the `TERMS` document + `TERMS_VERSION`). Content was reviewed and
+   approved by counsel on 2026-05-12 and is App Store / Google Play ready.
+   The AI-generation disclosure (section 09) is legally load-bearing
+   (Apple Review Guideline 5.1.2(i) + Google Play AI-Generated Content
+   policy) and is reproduced VERBATIM from `TERMS_AI_GENERATION_PARAGRAPH`
+   — do not reword it.
+   --------------------------------------------------------------------------- */
+const TERMS_VERSION = "2026.05.12";
+const TERMS_UPDATED = "May 12, 2026";
+
+const meta = [
+  { label: "Last updated", value: TERMS_UPDATED },
+  { label: "Version", value: TERMS_VERSION, mono: true },
+  { label: "Status", value: "Counsel-approved" },
+];
+
+// Section index — drives the table of contents and scroll-spy.
+const sections = [
+  { id: "eligibility", index: "01", label: "Eligibility" },
+  { id: "generated-stencils", index: "02", label: "Generated stencils" },
+  { id: "your-content", index: "03", label: "Your content" },
+  { id: "acceptable-use", index: "04", label: "Acceptable use" },
+  { id: "paid-features", index: "05", label: "Paid features" },
+  { id: "termination", index: "06", label: "Termination" },
+  { id: "liability", index: "07", label: "Liability" },
+  { id: "governing-law", index: "08", label: "Governing law" },
+  { id: "ai-generation", index: "09", label: "AI generation" },
+  { id: "contact", index: "10", label: "Contact" },
+] as const;
+
+// 01 — who the App is intended for
+const audience = [
+  { icon: "ph-pen-nib", label: "Tattoo artists" },
+  { icon: "ph-student", label: "Apprentices" },
+  { icon: "ph-handshake", label: "Clients with a licensed pro" },
+] as const;
+
+// 02 — what you must check before applying a generated stencil to skin
+const checks = [
+  {
+    icon: "ph-ruler",
+    title: "Review proportions",
+    detail: "Confirm scale and placement read correctly on the body.",
+  },
+  {
+    icon: "ph-magnifying-glass",
+    title: "Verify correctness",
+    detail: "Check linework, spelling, and detail against the reference.",
+  },
+  {
+    icon: "ph-brain",
+    title: "Use professional judgment",
+    detail: "Apply your craft before committing permanent ink.",
+  },
+] as const;
+
+// 03 — content assurances
+const contentAssurances = [
+  {
+    icon: "ph-brain",
+    title: "No model training",
+    detail: "We do not train models on your uploads.",
+  },
+  {
+    icon: "ph-prohibit",
+    title: "No third-party sale",
+    detail: "We never sell your images to third parties.",
+  },
+] as const;
+
+// 04 — prohibited content
+const prohibited = [
+  "Infringes third-party rights.",
+  "Depicts minors in any way that could be considered exploitative.",
+  "Violates applicable law.",
+] as const;
+
+// 05 — where subscriptions are managed
+const billingPortals = [
+  { icon: "ph-apple-logo", name: "App Store", note: "iOS subscriptions" },
+  {
+    icon: "ph-google-play-logo",
+    name: "Google Play",
+    note: "Android subscriptions",
+  },
+  {
+    icon: "ph-currency-circle-dollar",
+    name: "Coinbase Commerce",
+    note: "Web credit packs (USDC)",
+  },
+] as const;
+
+// 08 — jurisdiction facts
+const jurisdiction = [
+  {
+    icon: "ph-scales",
+    label: "Governing law",
+    value: "Laws of the United States",
+  },
+  { icon: "ph-bank", label: "Venue", value: "Courts of Delaware" },
+] as const;
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stencil focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian";
+
+const pageDescription =
+  "StencilMaker Terms of Service: eligibility, your responsibility for AI-generated stencils, content rights, acceptable use, billing, termination, liability, governing law, and our AI-generation disclosure.";
+---
+
+<BaseLayout
+  title={`Terms of Service — ${SITE.name}`}
+  description={pageDescription}
+  pathname="/terms"
+>
+  <!-- Skip link for keyboard users -->
+  <a
+    href="#terms"
+    class:list={[
+      "sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[120] focus:px-4 focus:py-2 focus:bg-paper focus:text-obsidian focus:text-sm focus:font-bold focus:uppercase focus:tracking-widest focus:rounded-sm",
+    ]}
+  >
+    Skip to terms
+  </a>
+
+  <!-- Reading-progress bar, scroll-driven. -->
+  <div
+    id="reading-progress"
+    class="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-stencil origin-left scale-x-0 will-change-transform"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Slim, persistent sub-page header. -->
+  <header
+    class="sticky top-0 z-50 w-full border-b border-ash/30 bg-obsidian/80 backdrop-blur-xl"
+  >
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-[4.5rem] flex items-center justify-between gap-4"
+    >
+      <a
+        href="/"
+        class:list={["flex items-center gap-2.5 -ml-1 rounded-sm", focusRing]}
+        aria-label={`${SITE.name} home`}
+      >
+        <img
+          src="/assets/hero-graphic-light.png"
+          alt=""
+          width="40"
+          height="40"
+          class="w-9 h-9 md:w-10 md:h-10 object-contain"
+          loading="eager"
+          decoding="async"
+        />
+        <span
+          class="font-display font-bold text-lg sm:text-xl md:text-2xl tracking-tight whitespace-nowrap"
+        >
+          {SITE.name}<span class="text-stencil leading-none">.</span>
+        </span>
+      </a>
+
+      <nav
+        aria-label="Page"
+        class="flex items-center gap-1 sm:gap-2 text-xs font-bold uppercase tracking-widest"
+      >
+        <a
+          href="/"
+          class:list={[
+            "hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          Home
+        </a>
+        <a
+          href="/privacy"
+          class:list={[
+            "hidden sm:inline-flex items-center px-3 sm:px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          Privacy
+        </a>
+        <a
+          href="/#download"
+          class:list={[
+            "ml-1 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-paper text-obsidian rounded-sm whitespace-nowrap hover:bg-white hover:-translate-y-0.5 transition-all duration-300",
+            focusRing,
+          ]}
+        >
+          <span class="hidden sm:inline">Get the app</span>
+          <span class="sm:hidden">App</span>
+          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================================
+         Masthead
+         =================================================================== -->
+    <section
+      class="relative w-full overflow-hidden px-6 md:px-12 pt-20 md:pt-28 pb-14 md:pb-20"
+    >
+      <!-- Indigo radial glow, anchored top-right like the hero. -->
+      <div
+        class="pointer-events-none absolute -top-24 right-[-10%] w-[640px] h-[640px] bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.14)_0%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <!-- Oversized watermark glyph. -->
+      <i
+        class="ph ph-scroll pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"></i>
+
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <div
+          class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-8"
+        >
+          <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+          <span>Legal</span>
+          <span class="text-neutral-700" aria-hidden="true">/</span>
+          <span class="text-neutral-500">Terms</span>
+        </div>
+
+        <h1
+          class="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-paper"
+        >
+          Terms of<br />
+          <span class="text-neutral-500"
+            >Service<span class="text-stencil">.</span></span
+          >
+        </h1>
+
+        <p
+          class="mt-8 font-sans text-lg md:text-xl font-light text-neutral-300 leading-relaxed text-balance max-w-2xl"
+        >
+          Welcome to StencilMaker. By creating an account or using the App, you
+          agree to these Terms.
+        </p>
+
+        <!-- Metadata strip -->
+        <dl
+          class="mt-10 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-ash/30 pt-6 max-w-2xl"
+        >
+          {
+            meta.map((m) => (
+              <div class="flex flex-col gap-1">
+                <dt class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+                  {m.label}
+                </dt>
+                <dd
+                  class:list={[
+                    "text-sm text-paper",
+                    m.mono && "font-mono tabular-nums",
+                  ]}
+                >
+                  {m.value}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Document body — sticky TOC rail + content
+         =================================================================== -->
+    <div id="terms" class="max-w-7xl mx-auto px-6 md:px-12 pb-32 scroll-mt-24">
+      <div
+        class="grid lg:grid-cols-[15rem_minmax(0,1fr)] gap-y-10 lg:gap-x-16 xl:gap-x-24"
+      >
+        <!-- ---- Table of contents ---- -->
+        <aside class="lg:sticky lg:top-28 lg:self-start">
+          <!-- Mobile: collapsible jump list -->
+          <details class="lg:hidden group border border-ash/30 rounded-sm bg-ink/40">
+            <summary
+              class:list={[
+                "flex items-center justify-between gap-3 px-5 py-4 cursor-pointer list-none select-none rounded-sm",
+                focusRing,
+              ]}
+            >
+              <span
+                class="text-[10px] font-mono uppercase tracking-widest text-neutral-400"
+              >
+                On this page
+              </span>
+              <i
+                class="ph ph-caret-down text-neutral-400 transition-transform duration-300 group-open:rotate-180"
+                aria-hidden="true"></i>
+            </summary>
+            <nav aria-label="On this page" class="px-2 pb-3">
+              <ol class="flex flex-col">
+                {
+                  sections.map((s) => (
+                    <li>
+                      <a
+                        href={`#${s.id}`}
+                        class:list={[
+                          "flex items-center gap-3 px-3 py-3 rounded-sm text-sm text-neutral-400 hover:text-paper hover:bg-ash/30 transition-colors",
+                          focusRing,
+                        ]}
+                      >
+                        <span class="font-mono text-[10px] text-neutral-600">
+                          {s.index}
+                        </span>
+                        {s.label}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ol>
+            </nav>
+          </details>
+
+          <!-- Desktop: sticky scroll-spy rail -->
+          <nav aria-label="On this page" class="hidden lg:block" data-toc>
+            <p
+              class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-5"
+            >
+              On this page
+            </p>
+            <ol class="flex flex-col gap-0.5 border-l border-ash/30">
+              {
+                sections.map((s) => (
+                  <li>
+                    <a
+                      href={`#${s.id}`}
+                      data-toc-link={s.id}
+                      class:list={[
+                        "group flex items-center gap-3 -ml-px border-l-2 border-transparent py-2 pl-4 text-sm text-neutral-500 transition-colors duration-200 hover:text-paper",
+                        focusRing,
+                      ]}
+                    >
+                      <span class="font-mono text-[10px] text-neutral-600 group-hover:text-neutral-400 transition-colors">
+                        {s.index}
+                      </span>
+                      <span class="leading-tight">{s.label}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ol>
+          </nav>
+        </aside>
+
+        <!-- ---- Content ---- -->
+        <div class="min-w-0">
+          <!-- 01 — Eligibility -->
+          <section
+            id="eligibility"
+            data-section
+            class="scroll-mt-24 pb-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">01</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Eligibility
+              </h2>
+            </div>
+
+            <div
+              class="relative overflow-hidden flex flex-col sm:flex-row sm:items-center gap-7 sm:gap-10 p-7 md:p-10 border border-ash/30 rounded-sm bg-ink/40"
+            >
+              <!-- Age gate seal -->
+              <div
+                class="shrink-0 flex flex-col items-center justify-center w-28 h-28 rounded-sm border border-stencil/40 bg-stencil/[0.06]"
+              >
+                <span
+                  class="font-display font-extrabold text-5xl leading-none text-paper"
+                  >18<span class="text-stencil">+</span></span
+                >
+                <span
+                  class="mt-2 text-[10px] font-mono uppercase tracking-widest text-neutral-400"
+                  >Minimum</span
+                >
+              </div>
+              <div class="max-w-[55ch]">
+                <p class="text-neutral-300 text-lg leading-relaxed">
+                  You must be at least <strong class="font-semibold text-paper"
+                    >18 years old</strong
+                  > — or the legal tattooing age in your jurisdiction — to use the
+                  App.
+                </p>
+                <p class="mt-4 text-neutral-400 leading-relaxed">
+                  The App is intended for tattoo artists, apprentices, and
+                  clients working with a licensed professional.
+                </p>
+              </div>
+            </div>
+
+            <ul class="mt-6 flex flex-wrap gap-3">
+              {
+                audience.map((a) => (
+                  <li class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-sm border border-ash/30 bg-ink/40 text-sm text-neutral-300">
+                    <i class={`ph ${a.icon} text-base text-stencil`} aria-hidden="true" />
+                    {a.label}
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <!-- 02 — Generated stencils -->
+          <section
+            id="generated-stencils"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">02</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Generated stencils
+              </h2>
+            </div>
+
+            <p class="text-neutral-300 text-lg leading-relaxed max-w-[62ch]">
+              Stencils produced by the App are <strong
+                class="font-semibold text-paper">AI-generated references</strong
+              >. They are provided for inspiration and transfer only.
+            </p>
+
+            <!-- Responsibility callout -->
+            <div
+              class="mt-7 flex items-start gap-4 p-6 md:p-7 border border-stencil/40 bg-stencil/[0.06] rounded-sm max-w-[62ch]"
+            >
+              <i
+                class="ph ph-warning-circle text-2xl text-stencil mt-0.5 shrink-0"
+                aria-hidden="true"></i>
+              <p class="text-paper/90 leading-relaxed">
+                You remain <strong class="font-semibold text-paper"
+                  >responsible for the final tattoo</strong
+                >. Before applying permanent ink:
+              </p>
+            </div>
+
+            <!-- Pre-application checklist -->
+            <ul class="mt-4 grid gap-4 sm:grid-cols-3">
+              {
+                checks.map((c) => (
+                  <li class="flex flex-col gap-3 p-6 border border-ash/30 rounded-sm bg-ink/40 hover:bg-ink transition-colors">
+                    <i class={`ph ${c.icon} text-2xl text-stencil`} aria-hidden="true" />
+                    <h3 class="font-display font-bold text-paper">{c.title}</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                      {c.detail}
+                    </p>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <!-- 03 — Your content -->
+          <section
+            id="your-content"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">03</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Your content
+              </h2>
+            </div>
+
+            <div
+              class="flex items-start gap-4 p-6 md:p-7 border border-ash/30 rounded-sm bg-ink/40 max-w-[62ch]"
+            >
+              <i
+                class="ph ph-copyright text-2xl text-paper mt-0.5 shrink-0"
+                aria-hidden="true"></i>
+              <p class="text-neutral-300 text-lg leading-relaxed">
+                You <strong class="font-semibold text-paper"
+                  >retain all rights</strong
+                > to images you upload. By uploading, you grant us a limited, worldwide
+                licence to process the image solely to produce a stencil.
+              </p>
+            </div>
+
+            <ul class="mt-4 grid gap-4 sm:grid-cols-2 max-w-[62ch]">
+              {
+                contentAssurances.map((a) => (
+                  <li class="flex items-start gap-3 p-5 border border-ash/30 rounded-sm bg-ink/40">
+                    <i class={`ph ${a.icon} text-xl text-stencil mt-0.5 shrink-0`} aria-hidden="true" />
+                    <div>
+                      <h3 class="font-display font-bold text-paper">{a.title}</h3>
+                      <p class="text-sm text-neutral-400 leading-relaxed mt-1">
+                        {a.detail}
+                      </p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <!-- 04 — Acceptable use -->
+          <section
+            id="acceptable-use"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-4">
+              <span class="font-mono text-sm text-stencil">04</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Acceptable use
+              </h2>
+            </div>
+            <p class="text-neutral-400 leading-relaxed max-w-[62ch] mb-8">
+              You agree not to upload content that:
+            </p>
+
+            <ul class="flex flex-col gap-3 max-w-[62ch]">
+              {
+                prohibited.map((p) => (
+                  <li class="flex items-start gap-4 p-5 border border-ash/30 rounded-sm bg-ink/40">
+                    <i class="ph ph-prohibit text-xl text-stencil mt-0.5 shrink-0" aria-hidden="true" />
+                    <span class="text-neutral-300 leading-relaxed">{p}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <!-- 05 — Paid features -->
+          <section
+            id="paid-features"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-4">
+              <span class="font-mono text-sm text-stencil">05</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Paid features
+              </h2>
+            </div>
+            <p class="text-neutral-300 text-lg leading-relaxed max-w-[62ch]">
+              Premium subscriptions <strong class="font-semibold text-paper"
+                >renew automatically</strong
+              > at the price displayed at purchase. Manage or cancel anytime from
+              the relevant portal:
+            </p>
+
+            <ul class="mt-8 grid gap-4 sm:grid-cols-3">
+              {
+                billingPortals.map((portal) => (
+                  <li class="flex flex-col gap-3 p-6 border border-ash/30 rounded-sm bg-ink/40">
+                    <i class={`ph ${portal.icon} text-2xl text-paper`} aria-hidden="true" />
+                    <div>
+                      <h3 class="font-display font-bold text-paper">{portal.name}</h3>
+                      <p class="text-sm text-neutral-400 mt-1">{portal.note}</p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <!-- 06 — Termination -->
+          <section
+            id="termination"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">06</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Termination
+              </h2>
+            </div>
+
+            <p class="text-neutral-300 text-lg leading-relaxed max-w-[62ch]">
+              We may suspend access for violations of these Terms.
+            </p>
+
+            <div
+              class="mt-8 flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40 max-w-[62ch]"
+            >
+              <i
+                class="ph ph-power text-xl text-paper mt-0.5 shrink-0"
+                aria-hidden="true"></i>
+              <p class="text-neutral-300 leading-relaxed">
+                You may delete your account at any time from
+                <span
+                  class="inline-flex items-center gap-1.5 px-2 py-0.5 mx-0.5 rounded-sm bg-ink border border-ash/50 text-sm font-mono text-paper align-baseline"
+                  ><i
+                    class="ph ph-gear-six text-xs text-neutral-400"
+                    aria-hidden="true"></i>Settings</span
+                >
+                <i
+                  class="ph ph-arrow-right text-xs text-neutral-500 mx-0.5"
+                  aria-hidden="true"></i>
+                <span
+                  class="inline-flex items-center gap-1.5 px-2 py-0.5 mx-0.5 rounded-sm bg-ink border border-ash/50 text-sm font-mono text-paper align-baseline"
+                  >Delete Account</span
+                >.
+              </p>
+            </div>
+          </section>
+
+          <!-- 07 — Liability -->
+          <section
+            id="liability"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">07</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Liability
+              </h2>
+            </div>
+
+            <div
+              class="flex items-start gap-4 p-7 md:p-9 border border-ash/40 rounded-sm bg-ink/40 max-w-[64ch]"
+            >
+              <i
+                class="ph ph-warning text-2xl text-paper mt-0.5 shrink-0"
+                aria-hidden="true"></i>
+              <p class="text-neutral-300 leading-relaxed">
+                The App is provided <strong class="font-semibold text-paper"
+                  >&ldquo;as is&rdquo;</strong
+                > without warranty. We are not liable for indirect, incidental, or
+                consequential damages arising from your use of the App.
+              </p>
+            </div>
+          </section>
+
+          <!-- 08 — Governing law -->
+          <section
+            id="governing-law"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">08</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Governing law
+              </h2>
+            </div>
+
+            <p class="text-neutral-300 text-lg leading-relaxed max-w-[62ch] mb-8">
+              These Terms are governed by the laws of the United States, and
+              disputes are resolved in the courts of Delaware.
+            </p>
+
+            <dl class="grid gap-4 sm:grid-cols-2 max-w-[62ch]">
+              {
+                jurisdiction.map((j) => (
+                  <div class="flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40">
+                    <i class={`ph ${j.icon} text-2xl text-stencil mt-0.5 shrink-0`} aria-hidden="true" />
+                    <div>
+                      <dt class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+                        {j.label}
+                      </dt>
+                      <dd class="font-display font-bold text-paper mt-1.5">
+                        {j.value}
+                      </dd>
+                    </div>
+                  </div>
+                ))
+              }
+            </dl>
+          </section>
+
+          <!-- 09 — AI generation (legally load-bearing callout, verbatim text) -->
+          <section
+            id="ai-generation"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">09</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                AI generation
+              </h2>
+            </div>
+
+            <div
+              class="relative overflow-hidden rounded-sm border border-stencil/40 bg-stencil/[0.06] p-7 md:p-10 shadow-[0_0_80px_-20px_rgba(79,70,229,0.5)]"
+            >
+              <div
+                class="pointer-events-none absolute -top-16 -right-16 w-56 h-56 bg-[radial-gradient(circle,rgba(79,70,229,0.25)_0%,transparent_70%)]"
+                aria-hidden="true"
+              >
+              </div>
+
+              <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-6">
+                  <span
+                    class="flex items-center justify-center w-11 h-11 rounded-sm bg-stencil/15 border border-stencil/40"
+                  >
+                    <i
+                      class="ph ph-sparkle text-xl text-stencil"
+                      aria-hidden="true"></i>
+                  </span>
+                  <span
+                    class="text-[10px] font-mono uppercase tracking-widest text-stencil"
+                  >
+                    Generative AI disclosure
+                  </span>
+                </div>
+
+                <div class="space-y-5 text-paper/90 leading-relaxed max-w-[65ch]">
+                  <p>
+                    StencilMaker uses generative AI (<strong
+                      class="font-semibold text-paper">Google Gemini</strong
+                    >) to convert your uploaded reference image into a black-line
+                    stencil. Each generation is a machine-derived interpretation;
+                    output quality varies.
+                  </p>
+                  <p>
+                    You are <strong class="font-semibold text-paper"
+                      >responsible for reviewing the generated stencil before
+                      applying it to skin</strong
+                    >. StencilMaker does not store user-supplied prompts because
+                    users do not supply prompts — the prompt template is
+                    assembled server-side from your style selection.
+                  </p>
+                </div>
+
+                <p
+                  class="mt-7 pt-5 border-t border-stencil/25 flex items-start gap-3 text-sm text-neutral-400 leading-relaxed max-w-[65ch]"
+                >
+                  <i
+                    class="ph ph-seal-check text-base text-stencil mt-0.5 shrink-0"
+                    aria-hidden="true"></i>
+                  <span>
+                    This disclosure satisfies App Store Review Guideline
+                    5.1.2(i) and Google Play&rsquo;s AI-Generated Content policy
+                    requirements for apps that use generative AI.
+                  </span>
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 10 — Contact -->
+          <section id="contact" data-section class="scroll-mt-24 pt-16">
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">10</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Contact
+              </h2>
+            </div>
+
+            <div
+              class="relative overflow-hidden flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 p-8 md:p-10 border border-ash/30 rounded-sm bg-ink"
+            >
+              <div
+                class="pointer-events-none absolute -bottom-20 -left-10 w-72 h-72 bg-[radial-gradient(circle,rgba(79,70,229,0.12)_0%,transparent_70%)]"
+                aria-hidden="true"
+              >
+              </div>
+              <div class="relative z-10 max-w-md">
+                <h3
+                  class="font-display text-2xl md:text-3xl font-bold tracking-tight text-paper mb-2"
+                >
+                  Questions about these Terms?
+                </h3>
+                <p class="text-neutral-400 leading-relaxed">
+                  Reach our legal team directly. We answer every request.
+                </p>
+              </div>
+              <a
+                href="mailto:legal@stencilmaker.app"
+                class:list={[
+                  "relative z-10 shrink-0 inline-flex items-center justify-center gap-3 px-7 py-4 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-8px_rgba(250,250,250,0.2)] transition-all duration-300",
+                  focusRing,
+                ]}
+              >
+                <i class="ph ph-envelope-simple text-lg" aria-hidden="true"></i>
+                legal@stencilmaker.app
+              </a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Back-to-top — appears once you've scrolled past the masthead. -->
+  <button
+    id="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    class:list={[
+      "fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-ink/80 backdrop-blur-xl border border-ash/40 text-paper shadow-2xl opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:bg-ash/60",
+      focusRing,
+    ]}
+  >
+    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+  </button>
+
+  <Footer />
+  <CustomCursor />
+</BaseLayout>
+
+<script>
+  // ---- Reading progress bar (rAF-throttled, transform-only) ----
+  const bar = document.getElementById("reading-progress");
+  let ticking = false;
+
+  function updateProgress() {
+    if (!bar) return;
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - doc.clientHeight;
+    const ratio = max > 0 ? Math.min(doc.scrollTop / max, 1) : 0;
+    bar.style.transform = `scaleX(${ratio})`;
+    ticking = false;
+  }
+
+  // ---- Back-to-top visibility ----
+  const toTop = document.getElementById("back-to-top");
+
+  function updateToTop() {
+    if (!toTop) return;
+    const show = window.scrollY > 600;
+    toTop.classList.toggle("opacity-0", !show);
+    toTop.classList.toggle("translate-y-3", !show);
+    toTop.classList.toggle("pointer-events-none", !show);
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateProgress();
+        updateToTop();
+      });
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  updateProgress();
+  updateToTop();
+
+  toTop?.addEventListener("click", () => {
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
+  // ---- Scroll-spy: highlight the active section in the TOC ----
+  const tocLinks = new Map<string, HTMLAnchorElement>();
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-toc-link]")
+    .forEach((el) => {
+      const id = el.getAttribute("data-toc-link");
+      if (id) tocLinks.set(id, el);
+    });
+
+  function setActive(id: string) {
+    tocLinks.forEach((link, linkId) => {
+      const isActive = linkId === id;
+      link.classList.toggle("!border-stencil", isActive);
+      link.classList.toggle("!text-paper", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "true");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  const sectionEls = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-section]"),
+  );
+
+  if (sectionEls.length && tocLinks.size && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry nearest the top that is intersecting.
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target.id) {
+          setActive(visible[0].target.id);
+        }
+      },
+      {
+        // Activate a section when it reaches the upper third of the viewport.
+        rootMargin: "-20% 0px -70% 0px",
+        threshold: 0,
+      },
+    );
+    sectionEls.forEach((el) => observer.observe(el));
+  }
+</script>

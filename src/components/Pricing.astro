@@ -1,0 +1,366 @@
+---
+import { PRICING } from "@/consts";
+
+const { premium, credits, creditsPerGeneration } = PRICING;
+
+// Effective monthly rate when billed annually (≈ $5/mo). Rounded to whole $.
+const yearlyPerMonth = Math.round(premium.yearly / 12);
+
+// Two subscription plans. Premium's daily cap, price, trial and CTA all shift
+// with the billing toggle, so those values live in data-* attributes and are
+// swapped by the inline script below (server-renders to the Yearly default).
+const subscriptions = [
+  {
+    name: PRICING.free.name,
+    tagline: "For your first sessions.",
+    price: "0",
+    period: "forever",
+    sub: "No card required",
+    features: [
+      "1 stencil / day",
+      "10 free stencils to start",
+      "Core style engines",
+      "PNG export",
+    ],
+    cta: "Download Free",
+    featured: false,
+    badge: null,
+  },
+  {
+    name: premium.name,
+    tagline: "For working artists.",
+    // Dynamic — see data-* on the price/period/cap/cta nodes in markup.
+    featured: true,
+    badge: "Most Popular",
+  },
+] as const;
+
+const premiumFeatures = [
+  { label: "stencils / day", dynamic: true }, // 5 monthly · 10 yearly
+  { label: "All style engines unlocked", dynamic: false },
+  { label: "PNG, PDF & SVG export", dynamic: false },
+  { label: "Cloud gallery — keep every stencil", dynamic: false },
+] as const;
+
+// Pay-as-you-go packs. Headline number is total credits (base + bonus); the
+// helper translates credits into stencils so the value is legible at a glance.
+const packs = [
+  PRICING.credits.starter,
+  PRICING.credits.popular,
+  PRICING.credits.pro,
+].map((p) => ({
+  name: p.name,
+  price: p.price.toFixed(2),
+  total: p.credits.toLocaleString("en-US"),
+  bonus: p.bonus.toLocaleString("en-US"),
+  stencils: Math.floor(p.credits / creditsPerGeneration),
+  featured: p.name === credits.popular.name,
+}));
+---
+
+<section id="pricing" data-billing="yearly" class="w-full py-32 bg-ink border-t border-ash/30">
+  <div class="max-w-7xl mx-auto px-8 md:px-12">
+    <!-- Heading + billing toggle -->
+    <div class="mb-16 flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 bg-obsidian border border-ash/50 rounded-full w-fit mb-6"
+        >
+          <div class="w-2 h-2 rounded-full bg-stencil animate-pulse" aria-hidden="true"></div>
+          <span class="text-[10px] uppercase font-mono tracking-widest text-neutral-400">
+            Plans &amp; Pricing
+          </span>
+        </div>
+        <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-6">
+          The Cost of Craft.
+        </h2>
+        <p class="text-neutral-400 text-lg max-w-xl">
+          Free to start. Upgrade when the work demands it — or skip the
+          subscription and buy credits you'll only spend when you create.
+        </p>
+      </div>
+
+      <!-- Monthly / Yearly segmented control -->
+      <div
+        role="group"
+        aria-label="Billing period"
+        class="inline-flex items-center self-start gap-1 p-1 bg-obsidian border border-ash/50 rounded-full"
+      >
+        <button
+          type="button"
+          data-billing-option="monthly"
+          aria-pressed="false"
+          class="px-6 py-3 min-h-[2.75rem] rounded-full text-[11px] font-bold uppercase tracking-widest text-neutral-400 transition-colors hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper"
+        >
+          Monthly
+        </button>
+        <button
+          type="button"
+          data-billing-option="yearly"
+          aria-pressed="true"
+          class="inline-flex items-center gap-2 px-6 py-3 min-h-[2.75rem] rounded-full text-[11px] font-bold uppercase tracking-widest bg-paper text-obsidian transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stencil"
+        >
+          Yearly
+          <span class="bg-stencil text-paper text-[10px] font-bold tracking-wide px-1.5 py-0.5 rounded-full tabular-nums">
+            −{premium.yearlySavingsPct}%
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Subscription plans -->
+    <div class="w-full grid grid-cols-1 md:grid-cols-2">
+      <!-- Free -->
+      <article
+        class="group p-8 md:p-10 border border-ash/30 flex flex-col relative transition-colors hover:bg-obsidian"
+      >
+        <h3 class="font-bold text-xl uppercase tracking-widest mb-1 text-neutral-400 group-hover:text-paper transition-colors">
+          {subscriptions[0].name}
+        </h3>
+        <div class="text-sm font-mono text-neutral-400 mb-10">{subscriptions[0].tagline}</div>
+
+        <div class="mb-1 flex items-baseline gap-1">
+          <span class="font-display text-5xl tabular-nums">${subscriptions[0].price}</span>
+          <span class="text-lg text-neutral-400 font-sans">/{subscriptions[0].period}</span>
+        </div>
+        <div class="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-8">
+          {subscriptions[0].sub}
+        </div>
+
+        <ul class="flex flex-col gap-4 text-sm flex-grow mb-12 text-neutral-300">
+          {
+            subscriptions[0].features.map((f) => (
+              <li class="flex items-start gap-3">
+                <i class="ph ph-check mt-0.5 text-stencil" aria-hidden="true" />
+                <span>{f}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <a
+          href="#download"
+          class="w-full py-4 min-h-[2.75rem] flex items-center justify-center text-sm font-bold uppercase tracking-widest text-center border border-ash/50 transition-colors hover:border-paper hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper"
+        >
+          {subscriptions[0].cta}
+        </a>
+      </article>
+
+      <!-- Premium (featured) -->
+      <article
+        class="p-8 md:p-10 md:py-14 border border-ash/30 border-t-0 md:border-t md:border-l-0 flex flex-col relative bg-obsidian md:-my-4 z-10 shadow-[0_0_60px_rgba(79,70,229,0.1)]"
+      >
+        <div
+          class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-stencil to-transparent"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="absolute top-0 right-0 text-[10px] uppercase font-bold tracking-widest px-3 py-1 bg-stencil text-paper">
+          {subscriptions[1].badge}
+        </div>
+
+        <h3 class="font-bold text-xl uppercase tracking-widest mb-1 text-paper">
+          {subscriptions[1].name}
+        </h3>
+        <div class="text-sm font-mono text-neutral-400 mb-10">{subscriptions[1].tagline}</div>
+
+        <div class="mb-1 flex items-baseline gap-1" aria-live="polite">
+          <span class="font-display text-5xl text-paper tabular-nums"
+            >$<span data-price data-monthly={premium.monthly.toFixed(2)} data-yearly={premium.yearly.toFixed(2)}
+              >{premium.yearly.toFixed(2)}</span></span
+          >
+          <span class="text-lg text-neutral-400 font-sans"
+            >/<span data-period data-monthly="mo" data-yearly="yr">yr</span></span
+          >
+        </div>
+        <div class="text-xs font-mono uppercase tracking-widest text-neutral-400 mb-8 tabular-nums">
+          <span data-subprice data-monthly="Billed monthly" data-yearly={`≈ $${yearlyPerMonth}/mo · billed yearly`}
+            >≈ ${yearlyPerMonth}/mo · billed yearly</span
+          >
+        </div>
+
+        <ul class="flex flex-col gap-4 text-sm flex-grow mb-6 text-neutral-300">
+          {
+            premiumFeatures.map((f) =>
+              f.dynamic ? (
+                <li class="flex items-start gap-3">
+                  <i class="ph-fill ph-check-circle mt-0.5 text-stencil" aria-hidden="true" />
+                  <span>
+                    <span class="tabular-nums" data-cap data-monthly="5" data-yearly="10">
+                      10
+                    </span>{" "}
+                    {f.label}
+                  </span>
+                </li>
+              ) : (
+                <li class="flex items-start gap-3">
+                  <i class="ph-fill ph-check-circle mt-0.5 text-stencil" aria-hidden="true" />
+                  <span>{f.label}</span>
+                </li>
+              ),
+            )
+          }
+        </ul>
+
+        <!-- Trial line — shown only on the Yearly plan -->
+        <p data-trial class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-stencil mb-6">
+          <i class="ph ph-gift" aria-hidden="true"></i>
+          {premium.trialDays}-day free trial
+        </p>
+
+        <a
+          href="#download"
+          class="w-full py-4 min-h-[2.75rem] flex items-center justify-center text-sm font-bold uppercase tracking-widest text-center bg-stencil text-paper shadow-lg transition-colors hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper"
+        >
+          <span data-cta data-monthly="Get Premium" data-yearly={`Start ${premium.trialDays}-day trial`}
+            >Start {premium.trialDays}-day trial</span
+          >
+        </a>
+      </article>
+    </div>
+
+    <!-- Pay-as-you-go credit packs -->
+    <div class="mt-24">
+      <div class="mb-10">
+        <span class="text-[10px] uppercase font-mono tracking-widest text-neutral-400">
+          Pay as you go
+        </span>
+        <h3 class="font-display text-2xl md:text-3xl font-bold tracking-tight mt-3 mb-3">
+          No subscription? Buy credits.
+        </h3>
+        <p class="text-neutral-400 text-base max-w-xl">
+          Credits never expire. One stencil costs {creditsPerGeneration} credits — top up once
+          and create at your own pace.
+        </p>
+      </div>
+
+      <div class="w-full grid grid-cols-1 sm:grid-cols-3">
+        {
+          packs.map((p, idx) => (
+            <article
+              class:list={[
+                "p-8 border border-ash/30 flex flex-col relative transition-colors",
+                idx > 0 && "border-t-0 sm:border-t sm:border-l-0",
+                p.featured ? "bg-obsidian z-10" : "group hover:bg-obsidian",
+              ]}
+            >
+              {p.featured && (
+                <div
+                  class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-stencil to-transparent"
+                  aria-hidden="true"
+                />
+              )}
+              {p.featured && (
+                <div class="absolute top-0 right-0 text-[10px] uppercase font-bold tracking-widest px-3 py-1 bg-stencil text-paper">
+                  Best Value
+                </div>
+              )}
+
+              <h4
+                class:list={[
+                  "font-bold text-sm uppercase tracking-widest mb-6 transition-colors",
+                  p.featured ? "text-paper" : "text-neutral-400 group-hover:text-paper",
+                ]}
+              >
+                {p.name}
+              </h4>
+
+              <div class="flex items-baseline gap-2 mb-1">
+                <span
+                  class:list={[
+                    "font-display text-4xl tabular-nums",
+                    p.featured ? "text-paper" : "",
+                  ]}
+                >
+                  {p.total}
+                </span>
+                <span class="text-sm text-neutral-400 font-sans">credits</span>
+              </div>
+              <div class="text-xs font-mono uppercase tracking-widest text-stencil mb-1 tabular-nums">
+                +{p.bonus} bonus
+              </div>
+              <div class="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-8 tabular-nums">
+                ≈ {p.stencils} stencils
+              </div>
+
+              <a
+                href="#download"
+                class:list={[
+                  "mt-auto w-full py-4 min-h-[2.75rem] flex items-center justify-center gap-2 text-sm font-bold uppercase tracking-widest text-center transition-colors focus-visible:outline-none focus-visible:ring-2",
+                  p.featured
+                    ? "bg-paper text-obsidian shadow-lg hover:bg-neutral-200 focus-visible:ring-paper"
+                    : "border border-ash/50 hover:border-paper hover:text-paper focus-visible:ring-paper",
+                ]}
+              >
+                <span class="tabular-nums">${p.price}</span>
+                <span class="text-neutral-500" aria-hidden="true">·</span>
+                Buy Credits
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Payment methods + fine print -->
+    <div class="mt-16 pt-10 border-t border-ash/30 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <ul class="flex flex-wrap items-center gap-x-6 gap-y-3" aria-label="Accepted payment methods">
+        <li class="flex items-center gap-2 text-sm text-neutral-300">
+          <i class="ph-fill ph-apple-logo text-lg" aria-hidden="true"></i>
+          App Store
+        </li>
+        <li class="flex items-center gap-2 text-sm text-neutral-300">
+          <i class="ph-fill ph-google-play-logo text-lg" aria-hidden="true"></i>
+          Google Play
+        </li>
+        <li class="flex items-center gap-2 text-sm text-neutral-300">
+          <i class="ph ph-currency-circle-dollar text-lg" aria-hidden="true"></i>
+          USDC on the web
+        </li>
+      </ul>
+      <p class="text-[11px] font-mono uppercase tracking-widest text-neutral-500 max-w-md md:text-right text-balance">
+        Premium ${premium.monthly.toFixed(2)}/mo or ${premium.yearly.toFixed(2)}/yr. Subscriptions
+        auto-renew — cancel anytime in your store account.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Billing toggle. Swaps every [data-monthly]/[data-yearly] node's text and
+  // shows the trial line on Yearly only. Server-rendered default is "yearly",
+  // so this is pure progressive enhancement — no-JS users still see real prices.
+  const section = document.getElementById("pricing");
+  if (section) {
+    const options = section.querySelectorAll<HTMLButtonElement>("[data-billing-option]");
+    const swappable = section.querySelectorAll<HTMLElement>("[data-monthly][data-yearly]");
+    const trials = section.querySelectorAll<HTMLElement>("[data-trial]");
+
+    const apply = (billing: "monthly" | "yearly") => {
+      section.dataset.billing = billing;
+
+      options.forEach((btn) => {
+        const active = btn.dataset.billingOption === billing;
+        btn.setAttribute("aria-pressed", String(active));
+        btn.classList.toggle("bg-paper", active);
+        btn.classList.toggle("text-obsidian", active);
+        btn.classList.toggle("text-neutral-400", !active);
+      });
+
+      swappable.forEach((el) => {
+        const next = el.dataset[billing];
+        if (next != null) el.textContent = next;
+      });
+
+      trials.forEach((el) => {
+        el.hidden = billing !== "yearly";
+      });
+    };
+
+    options.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        apply((btn.dataset.billingOption as "monthly" | "yearly") ?? "yearly");
+      });
+    });
+  }
+</script>

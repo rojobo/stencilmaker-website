@@ -1,0 +1,32 @@
+---
+// Floating spatial navigation, anchored to the bottom of the viewport.
+const links = [
+  { href: "#vision", label: "Vision" },
+  { href: "#engine", label: "The Engine" },
+  { href: "#styles", label: "Styles" },
+];
+---
+
+<nav
+  aria-label="Primary"
+  class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 p-2 bg-ink/80 backdrop-blur-xl border border-ash/40 rounded-full shadow-2xl"
+>
+  {
+    links.map(({ href, label }) => (
+      <a
+        href={href}
+        class="px-5 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase text-neutral-400 hover:text-paper hover:bg-ash/50 transition-colors duration-300"
+      >
+        {label}
+      </a>
+    ))
+  }
+  <div class="w-px h-6 bg-ash/50 mx-2" aria-hidden="true"></div>
+  <a
+    href="#download"
+    class="flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold tracking-widest uppercase bg-paper text-obsidian hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(250,250,250,0.1)]"
+  >
+    <span>Download</span>
+    <i class="ph ph-arrow-down-right" aria-hidden="true"></i>
+  </a>
+</nav>

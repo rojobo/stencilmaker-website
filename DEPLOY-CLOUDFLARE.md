@@ -1,0 +1,368 @@
+# Deploying to Cloudflare Pages — step by step
+
+Numbered, no-skip. Follow in order; later steps depend on earlier ones.
+Time estimate: **30 minutes** for a base deploy, **2 hours** including
+all integrations from `LIBRARIES-AUDIT.md` Phase 1.
+
+> Domain assumed throughout: **`thestencilmaker.com`**.
+> Replace if yours differs.
+
+---
+
+## 0 — Prerequisites
+
+- [ ] A **Cloudflare account** (free tier is enough). Sign up at
+  [dash.cloudflare.com](https://dash.cloudflare.com/sign-up).
+- [ ] A **GitHub** (or GitLab) account that owns a repo you can push to.
+- [ ] Your custom **domain** registered, with DNS you can change. (If you
+  registered it through Cloudflare Registrar, DNS is already on Cloudflare.)
+- [ ] Local toolchain: Node 22+ (`nvm use`), pnpm 10 (`corepack enable`),
+  `git`.
+- [ ] (Optional) `gh` CLI authenticated: `gh auth login`.
+
+Verify locally before pushing:
+
+```bash
+pnpm install
+pnpm check        # 0 errors expected
+pnpm build        # dist/ produced, no errors
+```
+
+---
+
+## 1 — Push the code to GitHub
+
+```bash
+cd /home/bryan/StencilMakerWebsite
+git add .
+git commit -m "Migrate to Astro 5 + Cloudflare Pages stack"
+
+# If the repo doesn't exist remotely yet:
+gh repo create stencilmaker-website --private --source=. --remote=origin --push
+
+# Otherwise:
+git push -u origin master
+```
+
+Confirm at `https://github.com/<you>/stencilmaker-website` that the tree
+contains `astro.config.mjs`, `wrangler.toml`, `src/`, and `public/`.
+
+---
+
+## 2 — Create the Cloudflare Pages project
+
+1. Open [dash.cloudflare.com](https://dash.cloudflare.com/).
+2. Sidebar → **Workers & Pages** → **Create** → **Pages** tab → **Connect
+   to Git**.
+3. Authorize GitHub if prompted, select the `stencilmaker-website` repo.
+4. **Set up builds and deployments:**
+   - **Production branch:** `master` (or `main`)
+   - **Framework preset:** **Astro** (auto-detected; confirms `pnpm build`).
+   - **Build command:** `pnpm install --frozen-lockfile && pnpm build`
+   - **Build output directory:** `dist`
+   - **Root directory:** (leave empty)
+   - **Environment variables (build):**
+     - `NODE_VERSION` = `22`
+     - `PNPM_VERSION` = `10`
+5. Click **Save and Deploy**. The first build takes ~2 minutes.
+6. You get a free `*.pages.dev` URL — open it; you should see the live site.
+
+> If the first deploy fails, expand the build log. 95% of the time it's a
+> missing `NODE_VERSION` env var (Cloudflare defaults to 20.x; Astro 5 wants
+> 22). Add it under **Settings → Environment variables → Production**, then
+> redeploy from **Deployments → Retry**.
+
+---
+
+## 3 — Wire up the custom domain
+
+1. Pages project → **Custom domains** → **Set up a custom domain**.
+2. Enter `thestencilmaker.com`. Cloudflare detects whether the DNS zone is
+   already on Cloudflare:
+   - **Yes (Cloudflare Registrar or Cloudflare nameservers):** click
+     **Activate domain** — done in 60 seconds.
+   - **No (external registrar):** Cloudflare gives you NS records to set
+     at your registrar. Propagation: 5 minutes to 48 hours.
+3. Add `www.thestencilmaker.com` as a second custom domain on the same
+   Pages project; Cloudflare auto-redirects it to the apex.
+4. **Verify TLS:** wait for the SSL status to show "Active" (auto-issued
+   via Universal SSL).
+5. **Force HTTPS:** Cloudflare dashboard → SSL/TLS → **Edge Certificates** →
+   enable **Always Use HTTPS** and **Automatic HTTPS Rewrites**.
+
+You should now be able to hit `https://thestencilmaker.com/` and see the
+site.
+
+---
+
+## 4 — Cloudflare Web Analytics (cookieless, no banner)
+
+1. Dashboard → **Analytics & Logs** → **Web Analytics** → **Add a site**.
+2. Choose **Automatic setup (via Pages)** — Cloudflare injects the snippet
+   into every HTML response. No code change required.
+3. (Optional) For more control, switch to **Manual setup**, copy the
+   beacon token, and add the snippet to `src/layouts/BaseLayout.astro`
+   inside the `<slot name="head" />`. Either path is fine; automatic is
+   faster.
+4. Data starts flowing within ~5 minutes.
+
+---
+
+## 5 — Cloudflare Turnstile (anti-bot for the lead form)
+
+1. Dashboard → **Turnstile** → **Add site**.
+2. Settings:
+   - **Site name:** `StencilMaker — production`
+   - **Hostnames:** `thestencilmaker.com`, `www.thestencilmaker.com`,
+     and the Pages preview hostname (e.g. `stencilmaker.pages.dev`).
+   - **Widget mode:** **Managed** (invisible 95% of the time).
+3. Save. Copy the **Site key** and **Secret key**.
+4. Pages project → **Settings → Environment variables → Production**, add:
+   - `PUBLIC_TURNSTILE_SITE_KEY` = the **site key** (note the `PUBLIC_`
+     prefix — that's how Astro exposes it to client-side code).
+   - `TURNSTILE_SECRET` = the **secret key** (server-only).
+5. Repeat for the **Preview** environment so the widget loads on PR
+   previews too.
+6. Trigger a redeploy: **Deployments** → **⋯** → **Retry deployment**.
+7. Visit `/#updates`; the Turnstile widget renders below the form.
+
+---
+
+## 6 — Cloudflare D1 (lead storage)
+
+D1 is serverless SQLite — the simplest possible database for an email list.
+
+### 6.1 Create the database
+
+```bash
+# Authenticate Wrangler once with your Cloudflare account.
+pnpm exec wrangler login
+
+# Create the database.
+pnpm exec wrangler d1 create stencilmaker-leads
+```
+
+Wrangler prints something like:
+
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "stencilmaker-leads"
+database_id = "abcdef12-3456-7890-abcd-ef1234567890"
+```
+
+### 6.2 Bind it in `wrangler.toml`
+
+Open `wrangler.toml`, uncomment the `[[d1_databases]]` block, paste the
+`database_id` from step 6.1, commit, and push.
+
+### 6.3 Bind it in the Pages project
+
+Pages project → **Settings → Functions → D1 database bindings** →
+**Add binding**:
+- **Variable name:** `DB`
+- **D1 database:** `stencilmaker-leads`
+
+Save. Pages will redeploy.
+
+### 6.4 Create the `leads` table
+
+Save this as `migrations/0001_init.sql`:
+
+```sql
+CREATE TABLE IF NOT EXISTS leads (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  email       TEXT    NOT NULL UNIQUE,
+  source      TEXT,
+  referrer    TEXT,
+  ip          TEXT,
+  user_agent  TEXT,
+  created_at  TEXT    NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads(created_at);
+```
+
+Apply it:
+
+```bash
+pnpm exec wrangler d1 execute stencilmaker-leads \
+  --remote --file=./migrations/0001_init.sql
+```
+
+Verify:
+
+```bash
+pnpm exec wrangler d1 execute stencilmaker-leads \
+  --remote --command "SELECT name FROM sqlite_master WHERE type='table';"
+```
+
+Expected output: `leads`.
+
+### 6.5 Test the form
+
+Submit the form on the live site with a real email. Then:
+
+```bash
+pnpm exec wrangler d1 execute stencilmaker-leads \
+  --remote --command "SELECT * FROM leads ORDER BY id DESC LIMIT 5;"
+```
+
+The row should be there.
+
+---
+
+## 7 — Resend (notification email)
+
+### 7.1 Sign up + verify the domain
+
+1. [resend.com](https://resend.com) → sign up (free tier = 3,000 emails/mo).
+2. **Domains → Add domain** → `thestencilmaker.com`.
+3. Resend gives you DNS records (DKIM, SPF, optionally DMARC). Add them
+   in Cloudflare → **DNS → Records** for `thestencilmaker.com`. Cloudflare
+   "proxied" should be **OFF** for these (gray cloud, not orange).
+4. Click **Verify**. Takes 1-30 minutes.
+
+### 7.2 Create an API key + sender
+
+1. Resend → **API Keys → Create** → scope **Sending access**. Copy it.
+2. Decide on a sender — e.g. `hello@thestencilmaker.com`.
+
+### 7.3 Add to Pages env
+
+Pages → Settings → Environment variables → Production:
+
+| Name | Value |
+| ---- | ----- |
+| `RESEND_API_KEY` | `re_…` |
+| `RESEND_FROM_EMAIL` | `hello@thestencilmaker.com` |
+| `LEAD_NOTIFY_EMAIL` | your personal inbox |
+
+Redeploy. Submit the form; you should receive the lead email within seconds.
+
+---
+
+## 8 — Verify the deployment
+
+Run through this checklist against the live site at
+`https://thestencilmaker.com/`:
+
+- [ ] Page loads in < 2 s on a cold tab (DevTools → Network → Disable cache).
+- [ ] Lighthouse score: Performance ≥ 90, A11y ≥ 95, Best Practices ≥ 95,
+  SEO = 100. (Run via Chrome DevTools or `pnpm dlx @lhci/cli@latest`.)
+- [ ] View source → `<title>`, `<meta name="description">`, OG tags, Twitter
+  card, canonical, JSON-LD all present.
+- [ ] `https://thestencilmaker.com/robots.txt` returns 200 with the policy.
+- [ ] `https://thestencilmaker.com/sitemap-index.xml` returns 200 with one
+  URL.
+- [ ] `https://thestencilmaker.com/llms.txt` returns 200 with the brief.
+- [ ] `https://thestencilmaker.com/.well-known/security.txt` returns 200.
+- [ ] Response headers (e.g. `curl -I`) show
+  `strict-transport-security`, `content-security-policy`,
+  `x-frame-options: DENY`, `x-content-type-options: nosniff`,
+  `referrer-policy: strict-origin-when-cross-origin`.
+- [ ] Submit the lead form with a real email → success toast → row in D1 →
+  email arrives via Resend.
+- [ ] Submit with garbage like `not-an-email` → "Please enter a valid email"
+  shown inline, no request fired.
+- [ ] Web Analytics dashboard shows the test pageview within 10 minutes.
+- [ ] Open Graph preview tester:
+  [opengraph.xyz/url/thestencilmaker.com](https://www.opengraph.xyz/url/https%3A%2F%2Fthestencilmaker.com) — image, title, description all rendered.
+- [ ] [Rich Results Test](https://search.google.com/test/rich-results) on
+  `thestencilmaker.com` shows the Organization, SoftwareApplication, and
+  FAQ snippets valid.
+
+---
+
+## 9 — Submit to discovery
+
+- **Google Search Console:** add property, verify via Cloudflare DNS TXT
+  record (Cloudflare offers one-click verify), submit
+  `sitemap-index.xml`.
+- **Bing Webmaster Tools:** "Import from Google Search Console" — done in
+  60 seconds once Google is set up.
+- **IndexNow** (Bing, Yandex, Naver — instant indexing): the Cloudflare
+  ruleset includes an opt-in IndexNow toggle under **Caching → Configuration**.
+  Free, takes 30 seconds.
+
+---
+
+## 10 — Subsequent deploys
+
+### Push to deploy (recommended)
+
+```bash
+git push origin master
+```
+
+Pages auto-builds and deploys. Preview deploys are created for every
+branch and PR.
+
+### Manual deploy
+
+For hotfixes or out-of-CI deploys:
+
+```bash
+pnpm build
+pnpm exec wrangler pages deploy ./dist --project-name=stencilmaker
+```
+
+### Roll back
+
+Pages project → **Deployments** → choose any prior successful deploy →
+**⋯ → Rollback**. Single click; takes 10 seconds.
+
+---
+
+## 11 — Local emulation that matches production
+
+Astro's dev server (`pnpm dev`) is fast and ergonomic but doesn't emulate
+the Cloudflare runtime — bindings (`DB`, `LEADS_KV`), `cf.connecting-ip`,
+the Workers cache API, etc. For high-fidelity local testing:
+
+```bash
+pnpm preview:cf
+```
+
+Runs `astro build && wrangler pages dev ./dist`. To exercise the D1
+binding locally without hitting production, use a local SQLite database:
+
+```bash
+# One-time: apply the migration to the local DB.
+pnpm exec wrangler d1 execute stencilmaker-leads \
+  --local --file=./migrations/0001_init.sql
+
+# Then:
+pnpm preview:cf
+# Hit http://localhost:8788/ — bindings work, D1 writes go to the local DB.
+```
+
+---
+
+## 12 — Troubleshooting
+
+| Symptom | Fix |
+| ------- | --- |
+| Build fails with `Cannot find module 'astro'` | `NODE_VERSION` not set to 22 in Pages env. Add it, retry deploy. |
+| Build fails with `pnpm: command not found` | Add `PNPM_VERSION=10` to env (or switch build command to use `corepack enable && pnpm build`). |
+| Lead form returns 500 | Pages → **Functions logs**. Most common: D1 binding mis-named (must be `DB`) or Turnstile secret missing. |
+| Turnstile widget shows "Network Error" | Hostname for the widget doesn't include `thestencilmaker.com`. Add it in Turnstile settings. |
+| Resend mail not sending | DNS records didn't propagate, or DKIM is not verified. Re-check `Domains` page on Resend. |
+| `https://thestencilmaker.com/` returns Cloudflare 522 | Custom domain assigned but Pages hasn't been published yet. Wait for the latest deploy to finish. |
+| CSP errors in browser console | A new script CDN you added isn't in `public/_headers`. Update the `Content-Security-Policy` line. |
+| Sitemap shows internal-only routes | The sitemap integration filter in `astro.config.mjs` already excludes `/api/*`. To exclude more, edit the `filter` callback. |
+| Pages preview shows old build | Hard-reload (`Cmd+Shift+R`). Cloudflare caches HTML at the edge for ~5 minutes per the `_headers` rules. |
+| API route returns 404 | Confirm `output: "server"` in `astro.config.mjs` and `export const prerender = false` in `src/pages/api/lead.ts`. |
+| Lighthouse complains "Avoid an excessive DOM size" | Already minor on this page. Phase 2 of the audit (`astro:assets`) removes redundant `<img>` markup. |
+
+---
+
+## Done.
+
+You now have a production-grade marketing site running on Cloudflare's
+edge network, with anti-bot lead capture, persistent storage, email
+notifications, privacy-first analytics, and a security headers grade of A+.
+
+When you're ready for Phase 2 (image pipeline, font self-host, nonce CSP,
+Sentry, Lighthouse CI), pick items from
+[`LIBRARIES-AUDIT.md`](./LIBRARIES-AUDIT.md) in order.

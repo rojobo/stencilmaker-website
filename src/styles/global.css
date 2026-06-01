@@ -1,0 +1,218 @@
+/* =============================================================================
+   StencilMaker — Global Stylesheet
+   Tailwind v4 CSS-based config (no tailwind.config.js needed).
+   Design tokens, custom utilities, and scroll-driven effects.
+   ========================================================================== */
+
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design Tokens — exposed to Tailwind as utility classes.
+   bg-obsidian, text-paper, font-display, ease-expo, animate-marquee, etc.
+   --------------------------------------------------------------------------- */
+@theme {
+  /* Palette */
+  --color-obsidian: #0a0a0a;
+  --color-ink: #141414;
+  --color-ash: #333333;
+  --color-paper: #fafafa;
+  --color-stencil: #4f46e5;
+
+  /* Typography */
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+
+  /* Motion */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Animations */
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-spin-slow: spin-slow 14s linear infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   Global base
+   --------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-obsidian);
+  color: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings:
+    "ss01", "cv11";
+}
+
+::selection {
+  background-color: var(--color-paper);
+  color: var(--color-obsidian);
+}
+
+/* Honor reduced-motion preference site-wide */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Utility extensions — not in Tailwind core, but used across the page.
+   --------------------------------------------------------------------------- */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* ---------------------------------------------------------------------------
+   The Neural Transfer — before/after split with hover-reveal.
+   --------------------------------------------------------------------------- */
+.transformation-container {
+  position: relative;
+  cursor: w-resize;
+  overflow: hidden;
+  border-radius: 1px;
+}
+
+.layer-original,
+.layer-stencil {
+  position: absolute;
+  inset: 0;
+  transition: clip-path 0.8s var(--ease-expo);
+}
+
+.layer-original {
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+  z-index: 2;
+}
+
+.layer-stencil {
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  z-index: 1;
+}
+
+.transformation-container:hover .layer-original {
+  clip-path: polygon(0 0, 15% 0, 15% 100%, 0 100%);
+}
+
+.transformation-container:hover .layer-stencil {
+  clip-path: polygon(15% 0, 100% 0, 100% 100%, 15% 100%);
+}
+
+.split-divider {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background-color: var(--color-paper);
+  z-index: 10;
+  transform: translateX(-50%);
+  transition: left 0.8s var(--ease-expo);
+  pointer-events: none;
+}
+
+.transformation-container:hover .split-divider {
+  left: 15%;
+}
+
+.faux-stencil {
+  filter: grayscale(100%) contrast(150%) brightness(1.2);
+  mix-blend-mode: luminosity;
+}
+
+.stencil-tint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgb(79 70 229 / 0.15);
+  mix-blend-mode: color;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ---------------------------------------------------------------------------
+   Gallery — desaturated by default, breathes on hover.
+   --------------------------------------------------------------------------- */
+.image-breathe {
+  transition:
+    transform 1.2s var(--ease-expo),
+    filter 0.8s ease;
+}
+
+.gallery-card .image-breathe {
+  filter: grayscale(80%);
+}
+
+.gallery-card:hover .image-breathe {
+  transform: scale(1.03);
+  filter: grayscale(0%);
+}
+
+/* ---------------------------------------------------------------------------
+   Marquee — used in the social-proof section.
+   --------------------------------------------------------------------------- */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Sponsored Artist — rotating indigo glow ring + scroll-reveal entrance.
+   --------------------------------------------------------------------------- */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Conic-gradient halo that orbits behind the artist portrait. */
+.sa-ring {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--color-stencil) 70deg,
+    transparent 175deg,
+    var(--color-stencil) 280deg,
+    transparent 360deg
+  );
+  animation: var(--animate-spin-slow);
+  will-change: transform;
+}
+
+/* Scroll-reveal: armed by JS only (no-JS / reduced-motion stays visible). */
+.sa-reveal {
+  transition:
+    opacity 0.9s var(--ease-expo),
+    transform 0.9s var(--ease-expo);
+}
+.sa-reveal.is-armed {
+  opacity: 0;
+  transform: translateY(2.5rem);
+}
+.sa-reveal.is-armed.is-visible {
+  opacity: 1;
+  transform: none;
+}

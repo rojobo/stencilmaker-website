@@ -1,0 +1,63 @@
+---
+import "@styles/global.css";
+import SEO from "@components/SEO.astro";
+import JsonLd from "@components/JsonLd.astro";
+import { SITE } from "@/consts";
+
+interface Props {
+  title?: string;
+  description?: string;
+  pathname?: string;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  pathname = Astro.url.pathname,
+} = Astro.props;
+
+const canonical = new URL(pathname, SITE.url).toString();
+---
+
+<!doctype html>
+<html lang={SITE.language} class="scroll-smooth bg-obsidian text-paper antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Preconnect to font + icon CDNs to cut TLS handshake latency -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--
+      Phosphor Icons web component, pinned to 2.1.2 with Subresource Integrity
+      so CDN tampering can't inject malicious JS. Phase 2 of the audit
+      replaces this CDN dependency with locally-vendored SVG sprites.
+    -->
+    <script
+      src="https://unpkg.com/@phosphor-icons/web@2.1.2"
+      integrity="sha384-J7cw2fbG1T4C5MirTVUxsZGaMfw2m0XsCgOQEqUvB1OF9VIsHWuZF1GmyVRzs7eu"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      is:inline
+      defer></script>
+
+    <SEO title={title} description={description} canonical={canonical} />
+    <JsonLd />
+
+    <slot name="head" />
+  </head>
+  <body
+    class="relative overflow-x-hidden selection:bg-paper selection:text-obsidian flex flex-col min-h-screen"
+  >
+    <slot />
+  </body>
+</html>

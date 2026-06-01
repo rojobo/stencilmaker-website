@@ -1,0 +1,26 @@
+# Cloudflare Wrangler config for local Pages emulation and deployment.
+# Astro builds to ./dist; Wrangler serves that as a Cloudflare Pages project.
+# Reference: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+
+name = "stencilmaker"
+compatibility_date = "2026-05-27"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
+
+# ---------------------------------------------------------------------------
+# Bindings — uncomment once each resource has been provisioned in the
+# Cloudflare dashboard or via `wrangler` CLI. See DEPLOY-CLOUDFLARE.md.
+# ---------------------------------------------------------------------------
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "stencilmaker-leads"
+# database_id = "REPLACE_WITH_D1_ID"
+
+# [[kv_namespaces]]
+# binding = "LEADS_KV"
+# id = "REPLACE_WITH_KV_ID"
+
+# [vars]
+# TURNSTILE_SITE_KEY = "set in Pages dashboard, not here"
+# RESEND_FROM_EMAIL = "hello@thestencilmaker.com"

@@ -1,0 +1,874 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Footer from "@components/Footer.astro";
+import CustomCursor from "@components/CustomCursor.astro";
+import { SITE } from "@/consts";
+
+// Statically prerender — this is a fixed legal document.
+export const prerender = true;
+
+/* ---------------------------------------------------------------------------
+   Privacy Policy content.
+
+   SOURCE OF TRUTH: StencilMaker/packages/legal-content/src/index.ts
+   (the `PRIVACY` document + `PRIVACY_VERSION`). Content was reviewed and
+   approved by counsel on 2026-05-12 and is App Store / Google Play ready.
+   The AI & generative-processing disclosure is legally load-bearing
+   (Apple Review Guideline 5.1.2(i) + Google Play AI-Generated Content
+   policy) — keep its wording in sync with the source package verbatim.
+   --------------------------------------------------------------------------- */
+const PRIVACY_VERSION = "2026.05.12";
+const PRIVACY_UPDATED = "May 12, 2026";
+
+const meta = [
+  { label: "Last updated", value: PRIVACY_UPDATED },
+  { label: "Version", value: PRIVACY_VERSION, mono: true },
+  { label: "Status", value: "Counsel-approved" },
+];
+
+// Section index — drives the table of contents and scroll-spy.
+const sections = [
+  { id: "collect", index: "01", label: "What we collect" },
+  { id: "ai-processing", index: "02", label: "AI & generative processing" },
+  { id: "what-we-dont", index: "03", label: "What we don’t do" },
+  { id: "processors", index: "04", label: "Third-party processors" },
+  { id: "rights", index: "05", label: "Your rights" },
+  { id: "retention", index: "06", label: "Data retention" },
+  { id: "contact", index: "07", label: "Contact" },
+] as const;
+
+const collected = [
+  {
+    icon: "ph-user-circle",
+    term: "Account data",
+    detail:
+      "Email, display name, and avatar from your chosen sign-in provider — Apple, Google, Meta / Instagram, or an email magic-link.",
+  },
+  {
+    icon: "ph-image-square",
+    term: "Uploads",
+    detail:
+      "Photos you submit for stencil generation. On the Free tier these are processed and not retained beyond generation. Premium uploads are persisted to your cloud gallery.",
+  },
+  {
+    icon: "ph-chart-line-up",
+    term: "Usage telemetry",
+    detail:
+      "Crash reports via Sentry and product analytics via PostHog. Identifiers are pseudonymous where technically feasible.",
+  },
+  {
+    icon: "ph-fingerprint",
+    term: "Device identifiers",
+    detail:
+      "A hashed device fingerprint, used solely to deter multi-account abuse.",
+  },
+] as const;
+
+const notDo = [
+  {
+    icon: "ph-currency-circle-dollar",
+    title: "No data sales",
+    detail: "We do not sell personal data.",
+  },
+  {
+    icon: "ph-brain",
+    title: "No model training",
+    detail: "We do not train AI models on your uploads.",
+  },
+  {
+    icon: "ph-eye-slash",
+    title: "No ad tracking",
+    detail: "We do not run ad tracking or build advertising profiles.",
+  },
+] as const;
+
+const processors = [
+  { name: "Supabase", purpose: "Authentication, storage, database" },
+  { name: "Vercel AI Gateway / Google Gemini", purpose: "Stencil generation" },
+  { name: "Sentry", purpose: "Crash reporting" },
+  { name: "PostHog", purpose: "Product analytics" },
+  { name: "RevenueCat", purpose: "Subscription lifecycle" },
+  { name: "Coinbase Commerce", purpose: "USDC payments (web credit packs)" },
+] as const;
+
+const retention = [
+  {
+    label: "Free-tier stencils",
+    duration: "24 hours",
+    detail: "Purged 24 hours after generation.",
+  },
+  {
+    label: "Premium stencils",
+    duration: "Until deleted",
+    detail: "Retained until you choose to delete them.",
+  },
+  {
+    label: "Account metadata",
+    duration: "Account lifetime",
+    detail: "Retained for the lifetime of your account.",
+  },
+  {
+    label: "Billing records",
+    duration: "7 years",
+    detail: "Retained to satisfy a legal requirement.",
+  },
+] as const;
+
+const cascade = [
+  "uploads",
+  "stencils",
+  "generations",
+  "device records",
+  "linked OAuth identities",
+];
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stencil focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian";
+
+const pageDescription =
+  "How StencilMaker handles your data: what we collect, our AI generative-processing disclosure, third-party processors, retention windows, and your rights.";
+---
+
+<BaseLayout
+  title={`Privacy Policy — ${SITE.name}`}
+  description={pageDescription}
+  pathname="/privacy"
+>
+  <!-- Skip link for keyboard users -->
+  <a
+    href="#policy"
+    class:list={[
+      "sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[120] focus:px-4 focus:py-2 focus:bg-paper focus:text-obsidian focus:text-sm focus:font-bold focus:uppercase focus:tracking-widest focus:rounded-sm",
+    ]}
+  >
+    Skip to policy
+  </a>
+
+  <!-- Reading-progress bar, scroll-driven. -->
+  <div
+    id="reading-progress"
+    class="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-stencil origin-left scale-x-0 will-change-transform"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Slim, persistent sub-page header. -->
+  <header
+    class="sticky top-0 z-50 w-full border-b border-ash/30 bg-obsidian/80 backdrop-blur-xl"
+  >
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-[4.5rem] flex items-center justify-between gap-4"
+    >
+      <a
+        href="/"
+        class:list={[
+          "flex items-center gap-2.5 -ml-1 rounded-sm",
+          focusRing,
+        ]}
+        aria-label={`${SITE.name} home`}
+      >
+        <img
+          src="/assets/hero-graphic-light.png"
+          alt=""
+          width="40"
+          height="40"
+          class="w-9 h-9 md:w-10 md:h-10 object-contain"
+          loading="eager"
+          decoding="async"
+        />
+        <span class="font-display font-bold text-lg sm:text-xl md:text-2xl tracking-tight whitespace-nowrap">
+          {SITE.name}<span class="text-stencil leading-none">.</span>
+        </span>
+      </a>
+
+      <nav
+        aria-label="Page"
+        class="flex items-center gap-1 sm:gap-2 text-xs font-bold uppercase tracking-widest"
+      >
+        <a
+          href="/"
+          class:list={[
+            "hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          Home
+        </a>
+        <a
+          href="/terms"
+          class:list={[
+            "hidden sm:inline-flex items-center px-3 sm:px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          Terms
+        </a>
+        <a
+          href="/#download"
+          class:list={[
+            "ml-1 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-paper text-obsidian rounded-sm whitespace-nowrap hover:bg-white hover:-translate-y-0.5 transition-all duration-300",
+            focusRing,
+          ]}
+        >
+          <span class="hidden sm:inline">Get the app</span>
+          <span class="sm:hidden">App</span>
+          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================================
+         Masthead
+         =================================================================== -->
+    <section
+      class="relative w-full overflow-hidden px-6 md:px-12 pt-20 md:pt-28 pb-14 md:pb-20"
+    >
+      <!-- Indigo radial glow, anchored top-right like the hero. -->
+      <div
+        class="pointer-events-none absolute -top-24 right-[-10%] w-[640px] h-[640px] bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.14)_0%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <!-- Oversized watermark glyph. -->
+      <i
+        class="ph ph-shield-check pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"></i>
+
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <div
+          class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-8"
+        >
+          <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+          <span>Legal</span>
+          <span class="text-neutral-700" aria-hidden="true">/</span>
+          <span class="text-neutral-500">Privacy</span>
+        </div>
+
+        <h1
+          class="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-paper"
+        >
+          Privacy<br />
+          <span class="text-neutral-500"
+            >Policy<span class="text-stencil">.</span></span
+          >
+        </h1>
+
+        <p
+          class="mt-8 font-sans text-lg md:text-xl font-light text-neutral-300 leading-relaxed text-balance max-w-2xl"
+        >
+          We respect your privacy and collect only what we need to run the App.
+        </p>
+
+        <!-- Metadata strip -->
+        <dl
+          class="mt-10 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-ash/30 pt-6 max-w-2xl"
+        >
+          {
+            meta.map((m) => (
+              <div class="flex flex-col gap-1">
+                <dt class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+                  {m.label}
+                </dt>
+                <dd
+                  class:list={[
+                    "text-sm text-paper",
+                    m.mono && "font-mono tabular-nums",
+                  ]}
+                >
+                  {m.value}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Document body — sticky TOC rail + content
+         =================================================================== -->
+    <div
+      id="policy"
+      class="max-w-7xl mx-auto px-6 md:px-12 pb-32 scroll-mt-24"
+    >
+      <div class="grid lg:grid-cols-[15rem_minmax(0,1fr)] gap-y-10 lg:gap-x-16 xl:gap-x-24">
+        <!-- ---- Table of contents ---- -->
+        <aside class="lg:sticky lg:top-28 lg:self-start">
+          <!-- Mobile: collapsible jump list -->
+          <details
+            class="lg:hidden group border border-ash/30 rounded-sm bg-ink/40"
+          >
+            <summary
+              class:list={[
+                "flex items-center justify-between gap-3 px-5 py-4 cursor-pointer list-none select-none rounded-sm",
+                focusRing,
+              ]}
+            >
+              <span
+                class="text-[10px] font-mono uppercase tracking-widest text-neutral-400"
+              >
+                On this page
+              </span>
+              <i
+                class="ph ph-caret-down text-neutral-400 transition-transform duration-300 group-open:rotate-180"
+                aria-hidden="true"></i>
+            </summary>
+            <nav aria-label="On this page" class="px-2 pb-3">
+              <ol class="flex flex-col">
+                {
+                  sections.map((s) => (
+                    <li>
+                      <a
+                        href={`#${s.id}`}
+                        class:list={[
+                          "flex items-center gap-3 px-3 py-3 rounded-sm text-sm text-neutral-400 hover:text-paper hover:bg-ash/30 transition-colors",
+                          focusRing,
+                        ]}
+                      >
+                        <span class="font-mono text-[10px] text-neutral-600">
+                          {s.index}
+                        </span>
+                        {s.label}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ol>
+            </nav>
+          </details>
+
+          <!-- Desktop: sticky scroll-spy rail -->
+          <nav
+            aria-label="On this page"
+            class="hidden lg:block"
+            data-toc
+          >
+            <p
+              class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-5"
+            >
+              On this page
+            </p>
+            <ol class="flex flex-col gap-0.5 border-l border-ash/30">
+              {
+                sections.map((s) => (
+                  <li>
+                    <a
+                      href={`#${s.id}`}
+                      data-toc-link={s.id}
+                      class:list={[
+                        "group flex items-center gap-3 -ml-px border-l-2 border-transparent py-2 pl-4 text-sm text-neutral-500 transition-colors duration-200 hover:text-paper",
+                        focusRing,
+                      ]}
+                    >
+                      <span class="font-mono text-[10px] text-neutral-600 group-hover:text-neutral-400 transition-colors">
+                        {s.index}
+                      </span>
+                      <span class="leading-tight">{s.label}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ol>
+          </nav>
+        </aside>
+
+        <!-- ---- Content ---- -->
+        <div class="min-w-0">
+          <!-- 01 — What we collect -->
+          <section
+            id="collect"
+            data-section
+            class="scroll-mt-24 pb-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">01</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                What we collect
+              </h2>
+            </div>
+
+            <dl class="flex flex-col">
+              {
+                collected.map((c, i) => (
+                  <div
+                    class:list={[
+                      "grid sm:grid-cols-[auto_1fr] gap-x-5 gap-y-2 py-6",
+                      i !== 0 && "border-t border-ash/20",
+                    ]}
+                  >
+                    <i
+                      class={`ph ${c.icon} text-2xl text-paper sm:mt-0.5`}
+                      aria-hidden="true"
+                    />
+                    <div class="max-w-[60ch]">
+                      <dt class="font-display font-bold text-lg text-paper mb-1.5">
+                        {c.term}
+                      </dt>
+                      <dd class="text-neutral-400 leading-relaxed">
+                        {c.detail}
+                      </dd>
+                    </div>
+                  </div>
+                ))
+              }
+            </dl>
+          </section>
+
+          <!-- 02 — AI & generative processing (legally load-bearing callout) -->
+          <section
+            id="ai-processing"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">02</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                AI &amp; third-party generative processing
+              </h2>
+            </div>
+
+            <div
+              class="relative overflow-hidden rounded-sm border border-stencil/40 bg-stencil/[0.06] p-7 md:p-10 shadow-[0_0_80px_-20px_rgba(79,70,229,0.5)]"
+            >
+              <div
+                class="pointer-events-none absolute -top-16 -right-16 w-56 h-56 bg-[radial-gradient(circle,rgba(79,70,229,0.25)_0%,transparent_70%)]"
+                aria-hidden="true"
+              >
+              </div>
+
+              <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-6">
+                  <span
+                    class="flex items-center justify-center w-11 h-11 rounded-sm bg-stencil/15 border border-stencil/40"
+                  >
+                    <i
+                      class="ph ph-sparkle text-xl text-stencil"
+                      aria-hidden="true"></i>
+                  </span>
+                  <span
+                    class="text-[10px] font-mono uppercase tracking-widest text-stencil"
+                  >
+                    Disclosure &amp; consent
+                  </span>
+                </div>
+
+                <div class="space-y-5 text-paper/90 leading-relaxed max-w-[65ch]">
+                  <p>
+                    When you upload a reference image and select a style to
+                    generate a stencil, your image is transmitted to <strong
+                      class="font-semibold text-paper">Google Gemini</strong
+                    > (a third-party generative AI model) via <strong
+                      class="font-semibold text-paper">Vercel AI Gateway</strong
+                    >. Both providers are located in the United States.
+                  </p>
+                  <p>
+                    By uploading an image and initiating generation you
+                    explicitly consent to this limited sharing and processing
+                    solely for the purpose of creating the black-line stencil.
+                    The image is <strong class="font-semibold text-paper"
+                      >not retained</strong
+                    > by the AI provider after the request completes, is <strong
+                      class="font-semibold text-paper">never used to train models</strong
+                    >, and is <strong class="font-semibold text-paper"
+                      >never shared</strong
+                    > with any other party.
+                  </p>
+                </div>
+
+                <p
+                  class="mt-7 pt-5 border-t border-stencil/25 flex items-start gap-3 text-sm text-neutral-400 leading-relaxed max-w-[65ch]"
+                >
+                  <i
+                    class="ph ph-seal-check text-base text-stencil mt-0.5 shrink-0"
+                    aria-hidden="true"></i>
+                  <span>
+                    This disclosure and consent mechanism satisfies App Store
+                    Review Guideline 5.1.2(i) and Google Play AI-Generated
+                    Content policy requirements for apps that use generative AI.
+                  </span>
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 03 — What we don't do -->
+          <section
+            id="what-we-dont"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">03</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                What we don&rsquo;t do
+              </h2>
+            </div>
+
+            <ul class="grid gap-4 sm:grid-cols-3">
+              {
+                notDo.map((n) => (
+                  <li class="flex flex-col gap-3 p-6 border border-ash/30 rounded-sm bg-ink/40 hover:bg-ink transition-colors">
+                    <i
+                      class={`ph ${n.icon} text-2xl text-stencil`}
+                      aria-hidden="true"
+                    />
+                    <h3 class="font-display font-bold text-paper">{n.title}</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                      {n.detail}
+                    </p>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <!-- 04 — Third-party processors -->
+          <section
+            id="processors"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-4">
+              <span class="font-mono text-sm text-stencil">04</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Third-party processors
+              </h2>
+            </div>
+            <p class="text-neutral-400 leading-relaxed max-w-[60ch] mb-8">
+              We share data with a small set of vetted processors strictly to
+              operate the App. Every processor below operates in the <span
+                class="text-paper">United States</span
+              >.
+            </p>
+
+            <!-- Desktop table -->
+            <div class="hidden md:block border border-ash/30 rounded-sm overflow-hidden">
+              <table class="w-full text-left border-collapse">
+                <caption class="sr-only">
+                  Third-party data processors, their purpose, and operating
+                  region.
+                </caption>
+                <thead>
+                  <tr class="bg-ink">
+                    <th
+                      scope="col"
+                      class="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-neutral-500 font-medium"
+                    >
+                      Processor
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-neutral-500 font-medium"
+                    >
+                      Purpose
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-neutral-500 font-medium"
+                    >
+                      Region
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    processors.map((p) => (
+                      <tr class="border-t border-ash/20 hover:bg-ink/60 transition-colors">
+                        <th
+                          scope="row"
+                          class="px-6 py-4 font-display font-bold text-paper align-top"
+                        >
+                          {p.name}
+                        </th>
+                        <td class="px-6 py-4 text-neutral-400 align-top">
+                          {p.purpose}
+                        </td>
+                        <td class="px-6 py-4 align-top">
+                          <span class="inline-flex items-center gap-2 text-neutral-400 whitespace-nowrap">
+                            <i
+                              class="ph ph-globe-hemisphere-west text-base text-neutral-500"
+                              aria-hidden="true"
+                            />
+                            United States
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Mobile cards -->
+            <ul class="md:hidden flex flex-col gap-3">
+              {
+                processors.map((p) => (
+                  <li class="p-5 border border-ash/30 rounded-sm bg-ink/40">
+                    <p class="font-display font-bold text-paper">{p.name}</p>
+                    <p class="text-sm text-neutral-400 mt-1">{p.purpose}</p>
+                    <p class="mt-3 inline-flex items-center gap-2 text-xs text-neutral-500">
+                      <i
+                        class="ph ph-globe-hemisphere-west text-sm"
+                        aria-hidden="true"
+                      />
+                      United States
+                    </p>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <!-- 05 — Your rights -->
+          <section
+            id="rights"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">05</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Your rights
+              </h2>
+            </div>
+
+            <p class="text-neutral-300 text-lg leading-relaxed max-w-[60ch]">
+              You can export your data or delete your account at any time from
+              <span
+                class="inline-flex items-center gap-1.5 px-2 py-0.5 mx-0.5 rounded-sm bg-ink border border-ash/50 text-sm font-mono text-paper align-baseline"
+                ><i class="ph ph-gear-six text-xs text-neutral-400" aria-hidden="true"
+                ></i>Settings</span
+              >.
+            </p>
+
+            <div
+              class="mt-8 flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40 max-w-[60ch]"
+            >
+              <i
+                class="ph ph-trash-simple text-xl text-paper mt-0.5 shrink-0"
+                aria-hidden="true"></i>
+              <div>
+                <p class="text-neutral-300 leading-relaxed">
+                  A delete cascades across everything tied to your account:
+                </p>
+                <ul class="mt-3 flex flex-wrap gap-2">
+                  {
+                    cascade.map((item) => (
+                      <li class="px-3 py-1 rounded-full bg-ash/30 border border-ash/40 text-xs text-neutral-300">
+                        {item}
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- 06 — Data retention -->
+          <section
+            id="retention"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">06</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Data retention
+              </h2>
+            </div>
+
+            <dl class="flex flex-col">
+              {
+                retention.map((r, i) => (
+                  <div
+                    class:list={[
+                      "grid sm:grid-cols-[1fr_auto] sm:items-center gap-x-6 gap-y-2 py-5",
+                      i !== 0 && "border-t border-ash/20",
+                    ]}
+                  >
+                    <div class="sm:order-1 order-2">
+                      <dt class="font-display font-bold text-paper">
+                        {r.label}
+                      </dt>
+                      <dd class="text-sm text-neutral-400 mt-1">{r.detail}</dd>
+                    </div>
+                    <span class="sm:order-2 order-1 inline-flex w-fit items-center px-3 py-1.5 rounded-sm bg-ink border border-ash/40 font-mono text-sm tabular-nums text-paper whitespace-nowrap">
+                      {r.duration}
+                    </span>
+                  </div>
+                ))
+              }
+            </dl>
+          </section>
+
+          <!-- 07 — Contact -->
+          <section id="contact" data-section class="scroll-mt-24 pt-16">
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">07</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Contact
+              </h2>
+            </div>
+
+            <div
+              class="relative overflow-hidden flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 p-8 md:p-10 border border-ash/30 rounded-sm bg-ink"
+            >
+              <div
+                class="pointer-events-none absolute -bottom-20 -left-10 w-72 h-72 bg-[radial-gradient(circle,rgba(79,70,229,0.12)_0%,transparent_70%)]"
+                aria-hidden="true"
+              >
+              </div>
+              <div class="relative z-10 max-w-md">
+                <h3
+                  class="font-display text-2xl md:text-3xl font-bold tracking-tight text-paper mb-2"
+                >
+                  Questions about your data?
+                </h3>
+                <p class="text-neutral-400 leading-relaxed">
+                  Reach our privacy team directly. We answer every request.
+                </p>
+              </div>
+              <a
+                href="mailto:privacy@stencilmaker.app"
+                class:list={[
+                  "relative z-10 shrink-0 inline-flex items-center justify-center gap-3 px-7 py-4 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-8px_rgba(250,250,250,0.2)] transition-all duration-300",
+                  focusRing,
+                ]}
+              >
+                <i class="ph ph-envelope-simple text-lg" aria-hidden="true"></i>
+                privacy@stencilmaker.app
+              </a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Back-to-top — appears once you've scrolled past the masthead. -->
+  <button
+    id="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    class:list={[
+      "fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-ink/80 backdrop-blur-xl border border-ash/40 text-paper shadow-2xl opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:bg-ash/60",
+      focusRing,
+    ]}
+  >
+    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+  </button>
+
+  <Footer />
+  <CustomCursor />
+</BaseLayout>
+
+<script>
+  // ---- Reading progress bar (rAF-throttled, transform-only) ----
+  const bar = document.getElementById("reading-progress");
+  let ticking = false;
+
+  function updateProgress() {
+    if (!bar) return;
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - doc.clientHeight;
+    const ratio = max > 0 ? Math.min(doc.scrollTop / max, 1) : 0;
+    bar.style.transform = `scaleX(${ratio})`;
+    ticking = false;
+  }
+
+  // ---- Back-to-top visibility ----
+  const toTop = document.getElementById("back-to-top");
+
+  function updateToTop() {
+    if (!toTop) return;
+    const show = window.scrollY > 600;
+    toTop.classList.toggle("opacity-0", !show);
+    toTop.classList.toggle("translate-y-3", !show);
+    toTop.classList.toggle("pointer-events-none", !show);
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateProgress();
+        updateToTop();
+      });
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  updateProgress();
+  updateToTop();
+
+  toTop?.addEventListener("click", () => {
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
+  // ---- Scroll-spy: highlight the active section in the TOC ----
+  const tocLinks = new Map<string, HTMLAnchorElement>();
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-toc-link]")
+    .forEach((el) => {
+      const id = el.getAttribute("data-toc-link");
+      if (id) tocLinks.set(id, el);
+    });
+
+  function setActive(id: string) {
+    tocLinks.forEach((link, linkId) => {
+      const isActive = linkId === id;
+      link.classList.toggle("!border-stencil", isActive);
+      link.classList.toggle("!text-paper", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "true");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  const sectionEls = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-section]"),
+  );
+
+  if (sectionEls.length && tocLinks.size && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry nearest the top that is intersecting.
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target.id) {
+          setActive(visible[0].target.id);
+        }
+      },
+      {
+        // Activate a section when it reaches the upper third of the viewport.
+        rootMargin: "-20% 0px -70% 0px",
+        threshold: 0,
+      },
+    );
+    sectionEls.forEach((el) => observer.observe(el));
+  }
+</script>

@@ -1,0 +1,67 @@
+---
+import { SITE } from "@/consts";
+const year = new Date().getFullYear();
+---
+
+<footer
+  id="download"
+  class="w-full bg-obsidian border-t border-ash/30 pt-32 pb-48 px-8 md:px-12 flex flex-col items-center justify-center relative overflow-hidden"
+>
+  <div
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-ink/50 rounded-full blur-[120px] pointer-events-none"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative z-10 text-center flex flex-col items-center max-w-5xl">
+    <h2
+      class="font-display text-[8vw] md:text-[6vw] font-bold leading-[0.9] tracking-tighter mb-8 lowercase"
+    >
+      Flawless execution<br />
+      <span class="text-neutral-600 italic">begins here.</span>
+    </h2>
+
+    <p class="text-neutral-400 text-lg mb-12 max-w-xl">
+      Join professional artists who have upgraded their workflow. Available on
+      iOS, Android, and Web.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a
+        href={SITE.appStoreUrl}
+        rel="noopener"
+        class="px-8 py-5 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(250,250,250,0.3)] transition-all duration-300 flex items-center justify-center gap-3"
+      >
+        <i class="ph-fill ph-apple-logo text-xl" aria-hidden="true"></i>
+        App Store
+      </a>
+      <a
+        href={SITE.playStoreUrl}
+        rel="noopener"
+        class="px-8 py-5 bg-transparent border border-ash text-paper text-sm font-bold uppercase tracking-widest rounded-sm hover:border-paper transition-all duration-300 flex items-center justify-center gap-3"
+      >
+        <i class="ph-fill ph-google-play-logo text-xl" aria-hidden="true"></i>
+        Google Play
+      </a>
+      <a
+        href={SITE.webAppUrl}
+        rel="noopener"
+        class="px-8 py-5 bg-transparent border border-ash text-paper text-sm font-bold uppercase tracking-widest rounded-sm hover:border-paper transition-all duration-300 flex items-center justify-center gap-3"
+      >
+        <i class="ph ph-globe text-xl" aria-hidden="true"></i>
+        Web App
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="absolute bottom-8 left-8 right-8 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase font-mono tracking-widest text-neutral-600 gap-4"
+  >
+    <div>&copy; {year} {SITE.name} Inc.</div>
+    <div class="flex gap-6">
+      <a href="/privacy" class="hover:text-paper transition-colors">Privacy</a>
+      <a href="/terms" class="hover:text-paper transition-colors">Terms</a>
+      <a href="/artists" class="hover:text-paper transition-colors">Artist Directory</a>
+    </div>
+  </div>
+</footer>

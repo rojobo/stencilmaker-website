@@ -1,0 +1,104 @@
+<section
+  id="engine"
+  class="relative w-full py-32 md:py-48 bg-obsidian border-t border-ash/30"
+>
+  <div
+    class="max-w-7xl mx-auto px-8 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center"
+  >
+    <div class="lg:col-span-4 flex flex-col gap-8 lg:pr-12">
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 bg-ink border border-ash/50 rounded-full w-fit"
+      >
+        <div class="w-2 h-2 rounded-full bg-stencil animate-pulse"></div>
+        <span class="text-[10px] uppercase font-mono tracking-widest text-neutral-400">
+          Diffusion Model 4.0
+        </span>
+      </div>
+      <h2
+        class="font-display text-4xl md:text-6xl font-bold leading-none tracking-tight"
+      >
+        The Neural Transfer.
+      </h2>
+      <p class="font-sans text-neutral-400 text-lg leading-relaxed">
+        Upload any client reference. Our engine strips away lighting artifacts,
+        shadows, and noise — isolating pure structure perfectly weighted for
+        transfer paper.
+      </p>
+
+      <ul class="flex flex-col gap-6 mt-4">
+        <li class="flex items-start gap-4">
+          <i class="ph ph-aperture text-2xl text-paper mt-1" aria-hidden="true"></i>
+          <div>
+            <h3 class="font-bold text-paper mb-1">Contrast Isolation</h3>
+            <p class="text-sm text-neutral-500">
+              Intelligently separates subject from background context.
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start gap-4">
+          <i class="ph ph-bezier-curve text-2xl text-paper mt-1" aria-hidden="true"></i>
+          <div>
+            <h3 class="font-bold text-paper mb-1">Vector-Grade Linework</h3>
+            <p class="text-sm text-neutral-500">
+              Outputs crisp, infinitely scalable tracing foundations.
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="lg:col-span-8">
+      <div
+        class="w-full aspect-[4/3] md:aspect-[16/9] transformation-container bg-ink relative group"
+      >
+        <div class="layer-stencil w-full h-full stencil-tint">
+          <img
+            src="/gallery/stencil.png"
+            alt="Black-line stencil output: pure contour, no shading, ready for transfer paper"
+            width="1600"
+            height="900"
+            class="w-full h-full object-cover faux-stencil bg-paper"
+            loading="lazy"
+            decoding="async"
+          />
+          <div
+            class="absolute bottom-6 right-6 px-4 py-2 bg-paper text-obsidian text-xs font-bold uppercase tracking-widest rounded-sm"
+          >
+            Output (Stencil)
+          </div>
+        </div>
+
+        <div class="layer-original w-full h-full border-r border-ash/20">
+          <img
+            src="/gallery/dragon-2.png"
+            alt="Original client reference photograph submitted to the StencilMaker engine"
+            width="1600"
+            height="900"
+            class="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+          <div
+            class="absolute bottom-6 left-6 px-4 py-2 bg-obsidian/80 backdrop-blur-md text-paper border border-ash/50 text-xs font-bold uppercase tracking-widest rounded-sm"
+          >
+            Input (Reference)
+          </div>
+        </div>
+
+        <div class="split-divider">
+          <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-paper rounded-full flex items-center justify-center shadow-lg"
+          >
+            <i class="ph ph-arrows-left-right text-obsidian text-sm" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div
+          class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] text-neutral-500 uppercase tracking-widest font-mono opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        >
+          [ Hover to reveal translation ]
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

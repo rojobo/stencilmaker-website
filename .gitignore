@@ -1,2 +1,30 @@
+# Astro / Node
+node_modules/
+dist/
+.astro/
+.output/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+.dev.vars.local
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# AIDesigner artifacts (kept locally, not deployed)
 .aidesigner/*
 !.aidesigner/.gitkeep
+runs/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.log
