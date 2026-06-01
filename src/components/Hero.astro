@@ -14,7 +14,7 @@ import { SITE } from "@/consts";
     </div>
   </div>
 
-  <!-- Hero Graphic: positioned absolutely, right-aligned, vertically centered -->
+  <!-- Hero Graphic: positioned absolutely, right-aligned, vertically centered (DESKTOP, lg+) -->
   <div
     class="hidden lg:block absolute right-12 xl:right-24 top-1/2 -translate-y-1/2 z-[1] w-[380px] xl:w-[440px]"
   >
@@ -32,14 +32,67 @@ import { SITE } from "@/consts";
 
   <div class="relative z-10 w-full max-w-7xl mx-auto">
     <div class="flex flex-col gap-8 max-w-2xl">
+      <!--
+        HALO ARTIFACT — mobile / tablet only (lg:hidden, so the desktop layout
+        above stays pixel-identical). On phones the desktop graphic is hidden,
+        which left the hero text-only with a dead upper region. This restores the
+        signature skull→neural brand mark as the focal point AND the logo
+        presence: it floats, centered, above the eyebrow on a slow-rotating
+        indigo conic halo + radial glow. It reuses the desktop image src
+        (browser-cached — no extra request) and the established .sa-ring halo
+        idiom. Animations are CSS-only, fully visible at rest (no-JS safe), and
+        neutralized under prefers-reduced-motion by the global media query.
+        The glow bed is kept inside the viewport (inset-[-10%]) so nothing clips
+        at the screen edge on a 320px phone.
+      -->
+      <div
+        class="lg:hidden sm-hero-art relative mx-auto mb-2 grid place-items-center w-[min(76vw,300px)] aspect-square"
+      >
+        <!-- Radial indigo glow bed (contained — no horizontal clip at 320px) -->
+        <div
+          class="pointer-events-none absolute inset-[-10%] rounded-full bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.24)_0%,rgba(79,70,229,0.07)_44%,transparent_70%)] blur-[2px]"
+        >
+        </div>
+        <!-- Rotating conic halo (reuses the .sa-ring idiom), masked to a thin ring -->
+        <div
+          class="sm-hero-ring sa-ring pointer-events-none absolute inset-[5%] rounded-full opacity-60"
+        >
+        </div>
+        <!-- Static fine inner ring for crisp containment -->
+        <div
+          class="pointer-events-none absolute inset-[5%] rounded-full border border-stencil/15"
+        >
+        </div>
+        <!-- The artwork itself, levitating above the halo -->
+        <img
+          src="/assets/sm-upscaled.png"
+          alt={`${SITE.name} — a tattoo reference transformed into a pure-line AI stencil`}
+          width="440"
+          height="440"
+          class="sm-hero-float relative z-[1] w-[88%] object-contain drop-shadow-[0_0_50px_rgba(79,70,229,0.28)]"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+
       <div
         class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400"
       >
         <span class="w-8 h-px bg-stencil"></span>
         <span>AI-Powered Tattoo Stencils</span>
       </div>
+      <!--
+        "TRANSLATE" is a single unbreakable 9-letter word; in Syne ExtraBold it
+        measures ~9.84em wide, so any fixed size large enough for desktop
+        overflows narrow phones and gets clipped by the section's overflow-hidden.
+        Fluid clamp() sizes it to the viewport: it fills the column edge-to-edge
+        on phones (intentional, never clipped) and caps at 6rem (= the old
+        lg:text-8xl) on desktop. 7.8vw is the largest coefficient that still fits
+        a 320px screen, empirically measured against the live font.
+      -->
       <h1
-        class="font-display font-extrabold text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight uppercase text-paper"
+        class="font-display font-extrabold text-[clamp(1.5rem,7.8vw,6rem)] leading-[0.9] tracking-tight uppercase text-paper"
       >
         Translate<br />
         <span class="text-neutral-500">Vision.</span>
