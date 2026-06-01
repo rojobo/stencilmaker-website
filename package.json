@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && cp .assetsignore dist/",
     "preview": "astro preview",
     "preview:cf": "astro build && wrangler pages dev ./dist --compatibility-date=2026-05-27",
     "deploy": "astro build && wrangler pages deploy ./dist --project-name=stencilmaker",
