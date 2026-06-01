@@ -1,4 +1,14 @@
-# Deploying to Cloudflare Pages — step by step
+# Deploying to Cloudflare — step by step
+
+> [!IMPORTANT]
+> **This site deploys to Cloudflare Workers (Static Assets), not Cloudflare Pages.**
+> Cloudflare recommends Workers for new projects ([announcement, Apr 2025](https://blog.cloudflare.com/full-stack-development-on-cloudflare-workers/));
+> Pages is in maintenance mode. The repo is wired to **Workers Builds** (Git →
+> `pnpm build` → `wrangler deploy`). The **"Deploying as a Cloudflare Worker"**
+> section directly below is the source of truth. Sections **2, 10, 11** still
+> describe the old Pages flow (`wrangler pages deploy`, `wrangler pages dev`) and
+> are **superseded** — read them only for the D1/Resend/Turnstile/DNS sub-steps,
+> which are unchanged; ignore their `wrangler pages …` commands.
 
 Numbered, no-skip. Follow in order; later steps depend on earlier ones.
 Time estimate: **30 minutes** for a base deploy, **2 hours** including
@@ -6,6 +16,61 @@ all integrations from `LIBRARIES-AUDIT.md` Phase 1.
 
 > Domain assumed throughout: **`thestencilmaker.com`**.
 > Replace if yours differs.
+
+---
+
+## Deploying as a Cloudflare Worker (current path)
+
+**Platform:** Cloudflare **Workers Builds** — a Git-connected Worker, not a Pages
+project. Tell them apart in the dashboard: Workers Builds has a **Deploy command**
+and **no Build-output-directory** field; Pages is the reverse.
+
+**1. Repo config (already set):**
+
+- `wrangler.toml` is a Workers Static-Assets config:
+  ```toml
+  name = "stencilmaker"            # MUST match the connected Worker's name
+  main = "dist/_worker.js/index.js"
+  compatibility_date = "2026-05-27"
+  compatibility_flags = ["nodejs_compat"]
+
+  [assets]
+  directory = "./dist"
+  binding = "ASSETS"
+  ```
+- `.assetsignore` (copied into `dist/` by `pnpm build`) lists `_worker.js` and
+  `_routes.json` so the SSR bundle isn't served as a public static file.
+- `astro.config.mjs` is unchanged (`output: "server"`, `@astrojs/cloudflare` v12).
+  `src/pages/api/lead.ts` keeps using `locals.runtime?.env` — valid on v12.
+
+**2. Dashboard build settings** (Workers & Pages → the **`stencilmaker`** Worker →
+**Settings → Builds**):
+
+- **Build command:** `pnpm install --frozen-lockfile && pnpm build`
+- **Deploy command:** `npx wrangler deploy`  ← replaces the old `wrangler pages deploy`
+- **Non-production branch deploy command:** leave default `npx wrangler versions upload`
+- There is **no** build-output-directory field — output is `[assets].directory`.
+- The `name` in `wrangler.toml` **must equal** this Worker's name, or the deploy
+  errors. If your connected Worker is named differently, change `name` to match
+  (or rename the Worker).
+
+**3. First deploy:** push to `master`. Workers Builds runs `pnpm build`, then
+`wrangler deploy`, which **auto-creates the `stencilmaker` Worker** (no
+pre-created project needed) and uploads `./dist` as static assets. The old
+`8000007 Project not found` error is gone — no Pages API is called.
+
+**4. Bindings & secrets** now live on the **Worker** (not a Pages project):
+uncomment the `[[d1_databases]]` / `[[kv_namespaces]]` blocks in `wrangler.toml`
+once provisioned, and set secrets with `wrangler secret put TURNSTILE_SECRET`
+(and `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`) or via the
+Worker's **Settings → Variables and Secrets**. Follow §5–§7 below for the
+provider setup; just attach the results to the Worker instead of a Pages project.
+
+**5. Custom domain:** Worker → **Settings → Domains & Routes** → add
+`thestencilmaker.com` and `www` (your zone is on Cloudflare, so this is one click).
+
+**Manual / hotfix deploy:** `pnpm deploy` (= `astro build && cp .assetsignore dist/
+&& wrangler deploy`). **Local Workers preview:** `pnpm preview:cf` (= `… && wrangler dev`).
 
 ---
 
@@ -343,6 +408,8 @@ pnpm preview:cf
 
 | Symptom | Fix |
 | ------- | --- |
+| Deploy step fails with `Project not found … [code: 8000007]` | The Git build is **Workers Builds**, but `wrangler pages deploy` (a *Pages* command) was being run — it calls the Pages API for a project that doesn't exist. Fix: deploy as a Worker. `wrangler.toml` must be a Workers config (`main` + `[assets]`, no `pages_build_output_dir`) and the Deploy command must be `npx wrangler deploy`. See "Deploying as a Cloudflare Worker" below. |
+| `wrangler deploy` fails: name in config must match the Worker | `name` in `wrangler.toml` must equal the Worker your build is connected to (dashboard → Workers & Pages → the connected Worker). Make them match (edit `name`, or rename the Worker). |
 | Build fails with `Cannot find module 'astro'` | `NODE_VERSION` not set to 22 in Pages env. Add it, retry deploy. |
 | Build fails with `pnpm: command not found` | Add `PNPM_VERSION=10` to env (or switch build command to use `corepack enable && pnpm build`). |
 | Lead form returns 500 | Pages → **Functions logs**. Most common: D1 binding mis-named (must be `DB`) or Turnstile secret missing. |

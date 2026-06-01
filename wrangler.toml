@@ -1,15 +1,33 @@
-# Cloudflare Wrangler config for local Pages emulation and deployment.
-# Astro builds to ./dist; Wrangler serves that as a Cloudflare Pages project.
-# Reference: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+# Cloudflare Wrangler config — Workers + Static Assets (SSR).
+# Astro (output:'server', @astrojs/cloudflare v12) builds to ./dist with the
+# SSR worker entry at dist/_worker.js/index.js. Deployed with `wrangler deploy`,
+# which creates/updates the Worker on first deploy — no pre-created project.
+# Static files in ./dist are served from the edge; only misses invoke the Worker.
+# Ref: https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/
+#
+# NOTE: `name` MUST match the Worker that your Workers Build (Settings > Builds)
+# is connected to in the dashboard, or `wrangler deploy` errors on a name clash.
 
-name = "stencilmaker-website"
+name = "stencilmaker"
+main = "dist/_worker.js/index.js"
 compatibility_date = "2026-05-27"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "./dist"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+# Defaults suit this site: html_handling = "auto-trailing-slash",
+# not_found_handling = "none", run_worker_first = false. _worker.js and
+# _routes.json are kept out of the public asset set via dist/.assetsignore.
+
+[observability]
+enabled = true
 
 # ---------------------------------------------------------------------------
-# Bindings — uncomment once each resource has been provisioned in the
-# Cloudflare dashboard or via `wrangler` CLI. See DEPLOY-CLOUDFLARE.md.
+# Bindings — uncomment once each resource is provisioned. src/pages/api/lead.ts
+# reads these via `locals.runtime?.env` (DB, LEADS_KV, RESEND_*, LEAD_NOTIFY_EMAIL).
+# On Workers, set secrets with `wrangler secret put NAME` or in the Worker's
+# dashboard Settings — they no longer come from a Pages project. See DEPLOY-CLOUDFLARE.md.
 # ---------------------------------------------------------------------------
 
 # [[d1_databases]]
@@ -22,5 +40,4 @@ pages_build_output_dir = "./dist"
 # id = "REPLACE_WITH_KV_ID"
 
 # [vars]
-# TURNSTILE_SITE_KEY = "set in Pages dashboard, not here"
 # RESEND_FROM_EMAIL = "hello@thestencilmaker.com"

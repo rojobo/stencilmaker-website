@@ -3,14 +3,14 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "StencilMaker marketing site — Astro 5 + Tailwind v4, deployed to Cloudflare Pages.",
+  "description": "StencilMaker marketing site — Astro 5 + Tailwind v4, deployed to Cloudflare Workers.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build && cp .assetsignore dist/",
     "preview": "astro preview",
-    "preview:cf": "astro build && wrangler pages dev ./dist --compatibility-date=2026-05-27",
-    "deploy": "astro build && wrangler pages deploy ./dist --project-name=stencilmaker",
+    "preview:cf": "astro build && cp .assetsignore dist/ && wrangler dev",
+    "deploy": "astro build && cp .assetsignore dist/ && wrangler deploy",
     "check": "astro check",
     "astro": "astro"
   },
