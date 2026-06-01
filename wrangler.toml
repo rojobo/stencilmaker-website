@@ -7,6 +7,9 @@ compatibility_date = "2026-05-27"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "./dist"
 
+[assets]
+directory = "./dist"
+
 # ---------------------------------------------------------------------------
 # Bindings — uncomment once each resource has been provisioned in the
 # Cloudflare dashboard or via `wrangler` CLI. See DEPLOY-CLOUDFLARE.md.
