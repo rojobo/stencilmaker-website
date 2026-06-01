@@ -2,7 +2,7 @@
 # Astro builds to ./dist; Wrangler serves that as a Cloudflare Pages project.
 # Reference: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
 
-name = "stencilmaker"
+name = "stencilmaker-website"
 compatibility_date = "2026-05-27"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "./dist"
