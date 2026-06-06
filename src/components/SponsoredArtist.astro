@@ -2,19 +2,20 @@
 // Sponsored Artist — paid partner spotlight.
 // Split layout: framed portrait (with an orbiting indigo glow ring) on the
 // left, bio + links on the right. Scroll-reveals on entrance.
+// Data is sourced from SPONSORED_ARTIST in consts.ts (single source of truth,
+// shared with the full /artists feature page).
+import { SPONSORED_ARTIST } from "@/consts";
+
 const artist = {
-  name: "Bruno Moretti",
-  studio: "LONG LIVE TATTOO COLLECTIVE // DENVER",
-  image: "/gallery/bruno-moretti.jpg",
-  imageAlt:
-    "Portrait of Bruno Moretti, black-and-grey tattoo artist, seated among his framed dark-art prints",
-  bioLead:
-    "Argentina-born, Denver-based — tattooing since 2010. Large-scale black-and-grey freehand dark art where realism bleeds into the surreal, terror, and horror.",
-  bioQuote:
-    "After more than a decade, I still work with the same passion as when I started.",
-  tags: ["Black & Grey", "Freehand", "Dark Realism"],
-  website: "https://www.brunomorettitattoo.com",
-  instagram: "https://www.instagram.com/brunomoretti.tattoo/",
+  name: SPONSORED_ARTIST.name,
+  studio: SPONSORED_ARTIST.studioMeta,
+  image: SPONSORED_ARTIST.portrait,
+  imageAlt: SPONSORED_ARTIST.portraitAlt,
+  bioLead: SPONSORED_ARTIST.bioLead,
+  bioQuote: SPONSORED_ARTIST.quoteShort,
+  tags: SPONSORED_ARTIST.tags.slice(0, 3),
+  website: SPONSORED_ARTIST.links.website,
+  instagram: SPONSORED_ARTIST.links.instagram,
 } as const;
 ---
 
@@ -128,6 +129,17 @@ const artist = {
           <i class="ph ph-instagram-logo text-xl" aria-hidden="true"></i>
         </a>
       </div>
+
+      <a
+        href="/artists"
+        class="group inline-flex items-center gap-2 mt-1 w-fit text-xs font-mono uppercase tracking-widest text-neutral-500 hover:text-paper transition-colors"
+      >
+        <span class="w-6 h-px bg-ash group-hover:bg-stencil transition-colors" aria-hidden="true"></span>
+        Read the full feature
+        <i
+          class="ph ph-arrow-right transition-transform group-hover:translate-x-1"
+          aria-hidden="true"></i>
+      </a>
     </div>
   </div>
 </section>

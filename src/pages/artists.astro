@@ -1,0 +1,993 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Footer from "@components/Footer.astro";
+import CustomCursor from "@components/CustomCursor.astro";
+import { SITE, SPONSORED_ARTIST as A } from "@/consts";
+
+// Statically prerender — this is a content page with no dynamic data.
+export const prerender = true;
+
+/* ---------------------------------------------------------------------------
+   Featured Artists — the StencilMaker artist hall.
+
+   Currently spotlights one resident master, Bruno Moretti, presented as a
+   numbered exhibition "dossier" (Vol. 01). All copy is sourced from his own
+   site; verbatim quotes live in SPONSORED_ARTIST (consts.ts). We do NOT claim
+   he uses the app — the product tie-in is framed strictly around his
+   documented reference-driven, composition-first, large-scale workflow.
+   --------------------------------------------------------------------------- */
+
+const realism = A.works.filter((w) => w.set === "Realism");
+const darkArt = A.works.filter((w) => w.set === "Dark Art");
+
+const tieIns = [
+  {
+    icon: "ph-crosshair-simple",
+    title: "Composition comes first",
+    body: "“What truly excites me is the composition of the tattoo and how it interacts with the body.” Planning placement before the needle is exactly where a precise stencil earns its keep.",
+  },
+  {
+    icon: "ph-image-square",
+    title: "A reference-driven practice",
+    body: "His booking flow asks every client for reference images — the same starting point StencilMaker turns into clean, vector-grade transfer linework in seconds.",
+  },
+  {
+    icon: "ph-stack-simple",
+    title: "Large-scale, multi-session",
+    body: "Full sleeves and back pieces built across sessions demand stencils that register perfectly every time. The higher the stakes, the less room for hand-traced drift.",
+  },
+];
+
+const connect = [
+  {
+    icon: "ph-globe-simple",
+    label: "Portfolio",
+    value: "brunomorettitattoo.com",
+    href: A.links.website,
+  },
+  {
+    icon: "ph-instagram-logo",
+    label: "Instagram",
+    value: `${A.links.instagramHandle} · ${A.followers}`,
+    href: A.links.instagram,
+  },
+  {
+    icon: "ph-microphone-stage",
+    label: "Podcast",
+    value: "InnorMales",
+    href: A.links.podcast,
+  },
+  {
+    icon: "ph-calendar-blank",
+    label: "Book a session",
+    value: "Denver · by request",
+    href: A.links.booking,
+  },
+];
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stencil focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian";
+
+const pageTitle = `Featured Artists — ${SITE.name}`;
+const pageDescription = `Meet the artists shaping the craft with StencilMaker. Vol. 01 spotlights ${A.name} — ${A.origin}-born, ${A.location}-based master of black & grey dark realism, resident at ${A.studio}.`;
+
+const portraitAbs = new URL(A.portrait, SITE.url).toString();
+
+// --- Page-specific structured data (additive to the global JsonLd) ---------
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${SITE.url}/artists#${A.slug}`,
+  name: A.name,
+  jobTitle: "Tattoo Artist",
+  description: A.bioLead,
+  nationality: "Argentine",
+  url: A.links.website,
+  image: portraitAbs,
+  knowsAbout: [
+    "Black and grey tattooing",
+    "Dark art tattoo",
+    "Realism tattoo",
+    "Large-scale custom tattoo",
+  ],
+  worksFor: { "@type": "Organization", name: A.studio },
+  homeLocation: { "@type": "Place", name: A.location },
+  sameAs: [A.links.website, A.links.instagram, A.links.podcast],
+};
+
+const profileLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  url: `${SITE.url}/artists`,
+  name: pageTitle,
+  isPartOf: { "@id": `${SITE.url}#website` },
+  about: { "@id": `${SITE.url}/artists#${A.slug}` },
+  mainEntity: { "@id": `${SITE.url}/artists#${A.slug}` },
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Featured Artists",
+      item: `${SITE.url}/artists`,
+    },
+  ],
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} pathname="/artists">
+  <!-- Skip link for keyboard users -->
+  <a
+    href="#feature"
+    class:list={[
+      "sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[120] focus:px-4 focus:py-2 focus:bg-paper focus:text-obsidian focus:text-sm focus:font-bold focus:uppercase focus:tracking-widest focus:rounded-sm",
+    ]}
+  >
+    Skip to artist
+  </a>
+
+  <!-- Reading-progress bar, scroll-driven. -->
+  <div
+    id="reading-progress"
+    class="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-stencil origin-left scale-x-0 will-change-transform"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Atmospheric film-grain overlay — matches his dark-art aesthetic. -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Slim, persistent sub-page header (mirrors /privacy + /terms). -->
+  <header
+    class="sticky top-0 z-50 w-full border-b border-ash/30 bg-obsidian/80 backdrop-blur-xl"
+  >
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-[4.5rem] flex items-center justify-between gap-4"
+    >
+      <a
+        href="/"
+        class:list={["flex items-center gap-2.5 -ml-1 rounded-sm", focusRing]}
+        aria-label={`${SITE.name} home`}
+      >
+        <img
+          src="/assets/hero-graphic-light.png"
+          alt=""
+          width="40"
+          height="40"
+          class="w-9 h-9 md:w-10 md:h-10 object-contain"
+          loading="eager"
+          decoding="async"
+        />
+        <span
+          class="font-display font-bold text-lg sm:text-xl md:text-2xl tracking-tight whitespace-nowrap"
+        >
+          {SITE.name}<span class="text-stencil leading-none">.</span>
+        </span>
+      </a>
+
+      <nav
+        aria-label="Page"
+        class="flex items-center gap-1 sm:gap-2 text-xs font-bold uppercase tracking-widest"
+      >
+        <a
+          href="/"
+          class:list={[
+            "hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          Home
+        </a>
+        <span
+          aria-current="page"
+          class="hidden sm:inline-flex items-center px-3 sm:px-4 py-2.5 rounded-sm text-paper"
+        >
+          Artists
+        </span>
+        <a
+          href="/#download"
+          class:list={[
+            "ml-1 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-paper text-obsidian rounded-sm whitespace-nowrap hover:bg-white hover:-translate-y-0.5 transition-all duration-300",
+            focusRing,
+          ]}
+        >
+          <span class="hidden sm:inline">Get the app</span>
+          <span class="sm:hidden">App</span>
+          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================================
+         Masthead
+         =================================================================== -->
+    <section
+      class="relative w-full overflow-hidden px-6 md:px-12 pt-20 md:pt-28 pb-12 md:pb-16"
+    >
+      <!-- Indigo radial glow, anchored top-right like the hero. -->
+      <div
+        class="pointer-events-none absolute -top-24 right-[-10%] w-[640px] h-[640px] bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.14)_0%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <!-- Oversized watermark glyph. -->
+      <i
+        class="ph ph-pen-nib pointer-events-none absolute -top-12 right-4 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"></i>
+
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <div
+          class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-8"
+        >
+          <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+          <span>The Roster</span>
+          <span class="text-neutral-700" aria-hidden="true">/</span>
+          <span class="text-neutral-500">Vol. 01</span>
+        </div>
+
+        <h1
+          class="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-paper text-balance"
+        >
+          Featured<br />
+          <span class="text-neutral-500"
+            >Artists<span class="text-stencil">.</span></span
+          >
+        </h1>
+
+        <p
+          class="mt-8 font-sans text-lg md:text-xl font-light text-neutral-300 leading-relaxed text-balance max-w-2xl"
+        >
+          Every clean line starts with an artist who refuses to compromise.
+          These are the masters we build for — and who let us put their work
+          on the wall.
+        </p>
+
+        <!-- Metadata strip -->
+        <dl
+          class="mt-10 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-ash/30 pt-6 max-w-2xl"
+        >
+          <div class="flex flex-col gap-1">
+            <dt
+              class="text-[10px] font-mono uppercase tracking-widest text-neutral-500"
+            >
+              Volume
+            </dt>
+            <dd class="text-sm text-paper font-mono tabular-nums">01</dd>
+          </div>
+          <div class="flex flex-col gap-1">
+            <dt
+              class="text-[10px] font-mono uppercase tracking-widest text-neutral-500"
+            >
+              Residents
+            </dt>
+            <dd class="text-sm text-paper">1 master</dd>
+          </div>
+          <div class="flex flex-col gap-1">
+            <dt
+              class="text-[10px] font-mono uppercase tracking-widest text-neutral-500"
+            >
+              Curation
+            </dt>
+            <dd class="text-sm text-paper">By invitation</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         The Roster — ledger of featured artists (1 active + open seat)
+         =================================================================== -->
+    <section class="px-6 md:px-12 pb-20 md:pb-28">
+      <div class="max-w-7xl mx-auto border-t border-ash/30">
+        <!-- 01 — Bruno Moretti (active) -->
+        <a
+          href="#feature"
+          class:list={[
+            "group grid grid-cols-[2.5rem_1fr_auto] sm:grid-cols-[4rem_1fr_auto] items-center gap-4 sm:gap-8 py-7 sm:py-9 border-b border-ash/30 transition-colors hover:bg-ink/40 -mx-4 px-4 rounded-sm",
+            focusRing,
+          ]}
+        >
+          <span class="font-mono text-sm sm:text-base text-stencil">01</span>
+          <span class="min-w-0">
+            <span
+              class="font-display font-bold text-2xl sm:text-4xl md:text-5xl tracking-tight text-paper block leading-none"
+            >
+              {A.name}
+              <span
+                class="align-middle text-base sm:text-xl ml-1"
+                aria-hidden="true">{A.flag}</span
+              >
+            </span>
+            <span
+              class="mt-2 sm:mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] sm:text-xs font-mono uppercase tracking-widest text-neutral-500"
+            >
+              <span>{A.role}</span>
+              <span class="text-neutral-700" aria-hidden="true">·</span>
+              <span>{A.location}</span>
+            </span>
+          </span>
+          <span
+            class="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-neutral-400 group-hover:text-paper transition-colors whitespace-nowrap"
+          >
+            <span class="hidden sm:inline">View dossier</span>
+            <i
+              class="ph ph-arrow-down-right text-base transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+              aria-hidden="true"></i>
+          </span>
+        </a>
+
+        <!-- 02 — Open seat (applications) -->
+        <a
+          href="#apply"
+          class:list={[
+            "group grid grid-cols-[2.5rem_1fr_auto] sm:grid-cols-[4rem_1fr_auto] items-center gap-4 sm:gap-8 py-7 sm:py-8 border-b border-ash/30 transition-colors hover:bg-ink/40 -mx-4 px-4 rounded-sm",
+            focusRing,
+          ]}
+        >
+          <span class="font-mono text-sm sm:text-base text-neutral-700">02</span
+          >
+          <span
+            class="font-display text-xl sm:text-3xl tracking-tight text-neutral-600 group-hover:text-neutral-400 transition-colors"
+          >
+            Seat reserved
+          </span>
+          <span
+            class="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-neutral-500 group-hover:text-paper transition-colors whitespace-nowrap"
+          >
+            <span class="hidden sm:inline">Applications open</span>
+            <i
+              class="ph ph-plus text-base transition-transform group-hover:rotate-90"
+              aria-hidden="true"></i>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Feature — Bruno Moretti dossier
+         =================================================================== -->
+    <section
+      id="feature"
+      class="relative w-full bg-ink border-t border-ash/30 overflow-hidden scroll-mt-20"
+    >
+      <!-- deep radial vignette behind the portrait -->
+      <div
+        class="pointer-events-none absolute -bottom-40 -left-40 w-[680px] h-[680px] bg-[radial-gradient(circle,rgba(79,70,229,0.10)_0%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-32">
+        <!-- Eyebrow -->
+        <div
+          class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-12 sm:mb-16 sa-reveal"
+        >
+          <span
+            class="inline-flex items-center gap-2 px-3 py-1 bg-obsidian border border-ash/50 rounded-full"
+          >
+            <span class="w-2 h-2 rounded-full bg-stencil animate-pulse"></span>
+            <span
+              class="text-[10px] uppercase font-mono tracking-widest text-neutral-400"
+              >Featured Artist — 01</span
+            >
+          </span>
+          <span
+            class="text-[10px] uppercase font-mono tracking-[0.3em] text-neutral-600"
+            >{A.motto}</span
+          >
+        </div>
+
+        <div
+          class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start"
+        >
+          <!-- Portrait + orbiting halo -->
+          <div class="lg:col-span-5 sa-reveal">
+            <div class="relative w-full max-w-md mx-auto lg:mx-0 lg:sticky lg:top-28">
+              <div
+                class="absolute -inset-4 rounded-sm blur-2xl opacity-50 sa-ring"
+                aria-hidden="true"
+              >
+              </div>
+              <figure
+                class="relative aspect-[3/4] overflow-hidden bg-obsidian gallery-card group"
+              >
+                <img
+                  src={A.portrait}
+                  alt={A.portraitAlt}
+                  width="600"
+                  height="800"
+                  class="w-full h-full object-cover image-breathe opacity-90"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div
+                  class="absolute inset-0 border border-ash/0 group-hover:border-stencil/50 transition-colors duration-500 m-4"
+                >
+                  <div
+                    class="absolute top-0 left-0 w-2 h-2 border-t border-l border-stencil opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                  </div>
+                  <div
+                    class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-stencil opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                  </div>
+                </div>
+                <figcaption
+                  class="absolute bottom-0 inset-x-0 p-4 text-[10px] font-mono uppercase tracking-widest text-neutral-400 bg-gradient-to-t from-obsidian/90 to-transparent pt-10"
+                >
+                  {A.siteTagline}
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <!-- Name, intro, tags -->
+          <div
+            class="lg:col-span-7 flex flex-col gap-8 sa-reveal"
+            style="transition-delay: 120ms"
+          >
+            <div>
+              <h2
+                class="font-display text-5xl sm:text-7xl md:text-8xl font-extrabold leading-[0.85] tracking-tight text-paper"
+              >
+                Bruno<br />Moretti<span class="text-stencil">.</span>
+              </h2>
+              <p
+                class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono uppercase tracking-widest text-neutral-500"
+              >
+                <span class="text-neutral-300">{A.role}</span>
+                <span class="text-neutral-700" aria-hidden="true">//</span>
+                <span>{A.studioMeta}</span>
+              </p>
+            </div>
+
+            <p
+              class="font-sans text-neutral-300 text-lg md:text-xl leading-relaxed max-w-2xl"
+            >
+              {A.quoteIntro}
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              {
+                A.tags.map((t) => (
+                  <span class="text-[10px] uppercase font-mono tracking-widest text-neutral-400 border border-ash/50 px-3 py-1.5">
+                    {t}
+                  </span>
+                ))
+              }
+            </div>
+
+            <!-- Spec sheet / credits -->
+            <dl
+              class="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-px bg-ash/30 border border-ash/30 rounded-sm overflow-hidden"
+            >
+              {
+                A.credits.map((c) => (
+                  <div class="bg-ink p-5 flex flex-col gap-1.5">
+                    <dt class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+                      {c.label}
+                    </dt>
+                    <dd class="text-sm text-paper leading-snug">{c.value}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+
+            <!-- Primary actions -->
+            <div class="flex flex-wrap items-center gap-4 mt-2">
+              <a
+                href={A.links.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                class:list={[
+                  "group inline-flex items-center gap-3 bg-paper text-obsidian px-6 py-4 text-sm font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors shadow-lg rounded-sm",
+                  focusRing,
+                ]}
+              >
+                View portfolio
+                <i
+                  class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  aria-hidden="true"></i>
+              </a>
+              <a
+                href={A.links.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${A.name} on Instagram`}
+                class:list={[
+                  "w-12 h-12 rounded-full border border-ash flex items-center justify-center hover:bg-paper hover:text-obsidian transition-colors",
+                  focusRing,
+                ]}
+              >
+                <i class="ph ph-instagram-logo text-xl" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Pull-quote — the craft
+         =================================================================== -->
+    <section class="w-full bg-obsidian relative overflow-hidden">
+      <div
+        class="absolute top-1/2 -translate-y-1/2 left-0 w-[200%] flex whitespace-nowrap opacity-[0.025] pointer-events-none select-none z-0"
+        aria-hidden="true"
+      >
+        <h2 class="font-display text-[15vw] font-bold animate-marquee">
+          BLACK &amp; GREY — DARK ART — BLACK &amp; GREY — DARK ART —
+        </h2>
+      </div>
+
+      <figure
+        class="relative z-10 max-w-4xl mx-auto px-8 py-28 md:py-36 text-center flex flex-col items-center"
+      >
+        <i
+          class="ph-fill ph-quotes text-4xl text-stencil mb-8"
+          aria-hidden="true"></i>
+        <blockquote
+          class="font-display text-2xl md:text-4xl font-medium leading-snug text-balance text-paper"
+        >
+          {A.quoteCraft}
+        </blockquote>
+        <div class="w-px h-12 bg-ash my-10 mx-auto"></div>
+        <figcaption
+          class="text-xs text-neutral-500 font-mono uppercase tracking-widest"
+        >
+          {A.name} — in his own words
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- ===================================================================
+         Selected works — the spectrum: Realism ↔ Dark Art
+         =================================================================== -->
+    <section
+      id="works"
+      class="w-full bg-ink border-t border-b border-ash/30 py-24 md:py-32 scroll-mt-20"
+    >
+      <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="max-w-3xl mb-6">
+          <div
+            class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6"
+          >
+            <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+            <span>Selected works</span>
+          </div>
+          <p
+            class="font-display text-2xl md:text-4xl font-medium leading-snug text-balance text-paper"
+          >
+            “{A.quoteRange}”
+          </p>
+        </div>
+
+        <!-- light → dark spectrum bar -->
+        <div
+          class="flex items-center gap-4 mb-16 text-[10px] font-mono uppercase tracking-widest text-neutral-500"
+        >
+          <span>Light</span>
+          <span
+            class="flex-1 h-1 rounded-full bg-gradient-to-r from-paper via-neutral-600 to-obsidian border border-ash/40"
+            aria-hidden="true"></span>
+          <span>Decadent</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+          <!-- Realism column -->
+          <div class="flex flex-col gap-8">
+            <div class="flex items-center gap-3">
+              <i
+                class="ph ph-sun-dim text-xl text-paper"
+                aria-hidden="true"></i>
+              <h3
+                class="font-display text-xl font-bold tracking-tight text-paper"
+              >
+                Realism
+              </h3>
+              <span class="flex-1 h-px bg-ash/30" aria-hidden="true"></span>
+              <span
+                class="text-[10px] font-mono uppercase tracking-widest text-neutral-600"
+                >Purest light</span
+              >
+            </div>
+            {
+              realism.map((w) => (
+                <a
+                  href={A.links.portfolio}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class:list={[
+                    "group block gallery-card sa-reveal",
+                    focusRing,
+                  ]}
+                >
+                  <div class="relative w-full aspect-[3/4] overflow-hidden bg-obsidian">
+                    <img
+                      src={w.src}
+                      alt={w.alt}
+                      width="1000"
+                      height="1333"
+                      class="w-full h-full object-cover image-breathe opacity-90"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div class="absolute inset-0 border border-ash/0 group-hover:border-stencil/50 transition-colors duration-500 m-4">
+                      <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-stencil opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-stencil opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between gap-4 pt-4">
+                    <h4 class="font-display text-lg font-bold text-paper">
+                      {w.caption}
+                    </h4>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 inline-flex items-center gap-1.5">
+                      {w.set}
+                      <i
+                        class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                </a>
+              ))
+            }
+          </div>
+
+          <!-- Dark Art column (offset for editorial asymmetry) -->
+          <div class="flex flex-col gap-8 lg:mt-16">
+            <div class="flex items-center gap-3">
+              <i class="ph ph-skull text-xl text-paper" aria-hidden="true"></i>
+              <h3
+                class="font-display text-xl font-bold tracking-tight text-paper"
+              >
+                Dark Art
+              </h3>
+              <span class="flex-1 h-px bg-ash/30" aria-hidden="true"></span>
+              <span
+                class="text-[10px] font-mono uppercase tracking-widest text-neutral-600"
+                >Dark &amp; decadent</span
+              >
+            </div>
+            {
+              darkArt.map((w) => (
+                <a
+                  href={A.links.portfolio}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class:list={[
+                    "group block gallery-card sa-reveal",
+                    focusRing,
+                  ]}
+                >
+                  <div class="relative w-full aspect-[3/4] overflow-hidden bg-obsidian">
+                    <img
+                      src={w.src}
+                      alt={w.alt}
+                      width="1000"
+                      height="1333"
+                      class="w-full h-full object-cover image-breathe opacity-90"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div class="absolute inset-0 border border-ash/0 group-hover:border-stencil/50 transition-colors duration-500 m-4">
+                      <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-stencil opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-stencil opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between gap-4 pt-4">
+                    <h4 class="font-display text-lg font-bold text-paper">
+                      {w.caption}
+                    </h4>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 inline-flex items-center gap-1.5">
+                      {w.set}
+                      <i
+                        class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+
+        <p
+          class="mt-14 flex items-center gap-3 text-[10px] font-mono uppercase tracking-widest text-neutral-600"
+        >
+          <i class="ph ph-info" aria-hidden="true"></i>
+          Selected works © {A.name} — courtesy of brunomorettitattoo.com
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Why we feature Bruno (honest StencilMaker tie-in)
+         =================================================================== -->
+    <section class="w-full bg-obsidian py-24 md:py-32">
+      <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="max-w-2xl mb-14">
+          <div
+            class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6"
+          >
+            <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+            <span>The partnership</span>
+          </div>
+          <h2
+            class="font-display text-4xl md:text-5xl font-bold tracking-tight text-paper"
+          >
+            Why we feature Bruno.
+          </h2>
+          <p class="mt-5 text-neutral-400 text-lg leading-relaxed">
+            A reference-driven, composition-first, large-scale practice is
+            exactly the kind of work StencilMaker is built for.
+          </p>
+        </div>
+
+        <ul class="grid gap-4 md:grid-cols-3">
+          {
+            tieIns.map((t, i) => (
+              <li class="relative flex flex-col gap-4 p-7 border border-ash/30 rounded-sm bg-ink/40 hover:bg-ink transition-colors">
+                <span class="absolute top-6 right-6 font-mono text-xs text-neutral-700">
+                  0{i + 1}
+                </span>
+                <i
+                  class={`ph ${t.icon} text-3xl text-stencil`}
+                  aria-hidden="true"
+                />
+                <h3 class="font-display font-bold text-lg text-paper">
+                  {t.title}
+                </h3>
+                <p class="text-sm text-neutral-400 leading-relaxed">{t.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <p
+          class="mt-8 flex items-start gap-3 text-sm text-neutral-500 leading-relaxed max-w-2xl"
+        >
+          <i
+            class="ph ph-seal-check text-base text-stencil mt-0.5 shrink-0"
+            aria-hidden="true"></i>
+          <span>
+            Bruno is a featured StencilMaker partner. We celebrate his craft and
+            workflow — we don&rsquo;t speak for his tools or technique.
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Connect
+         =================================================================== -->
+    <section
+      id="connect"
+      class="w-full bg-ink border-t border-ash/30 py-24 md:py-28 scroll-mt-20"
+    >
+      <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div
+          class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-10"
+        >
+          <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+          <span>Connect with {A.name.split(" ")[0]}</span>
+        </div>
+
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            connect.map((c) => (
+              <li>
+                <a
+                  href={c.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class:list={[
+                    "group flex flex-col gap-5 h-full p-6 border border-ash/30 rounded-sm bg-obsidian/40 hover:bg-obsidian hover:border-stencil/40 transition-colors",
+                    focusRing,
+                  ]}
+                >
+                  <div class="flex items-center justify-between">
+                    <i
+                      class={`ph ${c.icon} text-2xl text-paper`}
+                      aria-hidden="true"
+                    />
+                    <i
+                      class="ph ph-arrow-up-right text-neutral-600 group-hover:text-paper transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div>
+                    <p class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+                      {c.label}
+                    </p>
+                    <p class="mt-1 text-paper font-medium break-words">
+                      {c.value}
+                    </p>
+                  </div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Apply — grow the roster
+         =================================================================== -->
+    <section id="apply" class="w-full bg-obsidian py-24 md:py-32 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div
+          class="relative overflow-hidden flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 p-8 md:p-14 border border-ash/30 rounded-sm bg-ink"
+        >
+          <div
+            class="pointer-events-none absolute -top-24 -right-16 w-80 h-80 bg-[radial-gradient(circle,rgba(79,70,229,0.18)_0%,transparent_70%)]"
+            aria-hidden="true"
+          >
+          </div>
+
+          <div class="relative z-10 max-w-xl">
+            <div
+              class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6"
+            >
+              <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+              <span>Seat 02 — open</span>
+            </div>
+            <h2
+              class="font-display text-4xl md:text-6xl font-bold tracking-tight leading-[0.95] text-paper"
+            >
+              The roster grows<br />by invitation<span class="text-stencil"
+                >.</span
+              >
+            </h2>
+            <p
+              class="mt-6 text-neutral-400 text-lg leading-relaxed max-w-lg"
+            >
+              We feature a small circle of working artists whose craft sets the
+              standard. If that&rsquo;s you — or someone you follow — tell us
+              about the work.
+            </p>
+          </div>
+
+          <a
+            href="/artists/apply"
+            class:list={[
+              "relative z-10 shrink-0 inline-flex items-center justify-center gap-3 px-8 py-5 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-8px_rgba(250,250,250,0.2)] transition-all duration-300",
+              focusRing,
+            ]}
+          >
+            <i class="ph ph-paper-plane-tilt text-lg" aria-hidden="true"></i>
+            Apply to be featured
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Back-to-top — appears once you've scrolled past the masthead. -->
+  <button
+    id="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    class:list={[
+      "fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-ink/80 backdrop-blur-xl border border-ash/40 text-paper shadow-2xl opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:bg-ash/60",
+      focusRing,
+    ]}
+  >
+    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+  </button>
+
+  <Footer />
+  <CustomCursor />
+
+  <!-- Page-specific structured data (Person + ProfilePage + Breadcrumb). -->
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(personLd)}
+  />
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(profileLd)}
+  />
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(breadcrumbLd)}
+  />
+</BaseLayout>
+
+<style>
+  /* Atmospheric film-grain — fixed, subtle, sits above the background but below
+     content. Pure CSS via an inline SVG turbulence; neutralised for
+     reduced-motion users (it's static anyway, just kept faint). */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+</style>
+
+<script>
+  // ---- Reading progress bar (rAF-throttled, transform-only) ----
+  const bar = document.getElementById("reading-progress");
+  let ticking = false;
+
+  function updateProgress() {
+    if (!bar) return;
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - doc.clientHeight;
+    const ratio = max > 0 ? Math.min(doc.scrollTop / max, 1) : 0;
+    bar.style.transform = `scaleX(${ratio})`;
+    ticking = false;
+  }
+
+  // ---- Back-to-top visibility ----
+  const toTop = document.getElementById("back-to-top");
+
+  function updateToTop() {
+    if (!toTop) return;
+    const show = window.scrollY > 600;
+    toTop.classList.toggle("opacity-0", !show);
+    toTop.classList.toggle("translate-y-3", !show);
+    toTop.classList.toggle("pointer-events-none", !show);
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateProgress();
+        updateToTop();
+      });
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  updateProgress();
+  updateToTop();
+
+  toTop?.addEventListener("click", () => {
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
+  // ---- One-shot scroll reveals (shared .sa-reveal convention) ----
+  const prefersReduced = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const items = document.querySelectorAll<HTMLElement>(".sa-reveal");
+
+  if (!prefersReduced && "IntersectionObserver" in window && items.length) {
+    items.forEach((el) => el.classList.add("is-armed"));
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+    items.forEach((el) => io.observe(el));
+  }
+</script>

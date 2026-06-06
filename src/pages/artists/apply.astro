@@ -1,0 +1,561 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Footer from "@components/Footer.astro";
+import CustomCursor from "@components/CustomCursor.astro";
+import { SITE } from "@/consts";
+
+// Statically prerender — the form posts to the dynamic /api/lead endpoint.
+export const prerender = true;
+
+/* ---------------------------------------------------------------------------
+   Featured-artist application form.
+
+   Submits to the existing /api/lead endpoint with `type: "artist-application"`
+   (see src/pages/api/lead.ts), which validates, persists to KV, and emails a
+   notification. Pre-wired for Cloudflare Turnstile exactly like LeadForm —
+   the widget is omitted gracefully until PUBLIC_TURNSTILE_SITE_KEY is set.
+   --------------------------------------------------------------------------- */
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
+const styles = [
+  "Black & Grey",
+  "Realism",
+  "Dark Art",
+  "Fine Line",
+  "Traditional",
+  "Neo-Traditional",
+  "Japanese",
+  "Blackwork",
+  "Dotwork",
+  "Lettering / Script",
+  "Color",
+  "Other",
+];
+
+const nextSteps = [
+  {
+    icon: "ph-eye",
+    title: "We review the work",
+    body: "Every application is read by a human. We look at the craft first — Instagram or portfolio link required.",
+  },
+  {
+    icon: "ph-chats-circle",
+    title: "We reach out",
+    body: "If it's a fit, we'll email you to talk about a feature. The roster stays small on purpose.",
+  },
+  {
+    icon: "ph-seal-check",
+    title: "No cost to apply",
+    body: "Being featured is by invitation, not pay-to-play. Applying just puts your work in front of us.",
+  },
+];
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stencil focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian";
+const fieldClass =
+  "w-full px-4 py-3.5 bg-ink border border-ash/60 text-paper placeholder:text-neutral-600 text-sm rounded-sm focus:outline-none focus:border-paper transition-colors";
+const labelClass =
+  "flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-2.5";
+
+const pageTitle = `Apply to be a Featured Artist — ${SITE.name}`;
+const pageDescription =
+  "Apply to be a featured artist on StencilMaker. Tell us about your work — the roster grows by invitation, and there's no cost to apply.";
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  pathname="/artists/apply"
+>
+  <!-- Skip link for keyboard users -->
+  <a
+    href="#apply-form"
+    class:list={[
+      "sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[120] focus:px-4 focus:py-2 focus:bg-paper focus:text-obsidian focus:text-sm focus:font-bold focus:uppercase focus:tracking-widest focus:rounded-sm",
+    ]}
+  >
+    Skip to form
+  </a>
+
+  <!-- Slim, persistent sub-page header (mirrors /artists). -->
+  <header
+    class="sticky top-0 z-50 w-full border-b border-ash/30 bg-obsidian/80 backdrop-blur-xl"
+  >
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-[4.5rem] flex items-center justify-between gap-4"
+    >
+      <a
+        href="/"
+        class:list={["flex items-center gap-2.5 -ml-1 rounded-sm", focusRing]}
+        aria-label={`${SITE.name} home`}
+      >
+        <img
+          src="/assets/hero-graphic-light.png"
+          alt=""
+          width="40"
+          height="40"
+          class="w-9 h-9 md:w-10 md:h-10 object-contain"
+          loading="eager"
+          decoding="async"
+        />
+        <span
+          class="font-display font-bold text-lg sm:text-xl md:text-2xl tracking-tight whitespace-nowrap"
+        >
+          {SITE.name}<span class="text-stencil leading-none">.</span>
+        </span>
+      </a>
+
+      <nav
+        aria-label="Page"
+        class="flex items-center gap-1 sm:gap-2 text-xs font-bold uppercase tracking-widest"
+      >
+        <a
+          href="/artists"
+          class:list={[
+            "inline-flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          <span class="hidden sm:inline">Artists</span>
+        </a>
+        <a
+          href="/#download"
+          class:list={[
+            "ml-1 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-paper text-obsidian rounded-sm whitespace-nowrap hover:bg-white hover:-translate-y-0.5 transition-all duration-300",
+            focusRing,
+          ]}
+        >
+          <span class="hidden sm:inline">Get the app</span>
+          <span class="sm:hidden">App</span>
+          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================================
+         Masthead
+         =================================================================== -->
+    <section
+      class="relative w-full overflow-hidden px-6 md:px-12 pt-20 md:pt-28 pb-12 md:pb-16"
+    >
+      <div
+        class="pointer-events-none absolute -top-24 right-[-10%] w-[640px] h-[640px] bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.14)_0%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <i
+        class="ph ph-paper-plane-tilt pointer-events-none absolute -top-10 right-6 text-[16rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"></i>
+
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <div
+          class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-8"
+        >
+          <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+          <span>The Roster</span>
+          <span class="text-neutral-700" aria-hidden="true">/</span>
+          <span class="text-neutral-500">Apply</span>
+        </div>
+
+        <h1
+          class="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-paper text-balance"
+        >
+          Apply to be<br />
+          <span class="text-neutral-500"
+            >featured<span class="text-stencil">.</span></span
+          >
+        </h1>
+
+        <p
+          class="mt-8 font-sans text-lg md:text-xl font-light text-neutral-300 leading-relaxed text-balance max-w-2xl"
+        >
+          We feature a small circle of working artists whose craft sets the
+          standard. Tell us about your work — we read every submission.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Form + sidebar
+         =================================================================== -->
+    <section id="apply-form" class="px-6 md:px-12 pb-28 scroll-mt-24">
+      <div
+        class="max-w-7xl mx-auto grid lg:grid-cols-[minmax(0,1fr)_19rem] gap-12 lg:gap-16 items-start"
+      >
+        <!-- ---- Form ---- -->
+        <div
+          class="relative overflow-hidden border border-ash/30 rounded-sm bg-ink/40 p-7 sm:p-10"
+        >
+          <div
+            class="pointer-events-none absolute -top-24 -right-16 w-72 h-72 bg-[radial-gradient(circle,rgba(79,70,229,0.10)_0%,transparent_70%)]"
+            aria-hidden="true"
+          >
+          </div>
+
+          <form id="apply-form-el" class="relative z-10" novalidate>
+            <div class="grid sm:grid-cols-2 gap-6">
+              <!-- Name -->
+              <div class="flex flex-col">
+                <label for="ap-name" class={labelClass}>
+                  <i class="ph ph-user text-sm" aria-hidden="true"></i>
+                  Name <span class="text-stencil" aria-hidden="true">*</span>
+                </label>
+                <input
+                  id="ap-name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  required
+                  maxlength="120"
+                  placeholder="Your full name"
+                  class={fieldClass}
+                />
+              </div>
+
+              <!-- Email -->
+              <div class="flex flex-col">
+                <label for="ap-email" class={labelClass}>
+                  <i class="ph ph-envelope-simple text-sm" aria-hidden="true"
+                  ></i>
+                  Email <span class="text-stencil" aria-hidden="true">*</span>
+                </label>
+                <input
+                  id="ap-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                  placeholder="you@studio.com"
+                  class={fieldClass}
+                />
+              </div>
+
+              <!-- Instagram -->
+              <div class="flex flex-col">
+                <label for="ap-instagram" class={labelClass}>
+                  <i class="ph ph-instagram-logo text-sm" aria-hidden="true"></i
+                  >
+                  Instagram
+                </label>
+                <input
+                  id="ap-instagram"
+                  name="instagram"
+                  type="text"
+                  inputmode="text"
+                  maxlength="60"
+                  placeholder="@yourhandle"
+                  class={fieldClass}
+                />
+              </div>
+
+              <!-- Portfolio -->
+              <div class="flex flex-col">
+                <label for="ap-portfolio" class={labelClass}>
+                  <i class="ph ph-link-simple text-sm" aria-hidden="true"></i>
+                  Portfolio link
+                </label>
+                <input
+                  id="ap-portfolio"
+                  name="portfolio"
+                  type="url"
+                  inputmode="url"
+                  maxlength="300"
+                  placeholder="https://…"
+                  class={fieldClass}
+                />
+              </div>
+
+              <!-- Location / Studio -->
+              <div class="flex flex-col">
+                <label for="ap-location" class={labelClass}>
+                  <i class="ph ph-map-pin text-sm" aria-hidden="true"></i>
+                  Studio / City
+                </label>
+                <input
+                  id="ap-location"
+                  name="location"
+                  type="text"
+                  maxlength="120"
+                  placeholder="Studio name, city"
+                  class={fieldClass}
+                />
+              </div>
+
+              <!-- Style -->
+              <div class="flex flex-col">
+                <label for="ap-style" class={labelClass}>
+                  <i class="ph ph-pen-nib text-sm" aria-hidden="true"></i>
+                  Primary style
+                </label>
+                <div class="relative">
+                  <select
+                    id="ap-style"
+                    name="style"
+                    class:list={[fieldClass, "appearance-none pr-10 cursor-pointer"]}
+                  >
+                    <option value="" selected>Select a style…</option>
+                    {styles.map((s) => <option value={s}>{s}</option>)}
+                  </select>
+                  <i
+                    class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none"
+                    aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Message -->
+            <div class="flex flex-col mt-6">
+              <label for="ap-message" class={labelClass}>
+                <i class="ph ph-chat-text text-sm" aria-hidden="true"></i>
+                About your work
+              </label>
+              <textarea
+                id="ap-message"
+                name="message"
+                rows="5"
+                maxlength="4000"
+                placeholder="What you're known for, how you work, why you'd be a fit…"
+                class:list={[fieldClass, "resize-y min-h-[8rem]"]}></textarea>
+            </div>
+
+            {
+              turnstileSiteKey && (
+                <Fragment>
+                  <div
+                    class="cf-turnstile mt-6"
+                    data-sitekey={turnstileSiteKey}
+                    data-theme="dark"
+                    data-size="flexible"
+                  />
+                  <script
+                    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                    async
+                    defer
+                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    is:inline
+                  />
+                </Fragment>
+              )
+            }
+
+            <div
+              class="mt-8 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6"
+            >
+              <button
+                type="submit"
+                class:list={[
+                  "group inline-flex items-center justify-center gap-3 px-8 py-4 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-8px_rgba(250,250,250,0.2)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none",
+                  focusRing,
+                ]}
+              >
+                <span data-btn-label>Submit application</span>
+                <i
+                  class="ph ph-paper-plane-tilt text-lg transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  aria-hidden="true"></i>
+              </button>
+
+              <p
+                id="apply-status"
+                role="status"
+                aria-live="polite"
+                class="text-sm text-neutral-500 min-h-[1.25rem]"
+              >
+              </p>
+            </div>
+
+            <p
+              class="mt-7 pt-6 border-t border-ash/20 flex items-start gap-3 text-[11px] font-mono uppercase tracking-widest text-neutral-600 leading-relaxed"
+            >
+              <i
+                class="ph ph-lock-simple text-sm mt-0.5 shrink-0"
+                aria-hidden="true"></i>
+              <span>
+                We use your details only to review your application. No spam,
+                no sharing. <span class="text-neutral-500">* Required.</span>
+              </span>
+            </p>
+          </form>
+
+          <!-- Success state (revealed after submit) -->
+          <div
+            id="apply-success"
+            class="relative z-10 hidden flex-col items-center text-center py-10 focus:outline-none"
+            tabindex="-1"
+          >
+            <span
+              class="flex items-center justify-center w-16 h-16 rounded-full bg-stencil/15 border border-stencil/40 mb-7"
+            >
+              <i
+                class="ph ph-check-circle text-3xl text-stencil"
+                aria-hidden="true"></i>
+            </span>
+            <h2
+              class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+            >
+              Application received.
+            </h2>
+            <p
+              class="mt-4 text-neutral-400 leading-relaxed max-w-md text-balance"
+            >
+              Thanks for sending your work our way. We read every submission —
+              if it&rsquo;s a fit, we&rsquo;ll be in touch by email.
+            </p>
+            <a
+              href="/artists"
+              class:list={[
+                "mt-9 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-paper transition-colors",
+                focusRing,
+              ]}
+            >
+              <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+              Back to the roster
+            </a>
+          </div>
+        </div>
+
+        <!-- ---- Sidebar: what happens next ---- -->
+        <aside class="lg:sticky lg:top-28 lg:self-start">
+          <p
+            class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-6"
+          >
+            What happens next
+          </p>
+          <ul class="flex flex-col gap-4">
+            {
+              nextSteps.map((s) => (
+                <li class="flex flex-col gap-3 p-5 border border-ash/30 rounded-sm bg-ink/40">
+                  <i
+                    class={`ph ${s.icon} text-2xl text-stencil`}
+                    aria-hidden="true"
+                  />
+                  <h3 class="font-display font-bold text-paper">{s.title}</h3>
+                  <p class="text-sm text-neutral-400 leading-relaxed">
+                    {s.body}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <CustomCursor />
+</BaseLayout>
+
+<script>
+  const form = document.getElementById("apply-form-el") as HTMLFormElement | null;
+  const statusEl = document.getElementById("apply-status");
+  const successEl = document.getElementById("apply-success");
+
+  function val(id: string): string {
+    const el = document.getElementById(id) as
+      | HTMLInputElement
+      | HTMLTextAreaElement
+      | HTMLSelectElement
+      | null;
+    return (el?.value ?? "").trim();
+  }
+
+  function setStatus(msg: string, tone: "info" | "warn" | "error" | "ok") {
+    if (!statusEl) return;
+    const tones: Record<string, string> = {
+      info: "text-neutral-500",
+      warn: "text-amber-400",
+      error: "text-rose-400",
+      ok: "text-emerald-400",
+    };
+    statusEl.textContent = msg;
+    statusEl.className = `text-sm min-h-[1.25rem] ${tones[tone]}`;
+  }
+
+  if (form && statusEl) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = val("ap-name");
+      const email = val("ap-email");
+      const instagram = val("ap-instagram");
+      const portfolio = val("ap-portfolio");
+
+      if (name.length < 2) {
+        setStatus("Please enter your name.", "warn");
+        document.getElementById("ap-name")?.focus();
+        return;
+      }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setStatus("Please enter a valid email address.", "warn");
+        document.getElementById("ap-email")?.focus();
+        return;
+      }
+      if (!instagram && !portfolio) {
+        setStatus(
+          "Add an Instagram handle or portfolio link so we can see your work.",
+          "warn",
+        );
+        document.getElementById("ap-instagram")?.focus();
+        return;
+      }
+
+      const submitBtn = form.querySelector(
+        'button[type="submit"]',
+      ) as HTMLButtonElement;
+      const btnLabel = form.querySelector("[data-btn-label]");
+      submitBtn.disabled = true;
+      if (btnLabel) btnLabel.textContent = "Sending…";
+      setStatus("", "info");
+
+      try {
+        const tokenInput = form.querySelector(
+          'input[name="cf-turnstile-response"]',
+        ) as HTMLInputElement | null;
+
+        const res = await fetch("/api/lead", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            type: "artist-application",
+            name,
+            email,
+            instagram,
+            portfolio,
+            location: val("ap-location"),
+            style: val("ap-style"),
+            message: val("ap-message"),
+            source: location.pathname,
+            referrer: document.referrer || null,
+            turnstileToken: tokenInput?.value ?? null,
+          }),
+        });
+
+        if (res.ok) {
+          form.classList.add("hidden");
+          if (successEl) {
+            successEl.classList.remove("hidden");
+            successEl.classList.add("flex");
+            (successEl as HTMLElement).focus();
+            successEl.scrollIntoView({ block: "center", behavior: "smooth" });
+          }
+        } else {
+          const body = await res.json().catch(() => ({}));
+          setStatus(
+            body.error ?? "Something broke. Try again in a moment.",
+            "error",
+          );
+          submitBtn.disabled = false;
+          if (btnLabel) btnLabel.textContent = "Submit application";
+        }
+      } catch {
+        setStatus("Network hiccup. Try again.", "error");
+        submitBtn.disabled = false;
+        if (btnLabel) btnLabel.textContent = "Submit application";
+      }
+    });
+  }
+</script>

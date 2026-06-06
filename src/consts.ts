@@ -58,3 +58,106 @@ export const PRICING = {
     pro: { name: "Pro", price: 24.99, credits: 3000, bonus: 500 },
   },
 } as const;
+
+/**
+ * Featured / sponsored artist — single source of truth for BOTH the homepage
+ * SponsoredArtist spotlight and the /artists feature page. Keep both in sync by
+ * editing here only.
+ *
+ * SOURCE: All factual copy is drawn from the artist's own website
+ * (brunomorettitattoo.com) and public profiles. Fields prefixed `quote*` are
+ * VERBATIM quotes from his site — do not paraphrase them. Portfolio images in
+ * `works` are self-hosted under /gallery/bruno/ courtesy of his site (he is a
+ * paid partner). We do NOT claim he personally uses StencilMaker; the product
+ * tie-in is framed only around his documented reference-driven, composition-
+ * first, large-scale workflow.
+ */
+export const SPONSORED_ARTIST = {
+  slug: "bruno-moretti",
+  name: "Bruno Moretti",
+  flag: "🇦🇷",
+  role: "Black & Grey · Dark Realism",
+  motto: "Strange & Cursed", // his Instagram descriptor
+  siteTagline: "Dark Art Tattoo — Denver",
+  studio: "Long Live Tattoo Collective",
+  studioMeta: "LONG LIVE TATTOO COLLECTIVE // DENVER",
+  location: "Denver, Colorado",
+  origin: "Neuquén, Patagonia, Argentina",
+  since: 2010,
+  ink: "Radiant Colors",
+  followers: "~19K",
+  portrait: "/gallery/bruno-moretti.jpg",
+  portraitAlt:
+    "Bruno Moretti seated among his framed dark-art prints, holding a bottle of Radiant tattoo ink",
+
+  // Homepage spotlight lead (short).
+  bioLead:
+    "Patagonia-born, Denver-based — tattooing since 2010. Large-scale black-and-grey where realism bleeds into the surreal, terror, and horror.",
+
+  // VERBATIM quotes from brunomorettitattoo.com.
+  quoteShort:
+    "After more than a decade, I still work with the same passion as when I started.",
+  quoteIntro:
+    "I'm Bruno Moretti, born in Neuquén, in the south of Patagonia Argentina. I started my career as a tattoo artist in 2010, and after more than a decade, I still work with the same passion as when I started. I am now living in the United States, specifically in Denver, Colorado, where I continue to develop my craft and explore new possibilities in the world of black and grey — a style that allows me to blend influences of dark, surreal, terror, and horror.",
+  quoteCraft:
+    "My work is based on a constant search. I don't have a completely defined style, because what truly excites me is the composition of the tattoo and how it interacts with the body.",
+  quoteRange:
+    "My expressive search is primarily based on a deep study of black and grey — exploring from the purest light and beauty to the depths of the dark and decadent.",
+
+  tags: [
+    "Black & Grey",
+    "Dark Realism",
+    "Surreal Horror",
+    "Freehand",
+    "Large-Scale",
+  ],
+
+  // Spec-sheet "credits" block on the feature page.
+  credits: [
+    { label: "Origin", value: "Neuquén, Patagonia 🇦🇷" },
+    { label: "Based", value: "Denver, Colorado" },
+    { label: "Tattooing since", value: "2010" },
+    { label: "Resident", value: "Long Live Tattoo Collective" },
+    { label: "Ink partner", value: "Radiant Colors" },
+    { label: "Method", value: "Freehand · multi-session" },
+  ],
+
+  // Selected works — self-hosted from his portfolio. Captions are descriptive
+  // (his galleries are untitled), grouped by the two poles he organizes his own
+  // portfolio around: Realism and Dark Art.
+  works: [
+    {
+      src: "/gallery/bruno/realism-1.jpg",
+      set: "Realism",
+      caption: "Veiled portrait",
+      alt: "Black & grey realism tattoo — a woman's veiled face rendered in soft tonal shading across the shoulder",
+    },
+    {
+      src: "/gallery/bruno/realism-2.jpg",
+      set: "Realism",
+      caption: "The mask",
+      alt: "Black & grey horror realism tattoo — a cinematic masked figure portrait on the upper arm",
+    },
+    {
+      src: "/gallery/bruno/darkart-1.jpg",
+      set: "Dark Art",
+      caption: "Ossuary",
+      alt: "Dark-art bio-organic tattoo sleeve — skeletal, thorned forms in high-contrast black & grey",
+    },
+    {
+      src: "/gallery/bruno/darkart-2.jpg",
+      set: "Dark Art",
+      caption: "Spectres",
+      alt: "Dark surreal black & grey tattoo across the neck and back — spectral faces emerging from smoke",
+    },
+  ],
+
+  links: {
+    website: "https://www.brunomorettitattoo.com",
+    portfolio: "https://www.brunomorettitattoo.com/portfolio",
+    instagram: "https://www.instagram.com/brunomoretti.tattoo/",
+    instagramHandle: "@brunomoretti.tattoo",
+    booking: "https://www.brunomorettitattoo.com/contact",
+    podcast: "https://www.youtube.com/@innormales",
+  },
+} as const;
