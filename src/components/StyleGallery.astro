@@ -25,7 +25,7 @@ const styles = [
     src: "/gallery/tiger.jpg",
     alt: "Hyper-realistic tiger portrait tattoo — dense topographic shading and fine detail",
     title: "Hyper-Realism",
-    blurb: "Dense topographical maps for multi-shade wash work.",
+    blurb: "Dense topographic maps for multi-shade wash work.",
     offsetMd: 8,
   },
 ] as const;
@@ -40,7 +40,7 @@ const styles = [
   >
     <div>
       <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4">
-        10 Distinct Vocabularies.
+        Four Distinct Vocabularies.
       </h2>
       <p class="text-neutral-400 text-lg max-w-xl">
         Configure the AI to generate stencils perfectly matched to your
@@ -70,6 +70,9 @@ const styles = [
 
   <div
     id="style-rail"
+    tabindex="0"
+    role="region"
+    aria-label="Tattoo style gallery — scroll horizontally to browse"
     class="flex overflow-x-auto no-scrollbar gap-8 px-8 md:px-12 pb-12 snap-x snap-mandatory"
   >
     {

@@ -28,3 +28,6 @@ Thumbs.db
 .idea/
 *.swp
 *.log
+
+# Image-optimizer backups (audit fix) — keep originals out of git/dist
+.image-originals/

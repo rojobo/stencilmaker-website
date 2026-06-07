@@ -1,6 +1,6 @@
 # StencilMaker
 
-> StencilMaker is the first AI tool engineered specifically for professional
+> StencilMaker is the AI tool engineered specifically for professional
 > tattoo artists. It converts client reference photos into vector-grade
 > tattoo stencils — clean linework optimized for thermal-transfer paper —
 > eliminating roughly an hour of iPad tracing per client.

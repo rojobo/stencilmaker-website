@@ -1,0 +1,238 @@
+{
+  "route": "/",
+  "byBreakpoint": {
+    "desktop-1440": {
+      "status": 200,
+      "screenshot": "home_desktop-1440.png",
+      "viewportScreenshot": null,
+      "overflow": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "hasOverflow": false
+      },
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "geometry": {
+        "overlaps": [],
+        "clipped": [
+          {
+            "t": "Hyper-Realism",
+            "right": 1744,
+            "left": 1344,
+            "vw": 1440
+          },
+          {
+            "t": "Dense topographic maps for multi-shade wash work.",
+            "right": 1744,
+            "left": 1344,
+            "vw": 1440
+          }
+        ]
+      },
+      "axe": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 22,
+          "sample": [
+            ".md\\:block > .text-xs.text-neutral-500.font-mono"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "i": 0,
+          "id": "vision",
+          "file": "home__sec00_vision.png"
+        },
+        {
+          "i": 1,
+          "id": "engine",
+          "file": "home__sec01_engine.png"
+        },
+        {
+          "i": 2,
+          "id": "styles",
+          "file": "home__sec02_styles.png"
+        },
+        {
+          "i": 3,
+          "id": "sponsored-artist",
+          "file": "home__sec03_sponsored-artist.png"
+        },
+        {
+          "i": 4,
+          "id": "pricing",
+          "file": "home__sec04_pricing.png"
+        },
+        {
+          "i": 5,
+          "id": "updates",
+          "file": "home__sec05_updates.png"
+        }
+      ]
+    },
+    "mobile-390": {
+      "status": 200,
+      "screenshot": "home_mobile-390.png",
+      "viewportScreenshot": null,
+      "overflow": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "hasOverflow": false
+      },
+      "consoleErrors": [],
+      "pageErrors": [],
+      "failedRequests": [],
+      "geometry": {
+        "overlaps": [
+          {
+            "a": "Vision",
+            "b": "Get Started Free",
+            "fraction": 0.22,
+            "aRect": [
+              -35,
+              759,
+              86,
+              36
+            ],
+            "bRect": [
+              32,
+              756,
+              326,
+              52
+            ]
+          },
+          {
+            "a": "The Engine",
+            "b": "Get Started Free",
+            "fraction": 0.9,
+            "aRect": [
+              59,
+              751,
+              90,
+              52
+            ],
+            "bRect": [
+              32,
+              756,
+              326,
+              52
+            ]
+          },
+          {
+            "a": "Styles",
+            "b": "Get Started Free",
+            "fraction": 1,
+            "aRect": [
+              157,
+              759,
+              90,
+              36
+            ],
+            "bRect": [
+              32,
+              756,
+              326,
+              52
+            ]
+          },
+          {
+            "a": "Download",
+            "b": "Get Started Free",
+            "fraction": 0.7,
+            "aRect": [
+              303,
+              769,
+              78,
+              16
+            ],
+            "bRect": [
+              32,
+              756,
+              326,
+              52
+            ]
+          },
+          {
+            "a": "Output (Stencil)",
+            "b": "Input (Reference)",
+            "fraction": 0.32,
+            "aRect": [
+              174,
+              1899,
+              160,
+              32
+            ],
+            "bRect": [
+              56,
+              1897,
+              168,
+              34
+            ]
+          }
+        ],
+        "clipped": [
+          {
+            "t": "Vision",
+            "right": 51,
+            "left": -35,
+            "vw": 390
+          },
+          {
+            "t": "Japanese",
+            "right": 724,
+            "left": 393,
+            "vw": 390
+          },
+          {
+            "t": "Flowing composition with precise scale and wave mapping.",
+            "right": 724,
+            "left": 393,
+            "vw": 390
+          },
+          {
+            "t": "Fine Line",
+            "right": 1088,
+            "left": 756,
+            "vw": 390
+          },
+          {
+            "t": "Ultra-thin vector translation. Preserves fragile details.",
+            "right": 1088,
+            "left": 756,
+            "vw": 390
+          },
+          {
+            "t": "Hyper-Realism",
+            "right": 1451,
+            "left": 1120,
+            "vw": 390
+          },
+          {
+            "t": "Dense topographic maps for multi-shade wash work.",
+            "right": 1451,
+            "left": 1120,
+            "vw": 390
+          }
+        ]
+      },
+      "axe": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 16,
+          "sample": [
+            ".font-semibold.hover\\:bg-ash\\/50[href$=\"#engine\"]"
+          ]
+        }
+      ],
+      "sections": []
+    }
+  }
+}
