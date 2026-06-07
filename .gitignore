@@ -14,10 +14,17 @@ dist/
 .env.*
 !.env.example
 
+# Claude Code / Development
+.agents/
+.claude/
+
 # AIDesigner artifacts (kept locally, not deployed)
 .aidesigner/*
 !.aidesigner/.gitkeep
 runs/
+
+# Audit reports (not deployed)
+docs/audits/
 
 # Editor / OS
 .DS_Store
