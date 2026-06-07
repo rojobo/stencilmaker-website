@@ -660,7 +660,12 @@ const pageDescription =
             </div>
 
             <p class="text-neutral-300 text-lg leading-relaxed max-w-[60ch]">
-              You can export your data or delete your account at any time from
+              You can export your data or <a
+                href="/delete-account/"
+                class:list={[
+                  "text-paper underline decoration-ash hover:decoration-paper transition-colors rounded-sm",
+                  focusRing,
+                ]}>delete your account</a> at any time from
               <span
                 class="inline-flex items-center gap-1.5 px-2 py-0.5 mx-0.5 rounded-sm bg-ink border border-ash/50 text-sm font-mono text-paper align-baseline"
                 ><i class="ph ph-gear-six text-xs text-neutral-400" aria-hidden="true"

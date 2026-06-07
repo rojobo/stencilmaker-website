@@ -1,0 +1,577 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Footer from "@components/Footer.astro";
+import CustomCursor from "@components/CustomCursor.astro";
+import { SITE, PRICING } from "@/consts";
+
+// Statically prerender — fixed help page (also App Store "Support URL").
+export const prerender = true;
+
+/* ---------------------------------------------------------------------------
+   Support / Help center.
+
+   This page doubles as the App Store Connect "Support URL" (Apple Review
+   Guideline 1.5 — apps must provide support contact information at a stable
+   URL). Keep it resolving at https://thestencilmaker.com/support.
+
+   Contact channel is the canonical SITE.supportEmail. The stated reply window
+   (1–2 business days) is a real commitment — don't tighten it without staffing
+   to match. Pricing copy reads from PRICING in src/consts.ts (single source of
+   truth) so it never drifts from the homepage paywall.
+   --------------------------------------------------------------------------- */
+const sections = [
+  { id: "contact", index: "01", label: "Get in touch" },
+  { id: "faq", index: "02", label: "Common questions" },
+  { id: "account", index: "03", label: "Account & data" },
+] as const;
+
+const meta = [
+  { label: "Typical reply", value: "1–2 business days" },
+  { label: "Channel", value: "Email" },
+  { label: "Coverage", value: "iOS · Android · Web" },
+];
+
+const faqs = [
+  {
+    q: "How do I create a stencil?",
+    a: `Open ${SITE.name}, upload a reference photo, choose a style, and generate. Each generation uses ${PRICING.creditsPerGeneration} credits and returns a clean, vector-grade transfer stencil in seconds.`,
+  },
+  {
+    q: "How does pricing work?",
+    a: `The Free plan includes one generation per day, plus 10 free stencils to start. Premium is $${PRICING.premium.monthly.toFixed(2)}/month or $${PRICING.premium.yearly.toFixed(2)}/year (save ${PRICING.premium.yearlySavingsPct}%, with a ${PRICING.premium.trialDays}-day free trial on the annual plan) and raises your daily limit. You can also buy credit packs that never expire.`,
+    link: { href: "/#pricing", label: "See full pricing" },
+  },
+  {
+    q: "How do I manage or cancel my subscription?",
+    a: "Subscriptions are billed through the App Store or Google Play and are managed there — on iOS open Apple Settings, on Android open your Google Play subscriptions. If a purchase doesn't appear after reinstalling, tap “Restore Purchases” in the app.",
+  },
+  {
+    q: "Can I get a refund?",
+    a: "Purchases made through the App Store or Google Play are subject to Apple's and Google's refund policies, which you request through them directly. For questions about web credit-pack (USDC) payments, email us and we'll help.",
+  },
+  {
+    q: "A stencil looks wrong, or the app crashed — what should I send?",
+    a: "Email us with your device, OS version, and the steps that led to the issue (a screenshot helps). The more detail you include, the faster we can reproduce and fix it.",
+  },
+  {
+    q: "How do I delete my account or data?",
+    a: "You can delete your account at any time from the app, or request deletion by email. We walk through both on the account-deletion page.",
+    link: { href: "/delete-account/", label: "Delete your account" },
+  },
+];
+
+const accountLinks = [
+  {
+    icon: "ph-trash-simple",
+    title: "Delete your account",
+    detail: "Remove your account and data from the app or by email request.",
+    href: "/delete-account/",
+  },
+  {
+    icon: "ph-shield-check",
+    title: "Privacy Policy",
+    detail: "What we collect, how AI processing works, and your rights.",
+    href: "/privacy/",
+  },
+  {
+    icon: "ph-scroll",
+    title: "Terms of Service",
+    detail: "Eligibility, content rights, billing, and acceptable use.",
+    href: "/terms/",
+  },
+];
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stencil focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian";
+
+const pageDescription = `Get help with ${SITE.name}: contact support, answers to common questions about stencils, pricing, subscriptions, and how to manage your account and data.`;
+---
+
+<BaseLayout
+  title={`Support — ${SITE.name}`}
+  description={pageDescription}
+  pathname="/support"
+>
+  <!-- Skip link for keyboard users -->
+  <a
+    href="#help"
+    class:list={[
+      "sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[120] focus:px-4 focus:py-2 focus:bg-paper focus:text-obsidian focus:text-sm focus:font-bold focus:uppercase focus:tracking-widest focus:rounded-sm",
+    ]}
+  >
+    Skip to help
+  </a>
+
+  <!-- Reading-progress bar, scroll-driven. -->
+  <div
+    id="reading-progress"
+    class="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-stencil origin-left scale-x-0 will-change-transform"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Slim, persistent sub-page header. -->
+  <header
+    class="sticky top-0 z-50 w-full border-b border-ash/30 bg-obsidian/80 backdrop-blur-xl"
+  >
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-[4.5rem] flex items-center justify-between gap-4"
+    >
+      <a
+        href="/"
+        class:list={["flex items-center gap-2.5 -ml-1 rounded-sm", focusRing]}
+        aria-label={`${SITE.name} home`}
+      >
+        <img
+          src="/assets/hero-graphic-light.png"
+          alt=""
+          width="40"
+          height="40"
+          class="w-9 h-9 md:w-10 md:h-10 object-contain"
+          loading="eager"
+          decoding="async"
+        />
+        <span
+          class="font-display font-bold text-lg sm:text-xl md:text-2xl tracking-tight whitespace-nowrap"
+        >
+          {SITE.name}<span class="text-stencil leading-none">.</span>
+        </span>
+      </a>
+
+      <nav
+        aria-label="Page"
+        class="flex items-center gap-1 sm:gap-2 text-xs font-bold uppercase tracking-widest"
+      >
+        <a
+          href="/"
+          class:list={[
+            "hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          Home
+        </a>
+        <a
+          href="/privacy/"
+          class:list={[
+            "hidden sm:inline-flex items-center px-3 sm:px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          Privacy
+        </a>
+        <a
+          href="/#download"
+          class:list={[
+            "ml-1 inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-paper text-obsidian rounded-sm whitespace-nowrap hover:bg-white hover:-translate-y-0.5 transition-all duration-300",
+            focusRing,
+          ]}
+        >
+          <span class="hidden sm:inline">Get the app</span>
+          <span class="sm:hidden">App</span>
+          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================================
+         Masthead
+         =================================================================== -->
+    <section
+      class="relative w-full overflow-hidden px-6 md:px-12 pt-20 md:pt-28 pb-14 md:pb-20"
+    >
+      <div
+        class="pointer-events-none absolute -top-24 right-[-10%] w-[640px] h-[640px] bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.14)_0%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <i
+        class="ph ph-lifebuoy pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"></i>
+
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <div
+          class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-8"
+        >
+          <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+          <span>Help</span>
+          <span class="text-neutral-700" aria-hidden="true">/</span>
+          <span class="text-neutral-500">Support</span>
+        </div>
+
+        <h1
+          class="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-paper"
+        >
+          How can we<br />
+          <span class="text-neutral-500">help<span class="text-stencil">?</span></span>
+        </h1>
+
+        <p
+          class="mt-8 font-sans text-lg md:text-xl font-light text-neutral-300 leading-relaxed text-balance max-w-2xl"
+        >
+          Real answers from the people who build {SITE.name}. Most questions are
+          covered below — and you can always reach us directly.
+        </p>
+
+        <!-- Metadata strip -->
+        <dl
+          class="mt-10 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-ash/30 pt-6 max-w-2xl"
+        >
+          {
+            meta.map((m) => (
+              <div class="flex flex-col gap-1">
+                <dt class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+                  {m.label}
+                </dt>
+                <dd class="text-sm text-paper">{m.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Body — sticky TOC rail + content
+         =================================================================== -->
+    <div id="help" class="max-w-7xl mx-auto px-6 md:px-12 pb-32 scroll-mt-24">
+      <div
+        class="grid lg:grid-cols-[15rem_minmax(0,1fr)] gap-y-10 lg:gap-x-16 xl:gap-x-24"
+      >
+        <!-- ---- Table of contents ---- -->
+        <aside class="lg:sticky lg:top-28 lg:self-start">
+          <details class="lg:hidden group border border-ash/30 rounded-sm bg-ink/40">
+            <summary
+              class:list={[
+                "flex items-center justify-between gap-3 px-5 py-4 cursor-pointer list-none select-none rounded-sm",
+                focusRing,
+              ]}
+            >
+              <span
+                class="text-[10px] font-mono uppercase tracking-widest text-neutral-400"
+              >
+                On this page
+              </span>
+              <i
+                class="ph ph-caret-down text-neutral-400 transition-transform duration-300 group-open:rotate-180"
+                aria-hidden="true"></i>
+            </summary>
+            <nav aria-label="On this page" class="px-2 pb-3">
+              <ol class="flex flex-col">
+                {
+                  sections.map((s) => (
+                    <li>
+                      <a
+                        href={`#${s.id}`}
+                        class:list={[
+                          "flex items-center gap-3 px-3 py-3 rounded-sm text-sm text-neutral-400 hover:text-paper hover:bg-ash/30 transition-colors",
+                          focusRing,
+                        ]}
+                      >
+                        <span class="font-mono text-[10px] text-neutral-600">
+                          {s.index}
+                        </span>
+                        {s.label}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ol>
+            </nav>
+          </details>
+
+          <nav aria-label="On this page" class="hidden lg:block" data-toc>
+            <p
+              class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-5"
+            >
+              On this page
+            </p>
+            <ol class="flex flex-col gap-0.5 border-l border-ash/30">
+              {
+                sections.map((s) => (
+                  <li>
+                    <a
+                      href={`#${s.id}`}
+                      data-toc-link={s.id}
+                      class:list={[
+                        "group flex items-center gap-3 -ml-px border-l-2 border-transparent py-2 pl-4 text-sm text-neutral-400 transition-colors duration-200 hover:text-paper",
+                        focusRing,
+                      ]}
+                    >
+                      <span class="font-mono text-[10px] text-neutral-600 group-hover:text-neutral-400 transition-colors">
+                        {s.index}
+                      </span>
+                      <span class="leading-tight">{s.label}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ol>
+          </nav>
+        </aside>
+
+        <!-- ---- Content ---- -->
+        <div class="min-w-0">
+          <!-- 01 — Get in touch -->
+          <section
+            id="contact"
+            data-section
+            class="scroll-mt-24 pb-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">01</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Get in touch
+              </h2>
+            </div>
+
+            <div
+              class="relative overflow-hidden flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 p-8 md:p-10 border border-ash/30 rounded-sm bg-ink"
+            >
+              <div
+                class="pointer-events-none absolute -bottom-20 -left-10 w-72 h-72 bg-[radial-gradient(circle,rgba(79,70,229,0.12)_0%,transparent_70%)]"
+                aria-hidden="true"
+              >
+              </div>
+              <div class="relative z-10 max-w-md">
+                <h3
+                  class="font-display text-2xl md:text-3xl font-bold tracking-tight text-paper mb-2"
+                >
+                  Email our support team
+                </h3>
+                <p class="text-neutral-400 leading-relaxed">
+                  We read every message and typically reply within 1–2 business
+                  days.
+                </p>
+              </div>
+              <a
+                href={`mailto:${SITE.supportEmail}`}
+                class:list={[
+                  "relative z-10 shrink-0 inline-flex items-center justify-center gap-3 px-7 py-4 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-8px_rgba(250,250,250,0.2)] transition-all duration-300",
+                  focusRing,
+                ]}
+              >
+                <i class="ph ph-envelope-simple text-lg" aria-hidden="true"></i>
+                {SITE.supportEmail}
+              </a>
+            </div>
+          </section>
+
+          <!-- 02 — Common questions -->
+          <section
+            id="faq"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">02</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Common questions
+              </h2>
+            </div>
+
+            <div class="flex flex-col gap-3">
+              {
+                faqs.map((f) => (
+                  <details class="group border border-ash/30 rounded-sm bg-ink/40 open:bg-ink/60 transition-colors">
+                    <summary
+                      class:list={[
+                        "flex items-center justify-between gap-4 px-5 md:px-6 py-5 cursor-pointer list-none select-none rounded-sm",
+                        focusRing,
+                      ]}
+                    >
+                      <span class="font-display font-bold text-base md:text-lg text-paper">
+                        {f.q}
+                      </span>
+                      <i
+                        class="ph ph-plus shrink-0 text-neutral-400 transition-transform duration-300 group-open:rotate-45"
+                        aria-hidden="true"
+                      />
+                    </summary>
+                    <div class="px-5 md:px-6 pb-6 -mt-1">
+                      <p class="text-neutral-400 leading-relaxed max-w-[62ch]">
+                        {f.a}
+                      </p>
+                      {f.link && (
+                        <a
+                          href={f.link.href}
+                          class:list={[
+                            "mt-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-paper hover:text-stencil transition-colors rounded-sm",
+                            focusRing,
+                          ]}
+                        >
+                          {f.link.label}
+                          <i
+                            class="ph ph-arrow-right text-sm"
+                            aria-hidden="true"
+                          />
+                        </a>
+                      )}
+                    </div>
+                  </details>
+                ))
+              }
+            </div>
+          </section>
+
+          <!-- 03 — Account & data -->
+          <section id="account" data-section class="scroll-mt-24 pt-16">
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">03</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Account &amp; data
+              </h2>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              {
+                accountLinks.map((l) => (
+                  <a
+                    href={l.href}
+                    class:list={[
+                      "group flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40 hover:bg-ink/70 hover:border-ash/60 transition-colors",
+                      focusRing,
+                    ]}
+                  >
+                    <i
+                      class={`ph ${l.icon} text-2xl text-paper mt-0.5 shrink-0`}
+                      aria-hidden="true"
+                    />
+                    <div>
+                      <h3 class="font-display font-bold text-lg text-paper mb-1 flex items-center gap-2">
+                        {l.title}
+                        <i class="ph ph-arrow-up-right text-sm text-neutral-500 group-hover:text-stencil group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true" />
+                      </h3>
+                      <p class="text-sm text-neutral-400 leading-relaxed">
+                        {l.detail}
+                      </p>
+                    </div>
+                  </a>
+                ))
+              }
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Back-to-top — appears once you've scrolled past the masthead. -->
+  <button
+    id="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    class:list={[
+      "fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-ink/80 backdrop-blur-xl border border-ash/40 text-paper shadow-2xl opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:bg-ash/60",
+      focusRing,
+    ]}
+  >
+    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+  </button>
+
+  <Footer />
+  <CustomCursor />
+</BaseLayout>
+
+<script>
+  // ---- Reading progress bar (rAF-throttled, transform-only) ----
+  const bar = document.getElementById("reading-progress");
+  let ticking = false;
+
+  function updateProgress() {
+    if (!bar) return;
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - doc.clientHeight;
+    const ratio = max > 0 ? Math.min(doc.scrollTop / max, 1) : 0;
+    bar.style.transform = `scaleX(${ratio})`;
+    ticking = false;
+  }
+
+  // ---- Back-to-top visibility ----
+  const toTop = document.getElementById("back-to-top");
+
+  function updateToTop() {
+    if (!toTop) return;
+    const show = window.scrollY > 600;
+    toTop.classList.toggle("opacity-0", !show);
+    toTop.classList.toggle("translate-y-3", !show);
+    toTop.classList.toggle("pointer-events-none", !show);
+    // Keep the hidden button out of the keyboard tab order (WCAG 2.4.7).
+    toTop.tabIndex = show ? 0 : -1;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateProgress();
+        updateToTop();
+      });
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  updateProgress();
+  updateToTop();
+
+  toTop?.addEventListener("click", () => {
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
+  // ---- Scroll-spy: highlight the active section in the TOC ----
+  const tocLinks = new Map<string, HTMLAnchorElement>();
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-toc-link]")
+    .forEach((el) => {
+      const id = el.getAttribute("data-toc-link");
+      if (id) tocLinks.set(id, el);
+    });
+
+  function setActive(id: string) {
+    tocLinks.forEach((link, linkId) => {
+      const isActive = linkId === id;
+      link.classList.toggle("!border-stencil", isActive);
+      link.classList.toggle("!text-paper", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "true");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  const sectionEls = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-section]"),
+  );
+
+  if (sectionEls.length && tocLinks.size && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target.id) {
+          setActive(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-20% 0px -70% 0px",
+        threshold: 0,
+      },
+    );
+    sectionEls.forEach((el) => observer.observe(el));
+  }
+</script>

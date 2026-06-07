@@ -1,0 +1,704 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Footer from "@components/Footer.astro";
+import CustomCursor from "@components/CustomCursor.astro";
+import { SITE } from "@/consts";
+
+// Statically prerender — fixed compliance page (App Store account-deletion URL).
+export const prerender = true;
+
+/* ---------------------------------------------------------------------------
+   Account deletion.
+
+   This page is the public account-deletion URL referenced from App Store
+   Connect (Apple Review Guideline 5.1.1(v) — apps that create accounts must
+   let users initiate deletion) and Google Play's data-deletion requirement.
+   Keep it resolving at https://thestencilmaker.com/delete-account.
+
+   Facts here MUST stay consistent with the Privacy Policy:
+     • the deletion cascade (uploads, stencils, generations, device records,
+       linked OAuth identities) mirrors `cascade` in privacy.astro;
+     • billing records are retained 7 years (privacy retention table);
+     • free-tier stencils are purged 24h after generation, and free-tier
+       uploads aren't retained beyond generation.
+   The in-app steps mirror the app's real flow + i18n strings ("Delete account
+   anyway"). The email path is the channel we honor for users who can't reach
+   the app — it is processed by a person within the stated 30-day window.
+   --------------------------------------------------------------------------- */
+const sections = [
+  { id: "in-app", index: "01", label: "Delete in the app" },
+  { id: "by-email", index: "02", label: "Request by email" },
+  { id: "removed", index: "03", label: "What's removed" },
+  { id: "kept", index: "04", label: "What we keep" },
+  { id: "timeline", index: "05", label: "Timeline" },
+] as const;
+
+const meta = [
+  { label: "Completes within", value: "30 days" },
+  { label: "Applies to", value: "iOS · Android · Web" },
+  { label: "Permanent", value: "Yes" },
+];
+
+const steps = [
+  {
+    n: "1",
+    title: "Open Settings",
+    detail: `Launch ${SITE.name} and open the Settings tab.`,
+  },
+  {
+    n: "2",
+    title: "Tap “Delete account”",
+    detail: "It's in the account section, below Privacy and Terms.",
+  },
+  {
+    n: "3",
+    title: "Confirm",
+    detail:
+      "Read the warning, then confirm “Delete account anyway.” This cannot be undone.",
+  },
+];
+
+// Mirrors `cascade` in privacy.astro, with profile/sign-in made explicit.
+const removed = [
+  "Profile & sign-in",
+  "Uploads",
+  "Stencils",
+  "Generations",
+  "Device records",
+  "Linked OAuth identities",
+];
+
+const kept = [
+  {
+    icon: "ph-receipt",
+    label: "Billing & transaction records",
+    duration: "Up to 7 years",
+    detail:
+      "Retained only to meet legal, tax, and accounting obligations, kept separate from your profile, and never used to re-create your account.",
+  },
+];
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stencil focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian";
+
+const deletionMailto = `mailto:${SITE.supportEmail}?subject=${encodeURIComponent("Account deletion request")}`;
+
+const pageDescription = `How to delete your ${SITE.name} account and data — from inside the app or by email request. What is removed, what we keep for legal reasons, and how long deletion takes.`;
+---
+
+<BaseLayout
+  title={`Delete your account — ${SITE.name}`}
+  description={pageDescription}
+  pathname="/delete-account"
+>
+  <!-- Skip link for keyboard users -->
+  <a
+    href="#deletion"
+    class:list={[
+      "sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[120] focus:px-4 focus:py-2 focus:bg-paper focus:text-obsidian focus:text-sm focus:font-bold focus:uppercase focus:tracking-widest focus:rounded-sm",
+    ]}
+  >
+    Skip to deletion steps
+  </a>
+
+  <!-- Reading-progress bar, scroll-driven. -->
+  <div
+    id="reading-progress"
+    class="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-stencil origin-left scale-x-0 will-change-transform"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Slim, persistent sub-page header. -->
+  <header
+    class="sticky top-0 z-50 w-full border-b border-ash/30 bg-obsidian/80 backdrop-blur-xl"
+  >
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-[4.5rem] flex items-center justify-between gap-4"
+    >
+      <a
+        href="/"
+        class:list={["flex items-center gap-2.5 -ml-1 rounded-sm", focusRing]}
+        aria-label={`${SITE.name} home`}
+      >
+        <img
+          src="/assets/hero-graphic-light.png"
+          alt=""
+          width="40"
+          height="40"
+          class="w-9 h-9 md:w-10 md:h-10 object-contain"
+          loading="eager"
+          decoding="async"
+        />
+        <span
+          class="font-display font-bold text-lg sm:text-xl md:text-2xl tracking-tight whitespace-nowrap"
+        >
+          {SITE.name}<span class="text-stencil leading-none">.</span>
+        </span>
+      </a>
+
+      <nav
+        aria-label="Page"
+        class="flex items-center gap-1 sm:gap-2 text-xs font-bold uppercase tracking-widest"
+      >
+        <a
+          href="/"
+          class:list={[
+            "hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          Home
+        </a>
+        <a
+          href="/support/"
+          class:list={[
+            "hidden sm:inline-flex items-center px-3 sm:px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          Support
+        </a>
+        <a
+          href="/privacy/"
+          class:list={[
+            "hidden sm:inline-flex items-center px-3 sm:px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
+            focusRing,
+          ]}
+        >
+          Privacy
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================================
+         Masthead
+         =================================================================== -->
+    <section
+      class="relative w-full overflow-hidden px-6 md:px-12 pt-20 md:pt-28 pb-14 md:pb-20"
+    >
+      <div
+        class="pointer-events-none absolute -top-24 right-[-10%] w-[640px] h-[640px] bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.14)_0%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <i
+        class="ph ph-trash-simple pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"></i>
+
+      <div class="relative z-10 max-w-7xl mx-auto">
+        <div
+          class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-neutral-400 mb-8"
+        >
+          <span class="w-8 h-px bg-stencil" aria-hidden="true"></span>
+          <span>Account</span>
+          <span class="text-neutral-700" aria-hidden="true">/</span>
+          <span class="text-neutral-500">Delete</span>
+        </div>
+
+        <h1
+          class="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-paper"
+        >
+          Delete your<br />
+          <span class="text-neutral-500">account<span class="text-stencil">.</span></span>
+        </h1>
+
+        <p
+          class="mt-8 font-sans text-lg md:text-xl font-light text-neutral-300 leading-relaxed text-balance max-w-2xl"
+        >
+          You're in control of your data. Delete your {SITE.name} account in the
+          app, or request it by email — either way, it's permanent and we finish
+          within 30 days.
+        </p>
+
+        <!-- Metadata strip -->
+        <dl
+          class="mt-10 flex flex-wrap items-center gap-x-10 gap-y-4 border-t border-ash/30 pt-6 max-w-2xl"
+        >
+          {
+            meta.map((m) => (
+              <div class="flex flex-col gap-1">
+                <dt class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
+                  {m.label}
+                </dt>
+                <dd class="text-sm text-paper">{m.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Body — sticky TOC rail + content
+         =================================================================== -->
+    <div
+      id="deletion"
+      class="max-w-7xl mx-auto px-6 md:px-12 pb-32 scroll-mt-24"
+    >
+      <div
+        class="grid lg:grid-cols-[15rem_minmax(0,1fr)] gap-y-10 lg:gap-x-16 xl:gap-x-24"
+      >
+        <!-- ---- Table of contents ---- -->
+        <aside class="lg:sticky lg:top-28 lg:self-start">
+          <details class="lg:hidden group border border-ash/30 rounded-sm bg-ink/40">
+            <summary
+              class:list={[
+                "flex items-center justify-between gap-3 px-5 py-4 cursor-pointer list-none select-none rounded-sm",
+                focusRing,
+              ]}
+            >
+              <span
+                class="text-[10px] font-mono uppercase tracking-widest text-neutral-400"
+              >
+                On this page
+              </span>
+              <i
+                class="ph ph-caret-down text-neutral-400 transition-transform duration-300 group-open:rotate-180"
+                aria-hidden="true"></i>
+            </summary>
+            <nav aria-label="On this page" class="px-2 pb-3">
+              <ol class="flex flex-col">
+                {
+                  sections.map((s) => (
+                    <li>
+                      <a
+                        href={`#${s.id}`}
+                        class:list={[
+                          "flex items-center gap-3 px-3 py-3 rounded-sm text-sm text-neutral-400 hover:text-paper hover:bg-ash/30 transition-colors",
+                          focusRing,
+                        ]}
+                      >
+                        <span class="font-mono text-[10px] text-neutral-600">
+                          {s.index}
+                        </span>
+                        {s.label}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ol>
+            </nav>
+          </details>
+
+          <nav aria-label="On this page" class="hidden lg:block" data-toc>
+            <p
+              class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-5"
+            >
+              On this page
+            </p>
+            <ol class="flex flex-col gap-0.5 border-l border-ash/30">
+              {
+                sections.map((s) => (
+                  <li>
+                    <a
+                      href={`#${s.id}`}
+                      data-toc-link={s.id}
+                      class:list={[
+                        "group flex items-center gap-3 -ml-px border-l-2 border-transparent py-2 pl-4 text-sm text-neutral-400 transition-colors duration-200 hover:text-paper",
+                        focusRing,
+                      ]}
+                    >
+                      <span class="font-mono text-[10px] text-neutral-600 group-hover:text-neutral-400 transition-colors">
+                        {s.index}
+                      </span>
+                      <span class="leading-tight">{s.label}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ol>
+          </nav>
+        </aside>
+
+        <!-- ---- Content ---- -->
+        <div class="min-w-0">
+          <!-- 01 — Delete in the app -->
+          <section
+            id="in-app"
+            data-section
+            class="scroll-mt-24 pb-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">01</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Delete in the app
+              </h2>
+            </div>
+
+            <p
+              class="text-neutral-300 text-lg leading-relaxed max-w-[60ch] mb-10"
+            >
+              The fastest way to delete your account is from inside {SITE.name},
+              on iOS or Android.
+            </p>
+
+            <ol class="flex flex-col gap-px">
+              {
+                steps.map((s) => (
+                  <li class="flex items-start gap-5 py-5 border-t border-ash/20 first:border-t-0">
+                    <span class="flex items-center justify-center w-9 h-9 shrink-0 rounded-sm bg-ink border border-ash/50 font-mono text-sm tabular-nums text-paper">
+                      {s.n}
+                    </span>
+                    <div class="max-w-[58ch]">
+                      <h3 class="font-display font-bold text-lg text-paper mb-1">
+                        {s.title}
+                      </h3>
+                      <p class="text-neutral-400 leading-relaxed">{s.detail}</p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ol>
+
+            <p class="text-sm text-neutral-400 leading-relaxed mt-6 max-w-[58ch]">
+              On the Web app? Use the{" "}
+              <a
+                href="#by-email"
+                class:list={[
+                  "text-paper underline decoration-ash hover:decoration-paper transition-colors rounded-sm",
+                  focusRing,
+                ]}
+              >
+                email request
+              </a>{" "}
+              below — the same steps apply.
+            </p>
+
+            <!-- Active-subscription warning (mirrors the app's own notice). -->
+            <div
+              class="mt-10 flex items-start gap-4 p-6 border border-amber-500/30 rounded-sm bg-amber-500/[0.07] max-w-[62ch]"
+            >
+              <i
+                class="ph ph-warning text-xl text-amber-300 mt-0.5 shrink-0"
+                aria-hidden="true"></i>
+              <div>
+                <p class="font-display font-bold text-amber-100 mb-1">
+                  Cancel your subscription separately
+                </p>
+                <p class="text-neutral-300 leading-relaxed">
+                  Deleting your account does <strong class="font-semibold text-paper"
+                    >not</strong
+                  > cancel an active App Store or Google Play subscription. Cancel
+                  it first in Apple Settings (iOS) or Google Play (Android), or you
+                  may continue to be charged.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 02 — Request by email -->
+          <section
+            id="by-email"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">02</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Request by email
+              </h2>
+            </div>
+
+            <p
+              class="text-neutral-300 text-lg leading-relaxed max-w-[60ch] mb-8"
+            >
+              Removed the app, or can't sign in? Email us from the address on
+              your account and ask us to delete it. We may verify that you own
+              the account before we process the request.
+            </p>
+
+            <div
+              class="relative overflow-hidden flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 p-8 md:p-10 border border-ash/30 rounded-sm bg-ink"
+            >
+              <div
+                class="pointer-events-none absolute -bottom-20 -left-10 w-72 h-72 bg-[radial-gradient(circle,rgba(79,70,229,0.12)_0%,transparent_70%)]"
+                aria-hidden="true"
+              >
+              </div>
+              <div class="relative z-10 max-w-md">
+                <h3
+                  class="font-display text-2xl md:text-3xl font-bold tracking-tight text-paper mb-2"
+                >
+                  Request account deletion
+                </h3>
+                <p class="text-neutral-400 leading-relaxed">
+                  Send us a note with the subject “Account deletion request” and
+                  we'll take it from there.
+                </p>
+              </div>
+              <a
+                href={deletionMailto}
+                class:list={[
+                  "relative z-10 shrink-0 inline-flex items-center justify-center gap-3 px-7 py-4 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-8px_rgba(250,250,250,0.2)] transition-all duration-300",
+                  focusRing,
+                ]}
+              >
+                <i class="ph ph-envelope-simple text-lg" aria-hidden="true"></i>
+                {SITE.supportEmail}
+              </a>
+            </div>
+          </section>
+
+          <!-- 03 — What's removed -->
+          <section
+            id="removed"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">03</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                What's removed
+              </h2>
+            </div>
+
+            <p
+              class="text-neutral-300 text-lg leading-relaxed max-w-[60ch] mb-8"
+            >
+              Deletion cascades across everything tied to your account:
+            </p>
+
+            <ul class="flex flex-wrap gap-2.5 max-w-[60ch]">
+              {
+                removed.map((item) => (
+                  <li class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ash/30 border border-ash/40 text-sm text-neutral-200">
+                    <i
+                      class="ph ph-x-circle text-base text-neutral-500"
+                      aria-hidden="true"
+                    />
+                    {item}
+                  </li>
+                ))
+              }
+            </ul>
+
+            <p class="text-sm text-neutral-400 leading-relaxed max-w-[60ch] mt-6">
+              Free-tier stencils are purged 24 hours after generation, and
+              free-tier uploads aren't retained beyond generation — so there's
+              little left to remove from them.
+            </p>
+          </section>
+
+          <!-- 04 — What we keep -->
+          <section
+            id="kept"
+            data-section
+            class="scroll-mt-24 py-16 border-b border-ash/30"
+          >
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">04</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                What we keep
+              </h2>
+            </div>
+
+            <dl class="flex flex-col">
+              {
+                kept.map((k, i) => (
+                  <div
+                    class:list={[
+                      "grid sm:grid-cols-[auto_1fr_auto] sm:items-center gap-x-5 gap-y-3 py-6",
+                      i !== 0 && "border-t border-ash/20",
+                    ]}
+                  >
+                    <i
+                      class={`ph ${k.icon} text-2xl text-paper sm:mt-0.5 sm:order-1`}
+                      aria-hidden="true"
+                    />
+                    <div class="max-w-[58ch] order-3 sm:order-2">
+                      <dt class="font-display font-bold text-lg text-paper mb-1">
+                        {k.label}
+                      </dt>
+                      <dd class="text-neutral-400 leading-relaxed">
+                        {k.detail}
+                      </dd>
+                    </div>
+                    <span class="order-2 sm:order-3 inline-flex w-fit items-center px-3 py-1.5 rounded-sm bg-ink border border-ash/40 font-mono text-sm tabular-nums text-paper whitespace-nowrap">
+                      {k.duration}
+                    </span>
+                  </div>
+                ))
+              }
+            </dl>
+
+            <p class="text-sm text-neutral-400 leading-relaxed max-w-[60ch] mt-6">
+              For the full picture, see the retention table in our{" "}
+              <a
+                href="/privacy/#retention"
+                class:list={[
+                  "text-neutral-300 underline decoration-ash hover:text-paper hover:decoration-paper transition-colors rounded-sm",
+                  focusRing,
+                ]}
+              >
+                Privacy Policy
+              </a>.
+            </p>
+          </section>
+
+          <!-- 05 — Timeline -->
+          <section id="timeline" data-section class="scroll-mt-24 pt-16">
+            <div class="flex items-baseline gap-4 mb-8">
+              <span class="font-mono text-sm text-stencil">05</span>
+              <h2
+                class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
+              >
+                Timeline
+              </h2>
+            </div>
+
+            <div class="flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40 max-w-[62ch]">
+              <i
+                class="ph ph-clock-countdown text-xl text-paper mt-0.5 shrink-0"
+                aria-hidden="true"></i>
+              <p class="text-neutral-300 leading-relaxed">
+                Deletion requests — whether started in the app or by email — are
+                completed within <strong class="font-semibold text-paper"
+                  >30 days</strong
+                >, and usually much sooner. We'll email you to confirm once it's
+                done. Deletion is <strong class="font-semibold text-paper"
+                  >permanent and cannot be undone</strong
+                >: you'd need to create a new account to use {SITE.name} again.
+              </p>
+            </div>
+
+            <p class="text-neutral-400 leading-relaxed max-w-[60ch] mt-8">
+              Questions before you delete? Our{" "}
+              <a
+                href="/support/"
+                class:list={[
+                  "text-paper underline decoration-ash hover:decoration-paper transition-colors rounded-sm",
+                  focusRing,
+                ]}
+              >
+                support team
+              </a>{" "}
+              is glad to help.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Back-to-top — appears once you've scrolled past the masthead. -->
+  <button
+    id="back-to-top"
+    type="button"
+    aria-label="Back to top"
+    class:list={[
+      "fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-ink/80 backdrop-blur-xl border border-ash/40 text-paper shadow-2xl opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:bg-ash/60",
+      focusRing,
+    ]}
+  >
+    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+  </button>
+
+  <Footer />
+  <CustomCursor />
+</BaseLayout>
+
+<script>
+  // ---- Reading progress bar (rAF-throttled, transform-only) ----
+  const bar = document.getElementById("reading-progress");
+  let ticking = false;
+
+  function updateProgress() {
+    if (!bar) return;
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - doc.clientHeight;
+    const ratio = max > 0 ? Math.min(doc.scrollTop / max, 1) : 0;
+    bar.style.transform = `scaleX(${ratio})`;
+    ticking = false;
+  }
+
+  // ---- Back-to-top visibility ----
+  const toTop = document.getElementById("back-to-top");
+
+  function updateToTop() {
+    if (!toTop) return;
+    const show = window.scrollY > 600;
+    toTop.classList.toggle("opacity-0", !show);
+    toTop.classList.toggle("translate-y-3", !show);
+    toTop.classList.toggle("pointer-events-none", !show);
+    // Keep the hidden button out of the keyboard tab order (WCAG 2.4.7).
+    toTop.tabIndex = show ? 0 : -1;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateProgress();
+        updateToTop();
+      });
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  updateProgress();
+  updateToTop();
+
+  toTop?.addEventListener("click", () => {
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
+  // ---- Scroll-spy: highlight the active section in the TOC ----
+  const tocLinks = new Map<string, HTMLAnchorElement>();
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-toc-link]")
+    .forEach((el) => {
+      const id = el.getAttribute("data-toc-link");
+      if (id) tocLinks.set(id, el);
+    });
+
+  function setActive(id: string) {
+    tocLinks.forEach((link, linkId) => {
+      const isActive = linkId === id;
+      link.classList.toggle("!border-stencil", isActive);
+      link.classList.toggle("!text-paper", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "true");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  const sectionEls = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-section]"),
+  );
+
+  if (sectionEls.length && tocLinks.size && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target.id) {
+          setActive(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-20% 0px -70% 0px",
+        threshold: 0,
+      },
+    );
+    sectionEls.forEach((el) => observer.observe(el));
+  }
+</script>
