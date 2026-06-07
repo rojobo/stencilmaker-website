@@ -1,9 +1,0 @@
-# Security headers for https://thestencilmaker.com/
-  OK   content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://cdn.jsdelivr.net; connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
-  OK   strict-transport-security: max-age=63072000; includeSubDomains; preload
-  OK   x-frame-options: DENY
-  OK   referrer-policy: strict-origin-when-cross-origin
-  OK   x-content-type-options: nosniff
-  OK   permissions-policy: camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()
-  OK   cross-origin-opener-policy: same-origin
-  (no Set-Cookie)
