@@ -1,0 +1,34 @@
+name: StencilMaker marketing site
+base_url: https://thestencilmaker.com
+canonical_domain: thestencilmaker.com
+
+repo:
+  path: /home/bryan/StencilMakerWebsite
+  frontend_dir: src
+
+crawl:
+  depth: 2
+  max_pages: 40
+  include: ["/", "/artists", "/artists/apply", "/privacy", "/terms"]
+  exclude: ["/api"]
+
+render:
+  breakpoints: ["1440x900", "390x844"]
+
+lenses:
+  accessibility: true
+  performance: true
+  security_headers: true
+  privacy: true
+  backend_health: true
+
+privacy:
+  analytics: cookieless   # Cloudflare Web Analytics (static.cloudflareinsights.com) — cookieless
+
+content:
+  style_guide: []
+  product_name: StencilMaker
+
+output:
+  dir: docs/audits
+  open_github_issues: false

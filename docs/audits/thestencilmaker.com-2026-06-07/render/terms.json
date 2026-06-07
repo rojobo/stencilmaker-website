@@ -1,0 +1,487 @@
+{
+  "route": "/terms/",
+  "byBreakpoint": {
+    "desktop-1440": {
+      "status": 200,
+      "screenshot": "terms_desktop-1440.png",
+      "viewportScreenshot": null,
+      "overflow": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "hasOverflow": false
+      },
+      "consoleErrors": [
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Connecting to 'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blo",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked."
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "geometry": {
+        "overlaps": [],
+        "clipped": []
+      },
+      "axe": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 43,
+          "sample": [
+            ".text-xs.mb-8.uppercase > .text-neutral-500"
+          ]
+        },
+        {
+          "id": "definition-list",
+          "impact": "serious",
+          "help": "<dl> elements must only directly contain properly-ordered <dt> and <dd> groups, <script>, <template> or <div> elements",
+          "nodes": 1,
+          "sample": [
+            "#governing-law > dl"
+          ]
+        },
+        {
+          "id": "dlitem",
+          "impact": "serious",
+          "help": "<dt> and <dd> elements must be contained by a <dl>",
+          "nodes": 4,
+          "sample": [
+            ".p-6.items-start.bg-ink\\/40:nth-child(1) > div > dt"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "i": 0,
+          "id": "",
+          "file": "terms__sec00.png"
+        },
+        {
+          "i": 1,
+          "id": "terms",
+          "file": "terms__sec01_terms.png"
+        },
+        {
+          "i": 2,
+          "id": "eligibility",
+          "file": "terms__sec02_eligibility.png"
+        },
+        {
+          "i": 3,
+          "id": "generated-stencils",
+          "file": "terms__sec03_generated-stencils.png"
+        },
+        {
+          "i": 4,
+          "id": "your-content",
+          "file": "terms__sec04_your-content.png"
+        },
+        {
+          "i": 5,
+          "id": "acceptable-use",
+          "file": "terms__sec05_acceptable-use.png"
+        },
+        {
+          "i": 6,
+          "id": "paid-features",
+          "file": "terms__sec06_paid-features.png"
+        },
+        {
+          "i": 7,
+          "id": "termination",
+          "file": "terms__sec07_termination.png"
+        },
+        {
+          "i": 8,
+          "id": "liability",
+          "file": "terms__sec08_liability.png"
+        },
+        {
+          "i": 9,
+          "id": "governing-law",
+          "file": "terms__sec09_governing-law.png"
+        },
+        {
+          "i": 10,
+          "id": "ai-generation",
+          "file": "terms__sec10_ai-generation.png"
+        },
+        {
+          "i": 11,
+          "id": "contact",
+          "file": "terms__sec11_contact.png"
+        }
+      ]
+    },
+    "mobile-390": {
+      "status": 200,
+      "screenshot": "terms_mobile-390.png",
+      "viewportScreenshot": null,
+      "overflow": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "hasOverflow": false
+      },
+      "consoleErrors": [
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Connecting to 'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blo",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked."
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "geometry": {
+        "overlaps": [
+          {
+            "a": "02 Generated stencils",
+            "b": "01",
+            "fraction": 0.46,
+            "aRect": [
+              33,
+              707,
+              324,
+              44
+            ],
+            "bRect": [
+              24,
+              718,
+              17,
+              20
+            ]
+          },
+          {
+            "a": "02 Generated stencils",
+            "b": "Eligibility",
+            "fraction": 0.92,
+            "aRect": [
+              33,
+              707,
+              324,
+              44
+            ],
+            "bRect": [
+              57,
+              704,
+              137,
+              36
+            ]
+          },
+          {
+            "a": "04 Acceptable use",
+            "b": "18+",
+            "fraction": 0.36,
+            "aRect": [
+              33,
+              795,
+              324,
+              44
+            ],
+            "bRect": [
+              52,
+              822,
+              114,
+              48
+            ]
+          },
+          {
+            "a": "05 Paid features",
+            "b": "18+",
+            "fraction": 0.64,
+            "aRect": [
+              33,
+              839,
+              324,
+              44
+            ],
+            "bRect": [
+              52,
+              822,
+              114,
+              48
+            ]
+          },
+          {
+            "a": "05 Paid features",
+            "b": "Minimum",
+            "fraction": 0.37,
+            "aRect": [
+              33,
+              839,
+              324,
+              44
+            ],
+            "bRect": [
+              84,
+              878,
+              49,
+              15
+            ]
+          },
+          {
+            "a": "05",
+            "b": "18+",
+            "fraction": 0.42,
+            "aRect": [
+              45,
+              854,
+              12,
+              14
+            ],
+            "bRect": [
+              52,
+              822,
+              114,
+              48
+            ]
+          },
+          {
+            "a": "06 Termination",
+            "b": "Minimum",
+            "fraction": 0.63,
+            "aRect": [
+              33,
+              883,
+              324,
+              44
+            ],
+            "bRect": [
+              84,
+              878,
+              49,
+              15
+            ]
+          },
+          {
+            "a": "07 Liability",
+            "b": "You must be at least 18 years old — or the legal tattooing age in your",
+            "fraction": 0.6,
+            "aRect": [
+              33,
+              927,
+              324,
+              44
+            ],
+            "bRect": [
+              53,
+              941,
+              284,
+              117
+            ]
+          },
+          {
+            "a": "07 Liability",
+            "b": "18 years old",
+            "fraction": 1,
+            "aRect": [
+              33,
+              927,
+              324,
+              44
+            ],
+            "bRect": [
+              226,
+              943,
+              102,
+              24
+            ]
+          },
+          {
+            "a": "07",
+            "b": "You must be at least 18 years old — or the legal tattooing age in your",
+            "fraction": 0.33,
+            "aRect": [
+              45,
+              942,
+              12,
+              14
+            ],
+            "bRect": [
+              53,
+              941,
+              284,
+              117
+            ]
+          },
+          {
+            "a": "08 Governing law",
+            "b": "You must be at least 18 years old — or the legal tattooing age in your",
+            "fraction": 0.88,
+            "aRect": [
+              33,
+              971,
+              324,
+              44
+            ],
+            "bRect": [
+              53,
+              941,
+              284,
+              117
+            ]
+          },
+          {
+            "a": "08",
+            "b": "You must be at least 18 years old — or the legal tattooing age in your",
+            "fraction": 0.33,
+            "aRect": [
+              45,
+              986,
+              12,
+              14
+            ],
+            "bRect": [
+              53,
+              941,
+              284,
+              117
+            ]
+          },
+          {
+            "a": "09 AI generation",
+            "b": "You must be at least 18 years old — or the legal tattooing age in your",
+            "fraction": 0.86,
+            "aRect": [
+              33,
+              1015,
+              324,
+              44
+            ],
+            "bRect": [
+              53,
+              941,
+              284,
+              117
+            ]
+          },
+          {
+            "a": "09",
+            "b": "You must be at least 18 years old — or the legal tattooing age in your",
+            "fraction": 0.33,
+            "aRect": [
+              45,
+              1030,
+              12,
+              14
+            ],
+            "bRect": [
+              53,
+              941,
+              284,
+              117
+            ]
+          },
+          {
+            "a": "10 Contact",
+            "b": "The App is intended for tattoo artists, apprentices, and clients worki",
+            "fraction": 0.58,
+            "aRect": [
+              33,
+              1059,
+              324,
+              44
+            ],
+            "bRect": [
+              53,
+              1074,
+              284,
+              78
+            ]
+          },
+          {
+            "a": "10",
+            "b": "The App is intended for tattoo artists, apprentices, and clients worki",
+            "fraction": 0.33,
+            "aRect": [
+              45,
+              1074,
+              12,
+              14
+            ],
+            "bRect": [
+              53,
+              1074,
+              284,
+              78
+            ]
+          }
+        ],
+        "clipped": []
+      },
+      "axe": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 14,
+          "sample": [
+            "#eligibility > .items-baseline.mb-8.gap-4 > .text-stencil.font-mono.text-sm"
+          ]
+        },
+        {
+          "id": "definition-list",
+          "impact": "serious",
+          "help": "<dl> elements must only directly contain properly-ordered <dt> and <dd> groups, <script>, <template> or <div> elements",
+          "nodes": 1,
+          "sample": [
+            "#governing-law > dl"
+          ]
+        },
+        {
+          "id": "dlitem",
+          "impact": "serious",
+          "help": "<dt> and <dd> elements must be contained by a <dl>",
+          "nodes": 4,
+          "sample": [
+            ".p-6.items-start.bg-ink\\/40:nth-child(1) > div > dt"
+          ]
+        }
+      ],
+      "sections": []
+    }
+  }
+}

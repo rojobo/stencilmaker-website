@@ -1,0 +1,8 @@
+{
+  "routes": [
+    "/",
+    "/artists",
+    "/privacy",
+    "/terms"
+  ]
+}

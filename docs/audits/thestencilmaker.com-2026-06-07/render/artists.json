@@ -1,0 +1,53 @@
+{
+  "route": "/artists",
+  "byBreakpoint": {
+    "desktop-1440": {
+      "status": 404,
+      "screenshot": "artists_desktop-1440.png",
+      "viewportScreenshot": null,
+      "overflow": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "hasOverflow": false
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "pageErrors": [],
+      "failedRequests": [
+        "404 https://thestencilmaker.com/artists"
+      ],
+      "geometry": {
+        "overlaps": [],
+        "clipped": []
+      },
+      "axe": [],
+      "sections": []
+    },
+    "mobile-390": {
+      "status": 404,
+      "screenshot": "artists_mobile-390.png",
+      "viewportScreenshot": null,
+      "overflow": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "hasOverflow": false
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "pageErrors": [],
+      "failedRequests": [
+        "404 https://thestencilmaker.com/artists"
+      ],
+      "geometry": {
+        "overlaps": [],
+        "clipped": []
+      },
+      "axe": [],
+      "sections": []
+    }
+  }
+}

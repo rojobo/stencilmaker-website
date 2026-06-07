@@ -1,0 +1,44 @@
+{
+  "base": "https://thestencilmaker.com",
+  "host": "thestencilmaker.com",
+  "sitemap": {
+    "found": true,
+    "url": "https://thestencilmaker.com/sitemap-index.xml",
+    "hosts": [
+      "thestencilmaker.com"
+    ],
+    "count": 3,
+    "domainMismatch": false,
+    "robotsSitemap": "https://thestencilmaker.com/sitemap-index.xml",
+    "robotsSitemapHost": "thestencilmaker.com"
+  },
+  "robotsDisallow": [
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/api/",
+    "/",
+    "/",
+    "/",
+    "/"
+  ],
+  "crawl": {
+    "count": 4,
+    "depth": 2
+  },
+  "diffs": {
+    "inSitemapNotCrawled": [],
+    "crawledNotInSitemap": [
+      "/artists"
+    ]
+  },
+  "flags": [
+    "1 crawled page(s) missing from sitemap: /artists"
+  ]
+}

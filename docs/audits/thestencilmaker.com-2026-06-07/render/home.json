@@ -1,0 +1,360 @@
+{
+  "route": "/",
+  "byBreakpoint": {
+    "desktop-1440": {
+      "status": 200,
+      "screenshot": "home_desktop-1440.png",
+      "viewportScreenshot": null,
+      "overflow": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "overflowPx": 0,
+        "hasOverflow": false
+      },
+      "consoleErrors": [
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Connecting to 'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blo",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked."
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "geometry": {
+        "overlaps": [
+          {
+            "a": "TRUSTED BY MASTERS — BUILT FOR THE CRAFT — TRUSTED BY MASTERS —",
+            "b": "\"It eliminated an hour of iPad tracing per client. But more importantl",
+            "fraction": 1,
+            "aRect": [
+              0,
+              3272,
+              9203,
+              324
+            ],
+            "bRect": [
+              304,
+              3272,
+              832,
+              216
+            ]
+          }
+        ],
+        "clipped": [
+          {
+            "t": "Hyper-Realism",
+            "right": 1744,
+            "left": 1344,
+            "vw": 1440
+          },
+          {
+            "t": "Dense topographical maps for multi-shade wash work.",
+            "right": 1744,
+            "left": 1344,
+            "vw": 1440
+          },
+          {
+            "t": "TRUSTED BY MASTERS — BUILT FOR THE CRAFT — TRUSTED BY MASTERS —",
+            "right": 9203,
+            "left": 0,
+            "vw": 1440
+          }
+        ]
+      },
+      "axe": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 23,
+          "sample": [
+            ".md\\:block > .text-xs.text-neutral-500.font-mono"
+          ]
+        },
+        {
+          "id": "scrollable-region-focusable",
+          "impact": "serious",
+          "help": "Scrollable region must have keyboard access",
+          "nodes": 1,
+          "sample": [
+            "#style-rail"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "i": 0,
+          "id": "vision",
+          "file": "home__sec00_vision.png"
+        },
+        {
+          "i": 1,
+          "id": "engine",
+          "file": "home__sec01_engine.png"
+        },
+        {
+          "i": 2,
+          "id": "styles",
+          "file": "home__sec02_styles.png"
+        },
+        {
+          "i": 3,
+          "id": "",
+          "file": "home__sec03.png"
+        },
+        {
+          "i": 4,
+          "id": "sponsored-artist",
+          "file": "home__sec04_sponsored-artist.png"
+        },
+        {
+          "i": 5,
+          "id": "pricing",
+          "file": "home__sec05_pricing.png"
+        },
+        {
+          "i": 6,
+          "id": "updates",
+          "file": "home__sec06_updates.png"
+        }
+      ]
+    },
+    "mobile-390": {
+      "status": 200,
+      "screenshot": "home_mobile-390.png",
+      "viewportScreenshot": null,
+      "overflow": {
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "overflowPx": 0,
+        "hasOverflow": false
+      },
+      "consoleErrors": [
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/Phosphor-Duotone.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/Phosphor.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/Phosphor-Thin.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/Phosphor-Light.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/Phosphor-Bold.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.woff2' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.woff' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Loading the font 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/Phosphor-Fill.ttf' violates the following Content Security Policy directive: \"font-src 'self' https://fonts.gstatic.com\". The action has been blocked.",
+        "Connecting to 'https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blo",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked.",
+        "Connecting to 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css' violates the following Content Security Policy directive: \"connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com\". The action has been blocked."
+      ],
+      "pageErrors": [],
+      "failedRequests": [],
+      "geometry": {
+        "overlaps": [
+          {
+            "a": "Vision",
+            "b": "Get Started Free",
+            "fraction": 0.24,
+            "aRect": [
+              -34,
+              759,
+              86,
+              36
+            ],
+            "bRect": [
+              32,
+              756,
+              326,
+              52
+            ]
+          },
+          {
+            "a": "The Engine",
+            "b": "Get Started Free",
+            "fraction": 0.9,
+            "aRect": [
+              60,
+              751,
+              90,
+              52
+            ],
+            "bRect": [
+              32,
+              756,
+              326,
+              52
+            ]
+          },
+          {
+            "a": "Styles",
+            "b": "Get Started Free",
+            "fraction": 1,
+            "aRect": [
+              158,
+              759,
+              90,
+              36
+            ],
+            "bRect": [
+              32,
+              756,
+              326,
+              52
+            ]
+          },
+          {
+            "a": "Download",
+            "b": "Get Started Free",
+            "fraction": 0.69,
+            "aRect": [
+              305,
+              769,
+              78,
+              16
+            ],
+            "bRect": [
+              32,
+              756,
+              326,
+              52
+            ]
+          },
+          {
+            "a": "Output (Stencil)",
+            "b": "Input (Reference)",
+            "fraction": 0.32,
+            "aRect": [
+              174,
+              1899,
+              160,
+              32
+            ],
+            "bRect": [
+              56,
+              1897,
+              168,
+              34
+            ]
+          },
+          {
+            "a": "TRUSTED BY MASTERS — BUILT FOR THE CRAFT — TRUSTED BY MASTERS —",
+            "b": "\"It eliminated an hour of iPad tracing per client. But more importantl",
+            "fraction": 0.41,
+            "aRect": [
+              0,
+              3613,
+              2489,
+              88
+            ],
+            "bRect": [
+              32,
+              3495,
+              326,
+              216
+            ]
+          }
+        ],
+        "clipped": [
+          {
+            "t": "Vision",
+            "right": 52,
+            "left": -34,
+            "vw": 390
+          },
+          {
+            "t": "Japanese",
+            "right": 724,
+            "left": 393,
+            "vw": 390
+          },
+          {
+            "t": "Flowing composition with precise scale and wave mapping.",
+            "right": 724,
+            "left": 393,
+            "vw": 390
+          },
+          {
+            "t": "Fine Line",
+            "right": 1088,
+            "left": 756,
+            "vw": 390
+          },
+          {
+            "t": "Ultra-thin vector translation. Preserves fragile details.",
+            "right": 1088,
+            "left": 756,
+            "vw": 390
+          },
+          {
+            "t": "Hyper-Realism",
+            "right": 1451,
+            "left": 1120,
+            "vw": 390
+          },
+          {
+            "t": "Dense topographical maps for multi-shade wash work.",
+            "right": 1451,
+            "left": 1120,
+            "vw": 390
+          },
+          {
+            "t": "TRUSTED BY MASTERS — BUILT FOR THE CRAFT — TRUSTED BY MASTERS —",
+            "right": 2489,
+            "left": 0,
+            "vw": 390
+          }
+        ]
+      },
+      "axe": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": 17,
+          "sample": [
+            ".font-semibold.hover\\:bg-ash\\/50[href$=\"#engine\"]"
+          ]
+        },
+        {
+          "id": "scrollable-region-focusable",
+          "impact": "serious",
+          "help": "Scrollable region must have keyboard access",
+          "nodes": 1,
+          "sample": [
+            "#style-rail"
+          ]
+        }
+      ],
+      "sections": []
+    }
+  }
+}
