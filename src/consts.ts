@@ -10,19 +10,19 @@ export const SITE = {
   title: "StencilMaker — AI Tattoo Stencils for Professional Artists",
   tagline: "The Evolution of Tattoo Craft",
   description:
-    "StencilMaker is the first AI architecture built for the demands of high-end tattoo craft. Upload any reference, get a vector-grade transfer stencil in seconds. Uncompromising precision. Pure lines. Zero noise.",
+    "StencilMaker is the AI architecture built for the demands of high-end tattoo craft. Upload any reference, get a vector-grade transfer stencil in seconds. Uncompromising precision. Pure lines. Zero noise.",
   shortDescription:
     "AI-powered tattoo stencils. Vector-grade output from any reference image.",
   keywords: [
     "tattoo stencil generator",
     "AI tattoo stencil",
     "tattoo transfer paper",
-    "stencil maker app",
+    "stencilmaker app",
     "AI stencil for tattoo artists",
     "professional tattoo tools",
     "tattoo prep software",
   ],
-  ogImage: "/assets/og-image.png", // TODO: generate 1200x630 OG card
+  ogImage: "/assets/og-image.png", // 1200x630 social card
   twitterHandle: "@stencilmaker",
   locale: "en_US",
   language: "en",
