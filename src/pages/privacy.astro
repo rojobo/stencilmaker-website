@@ -20,14 +20,25 @@ export const prerender = true;
    30-day response); billing-records retention reworded to processor-held; the
    delete cascade now lists payment-event records and uses "generations" (the
    duplicate "stencils" entry was dropped); the processor list was reconciled
-   with the app source (xAI / Customer.io / Stripe added).
+   with the app source (xAI + Customer.io added).
+
+   AMENDED 2026-06-08 (→ 2026.06.08): USDC processor renamed from the defunct
+   "Coinbase Commerce" to "Coinbase" (Coinbase Developer Platform / Business),
+   mirroring the source package.
+
+   AMENDED 2026-06-09 (→ 2026.06.09, counsel-approved): AI providers re-synced
+   to the source — xAI (Grok) is now the PRIMARY stencil generator and Google
+   Gemini (via Vercel AI Gateway) is the fallback; the AI disclosure prose and
+   the processor list now name xAI first. A Stripe processor that an earlier
+   draft had added was removed — Stripe is not used and is absent from the app
+   source.
 
    The AI & generative-processing disclosure is legally load-bearing
    (Apple Review Guideline 5.1.2(i) + Google Play AI-Generated Content
    policy) — keep its wording in sync with the source package verbatim.
    --------------------------------------------------------------------------- */
-const PRIVACY_VERSION = "2026.06.07";
-const PRIVACY_UPDATED = "June 7, 2026";
+const PRIVACY_VERSION = "2026.06.09";
+const PRIVACY_UPDATED = "June 9, 2026";
 
 const meta = [
   { label: "Last updated", value: PRIVACY_UPDATED },
@@ -99,18 +110,19 @@ const notDo = [
 
 const processors = [
   { name: "Supabase", purpose: "Authentication, storage, database" },
-  { name: "Vercel AI Gateway / Google Gemini", purpose: "Stencil generation" },
+  { name: "xAI", purpose: "Primary stencil generation" },
   {
-    name: "xAI",
-    purpose:
-      "Fallback stencil generation when the primary provider declines an image",
+    name: "Vercel AI Gateway / Google Gemini",
+    purpose: "Fallback stencil generation",
   },
   { name: "Sentry", purpose: "Crash reporting" },
   { name: "PostHog", purpose: "Product analytics" },
   { name: "Customer.io", purpose: "Transactional and lifecycle messaging" },
   { name: "RevenueCat", purpose: "Subscription lifecycle" },
-  { name: "Stripe", purpose: "Subscription payments" },
-  { name: "Coinbase Commerce", purpose: "USDC payments (web credit packs)" },
+  {
+    name: "Coinbase",
+    purpose: "USDC payments via Coinbase Developer Platform / Coinbase Business",
+  },
   {
     name: "Cloudflare",
     purpose: "Hosting, CDN, cookieless web analytics, and bot protection (Turnstile)",
@@ -494,10 +506,14 @@ const pageDescription =
                   <p>
                     When you upload a reference image and select a style to
                     generate a stencil, your image is transmitted to <strong
-                      class="font-semibold text-paper">Google Gemini</strong
-                    > (a third-party generative AI model) via <strong
-                      class="font-semibold text-paper">Vercel AI Gateway</strong
-                    >. Both providers are located in the United States.
+                      class="font-semibold text-paper">xAI (Grok)</strong
+                    >, our primary third-party generative AI provider, and may be
+                    sent to <strong class="font-semibold text-paper"
+                      >Google Gemini</strong
+                    > via <strong class="font-semibold text-paper"
+                      >Vercel AI Gateway</strong
+                    > as a fallback. These providers are located in the United
+                    States.
                   </p>
                   <p>
                     By uploading an image and initiating generation you
@@ -505,7 +521,7 @@ const pageDescription =
                     solely for the purpose of creating the black-line stencil.
                     The image is <strong class="font-semibold text-paper"
                       >not retained</strong
-                    > by the AI provider after the request completes, is <strong
+                    > by these AI providers after the request completes, is <strong
                       class="font-semibold text-paper">never used to train models</strong
                     >, and is <strong class="font-semibold text-paper"
                       >never shared</strong

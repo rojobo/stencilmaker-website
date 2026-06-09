@@ -19,13 +19,18 @@ export const prerender = true;
    the verbatim `TERMS_AI_GENERATION_PARAGRAPH` after a prior paraphrase had
    drifted from the App-Store-cited wording.
 
+   AMENDED 2026-06-09 (→ 2026.06.09, counsel-approved): section 09 re-synced to
+   the amended `TERMS_AI_GENERATION_PARAGRAPH` — xAI (Grok) is now named as the
+   primary generator and Google Gemini (via Vercel AI Gateway) the fallback.
+   The §5 billing card's "Coinbase Commerce" was renamed to "Coinbase".
+
    The AI-generation disclosure (section 09) is legally load-bearing
    (Apple Review Guideline 5.1.2(i) + Google Play AI-Generated Content
    policy) and is reproduced VERBATIM from `TERMS_AI_GENERATION_PARAGRAPH`
    — do not reword it.
    --------------------------------------------------------------------------- */
-const TERMS_VERSION = "2026.06.07";
-const TERMS_UPDATED = "June 7, 2026";
+const TERMS_VERSION = "2026.06.09";
+const TERMS_UPDATED = "June 9, 2026";
 
 const meta = [
   { label: "Last updated", value: TERMS_UPDATED },
@@ -104,7 +109,7 @@ const billingPortals = [
   },
   {
     icon: "ph-currency-circle-dollar",
-    name: "Coinbase Commerce",
+    name: "Coinbase",
     note: "Web credit packs (USDC)",
   },
 ] as const;
@@ -742,11 +747,14 @@ const pageDescription =
 
                 <div class="space-y-5 text-paper/90 leading-relaxed max-w-[65ch]">
                   <p>
-                    StencilMaker uses generative AI (<strong
+                    StencilMaker uses generative AI — <strong
+                      class="font-semibold text-paper">xAI's Grok image model</strong
+                    > as the primary generator, with <strong
                       class="font-semibold text-paper">Google Gemini</strong
-                    >) to convert your uploaded reference image into a black-line
-                    stencil. Each generation is a machine-derived interpretation;
-                    output quality varies.
+                    > (via Vercel AI Gateway) as a fallback — to convert your
+                    uploaded reference image into a black-line stencil. Each
+                    generation is a machine-derived interpretation; output
+                    quality varies.
                   </p>
                   <p>
                     You are <strong class="font-semibold text-paper"
