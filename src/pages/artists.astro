@@ -3,6 +3,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Footer from "@components/Footer.astro";
 import CustomCursor from "@components/CustomCursor.astro";
 import { SITE, SPONSORED_ARTIST as A } from "@/consts";
+import Icon from "@/components/Icon.astro";
 
 // Statically prerender — this is a content page with no dynamic data.
 export const prerender = true;
@@ -181,7 +182,7 @@ const breadcrumbLd = {
             focusRing,
           ]}
         >
-          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-left" class="text-sm" aria-hidden="true" />
           Home
         </a>
         <span
@@ -199,7 +200,7 @@ const breadcrumbLd = {
         >
           <span class="hidden sm:inline">Get the app</span>
           <span class="sm:hidden">App</span>
-          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-up-right" class="text-sm" aria-hidden="true" />
         </a>
       </nav>
     </div>
@@ -219,9 +220,11 @@ const breadcrumbLd = {
       >
       </div>
       <!-- Oversized watermark glyph. -->
-      <i
-        class="ph ph-pen-nib pointer-events-none absolute -top-12 right-4 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
-        aria-hidden="true"></i>
+      <Icon
+        name="pen-nib"
+        class="pointer-events-none absolute -top-12 right-4 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"
+      />
 
       <div class="relative z-10 max-w-7xl mx-auto">
         <div
@@ -318,9 +321,11 @@ const breadcrumbLd = {
             class="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-neutral-400 group-hover:text-paper transition-colors whitespace-nowrap"
           >
             <span class="hidden sm:inline">View dossier</span>
-            <i
-              class="ph ph-arrow-down-right text-base transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
-              aria-hidden="true"></i>
+            <Icon
+              name="arrow-down-right"
+              class="text-base transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+              aria-hidden="true"
+            />
           </span>
         </a>
 
@@ -343,9 +348,11 @@ const breadcrumbLd = {
             class="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-neutral-500 group-hover:text-paper transition-colors whitespace-nowrap"
           >
             <span class="hidden sm:inline">Applications open</span>
-            <i
-              class="ph ph-plus text-base transition-transform group-hover:rotate-90"
-              aria-hidden="true"></i>
+            <Icon
+              name="plus"
+              class="text-base transition-transform group-hover:rotate-90"
+              aria-hidden="true"
+            />
           </span>
         </a>
       </div>
@@ -493,9 +500,11 @@ const breadcrumbLd = {
                 ]}
               >
                 View portfolio
-                <i
-                  class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  aria-hidden="true"></i>
+                <Icon
+                  name="arrow-up-right"
+                  class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  aria-hidden="true"
+                />
               </a>
               <a
                 href={A.links.instagram}
@@ -507,7 +516,7 @@ const breadcrumbLd = {
                   focusRing,
                 ]}
               >
-                <i class="ph ph-instagram-logo text-xl" aria-hidden="true"></i>
+                <Icon name="instagram-logo" class="text-xl" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -531,9 +540,12 @@ const breadcrumbLd = {
       <figure
         class="relative z-10 max-w-4xl mx-auto px-8 py-28 md:py-36 text-center flex flex-col items-center"
       >
-        <i
-          class="ph-fill ph-quotes text-4xl text-stencil mb-8"
-          aria-hidden="true"></i>
+        <Icon
+          name="quotes"
+          weight="fill"
+          class="text-4xl text-stencil mb-8"
+          aria-hidden="true"
+        />
         <blockquote
           class="font-display text-2xl md:text-4xl font-medium leading-snug text-balance text-paper"
         >
@@ -585,9 +597,11 @@ const breadcrumbLd = {
           <!-- Realism column -->
           <div class="flex flex-col gap-8">
             <div class="flex items-center gap-3">
-              <i
-                class="ph ph-sun-dim text-xl text-paper"
-                aria-hidden="true"></i>
+              <Icon
+                name="sun-dim"
+                class="text-xl text-paper"
+                aria-hidden="true"
+              />
               <h3
                 class="font-display text-xl font-bold tracking-tight text-paper"
               >
@@ -631,8 +645,9 @@ const breadcrumbLd = {
                     </h4>
                     <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 inline-flex items-center gap-1.5">
                       {w.set}
-                      <i
-                        class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      <Icon
+                        name="arrow-up-right"
+                        class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                         aria-hidden="true"
                       />
                     </span>
@@ -645,7 +660,7 @@ const breadcrumbLd = {
           <!-- Dark Art column (offset for editorial asymmetry) -->
           <div class="flex flex-col gap-8 lg:mt-16">
             <div class="flex items-center gap-3">
-              <i class="ph ph-skull text-xl text-paper" aria-hidden="true"></i>
+              <Icon name="skull" class="text-xl text-paper" aria-hidden="true" />
               <h3
                 class="font-display text-xl font-bold tracking-tight text-paper"
               >
@@ -689,8 +704,9 @@ const breadcrumbLd = {
                     </h4>
                     <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 inline-flex items-center gap-1.5">
                       {w.set}
-                      <i
-                        class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      <Icon
+                        name="arrow-up-right"
+                        class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                         aria-hidden="true"
                       />
                     </span>
@@ -704,7 +720,7 @@ const breadcrumbLd = {
         <p
           class="mt-14 flex items-center gap-3 text-[10px] font-mono uppercase tracking-widest text-neutral-600"
         >
-          <i class="ph ph-info" aria-hidden="true"></i>
+          <Icon name="info" aria-hidden="true" />
           Selected works © {A.name} — courtesy of brunomorettitattoo.com
         </p>
       </div>
@@ -740,8 +756,9 @@ const breadcrumbLd = {
                 <span class="absolute top-6 right-6 font-mono text-xs text-neutral-700">
                   0{i + 1}
                 </span>
-                <i
-                  class={`ph ${t.icon} text-3xl text-stencil`}
+                <Icon
+                  name={t.icon}
+                  class="text-3xl text-stencil"
                   aria-hidden="true"
                 />
                 <h3 class="font-display font-bold text-lg text-paper">
@@ -756,9 +773,11 @@ const breadcrumbLd = {
         <p
           class="mt-8 flex items-start gap-3 text-sm text-neutral-500 leading-relaxed max-w-2xl"
         >
-          <i
-            class="ph ph-seal-check text-base text-stencil mt-0.5 shrink-0"
-            aria-hidden="true"></i>
+          <Icon
+            name="seal-check"
+            class="text-base text-stencil mt-0.5 shrink-0"
+            aria-hidden="true"
+          />
           <span>
             Bruno is a featured StencilMaker partner. We celebrate his craft and
             workflow — we don&rsquo;t speak for his tools or technique.
@@ -796,12 +815,14 @@ const breadcrumbLd = {
                   ]}
                 >
                   <div class="flex items-center justify-between">
-                    <i
-                      class={`ph ${c.icon} text-2xl text-paper`}
+                    <Icon
+                      name={c.icon}
+                      class="text-2xl text-paper"
                       aria-hidden="true"
                     />
-                    <i
-                      class="ph ph-arrow-up-right text-neutral-600 group-hover:text-paper transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    <Icon
+                      name="arrow-up-right"
+                      class="text-neutral-600 group-hover:text-paper transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                       aria-hidden="true"
                     />
                   </div>
@@ -865,7 +886,7 @@ const breadcrumbLd = {
               focusRing,
             ]}
           >
-            <i class="ph ph-paper-plane-tilt text-lg" aria-hidden="true"></i>
+            <Icon name="paper-plane-tilt" class="text-lg" aria-hidden="true" />
             Apply to be featured
           </a>
         </div>
@@ -883,7 +904,7 @@ const breadcrumbLd = {
       focusRing,
     ]}
   >
-    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+    <Icon name="arrow-up" class="text-lg" aria-hidden="true" />
   </button>
 
   <Footer />

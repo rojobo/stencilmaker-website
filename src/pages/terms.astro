@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Footer from "@components/Footer.astro";
 import CustomCursor from "@components/CustomCursor.astro";
+import Icon from "@/components/Icon.astro";
 import { SITE } from "@/consts";
 
 // Statically prerender — this is a fixed legal document.
@@ -193,7 +194,7 @@ const pageDescription =
             focusRing,
           ]}
         >
-          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-left" class="text-sm" aria-hidden="true" />
           Home
         </a>
         <a
@@ -214,7 +215,7 @@ const pageDescription =
         >
           <span class="hidden sm:inline">Get the app</span>
           <span class="sm:hidden">App</span>
-          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-up-right" class="text-sm" aria-hidden="true" />
         </a>
       </nav>
     </div>
@@ -234,9 +235,11 @@ const pageDescription =
       >
       </div>
       <!-- Oversized watermark glyph. -->
-      <i
-        class="ph ph-scroll pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
-        aria-hidden="true"></i>
+      <Icon
+        name="scroll"
+        class="pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"
+      />
 
       <div class="relative z-10 max-w-7xl mx-auto">
         <div
@@ -311,9 +314,11 @@ const pageDescription =
               >
                 On this page
               </span>
-              <i
-                class="ph ph-caret-down text-neutral-400 transition-transform duration-300 group-open:rotate-180"
-                aria-hidden="true"></i>
+              <Icon
+                name="caret-down"
+                class="text-neutral-400 transition-transform duration-300 group-open:rotate-180"
+                aria-hidden="true"
+              />
             </summary>
             <nav aria-label="On this page" class="px-2 pb-3">
               <ol class="flex flex-col">
@@ -421,7 +426,7 @@ const pageDescription =
               {
                 audience.map((a) => (
                   <li class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-sm border border-ash/30 bg-ink/40 text-sm text-neutral-300">
-                    <i class={`ph ${a.icon} text-base text-stencil`} aria-hidden="true" />
+                    <Icon name={a.icon} class="text-base text-stencil" aria-hidden="true" />
                     {a.label}
                   </li>
                 ))
@@ -454,9 +459,11 @@ const pageDescription =
             <div
               class="mt-7 flex items-start gap-4 p-6 md:p-7 border border-stencil/40 bg-stencil/[0.06] rounded-sm max-w-[62ch]"
             >
-              <i
-                class="ph ph-warning-circle text-2xl text-stencil mt-0.5 shrink-0"
-                aria-hidden="true"></i>
+              <Icon
+                name="warning-circle"
+                class="text-2xl text-stencil mt-0.5 shrink-0"
+                aria-hidden="true"
+              />
               <p class="text-paper/90 leading-relaxed">
                 You remain <strong class="font-semibold text-paper"
                   >responsible for the final tattoo</strong
@@ -469,7 +476,7 @@ const pageDescription =
               {
                 checks.map((c) => (
                   <li class="flex flex-col gap-3 p-6 border border-ash/30 rounded-sm bg-ink/40 hover:bg-ink transition-colors">
-                    <i class={`ph ${c.icon} text-2xl text-stencil`} aria-hidden="true" />
+                    <Icon name={c.icon} class="text-2xl text-stencil" aria-hidden="true" />
                     <h3 class="font-display font-bold text-paper">{c.title}</h3>
                     <p class="text-sm text-neutral-400 leading-relaxed">
                       {c.detail}
@@ -498,9 +505,11 @@ const pageDescription =
             <div
               class="flex items-start gap-4 p-6 md:p-7 border border-ash/30 rounded-sm bg-ink/40 max-w-[62ch]"
             >
-              <i
-                class="ph ph-copyright text-2xl text-paper mt-0.5 shrink-0"
-                aria-hidden="true"></i>
+              <Icon
+                name="copyright"
+                class="text-2xl text-paper mt-0.5 shrink-0"
+                aria-hidden="true"
+              />
               <p class="text-neutral-300 text-lg leading-relaxed">
                 You <strong class="font-semibold text-paper"
                   >retain all rights</strong
@@ -513,7 +522,7 @@ const pageDescription =
               {
                 contentAssurances.map((a) => (
                   <li class="flex items-start gap-3 p-5 border border-ash/30 rounded-sm bg-ink/40">
-                    <i class={`ph ${a.icon} text-xl text-stencil mt-0.5 shrink-0`} aria-hidden="true" />
+                    <Icon name={a.icon} class="text-xl text-stencil mt-0.5 shrink-0" aria-hidden="true" />
                     <div>
                       <h3 class="font-display font-bold text-paper">{a.title}</h3>
                       <p class="text-sm text-neutral-400 leading-relaxed mt-1">
@@ -548,7 +557,7 @@ const pageDescription =
               {
                 prohibited.map((p) => (
                   <li class="flex items-start gap-4 p-5 border border-ash/30 rounded-sm bg-ink/40">
-                    <i class="ph ph-prohibit text-xl text-stencil mt-0.5 shrink-0" aria-hidden="true" />
+                    <Icon name="prohibit" class="text-xl text-stencil mt-0.5 shrink-0" aria-hidden="true" />
                     <span class="text-neutral-300 leading-relaxed">{p}</span>
                   </li>
                 ))
@@ -581,7 +590,7 @@ const pageDescription =
               {
                 billingPortals.map((portal) => (
                   <li class="flex flex-col gap-3 p-6 border border-ash/30 rounded-sm bg-ink/40">
-                    <i class={`ph ${portal.icon} text-2xl text-paper`} aria-hidden="true" />
+                    <Icon name={portal.icon} class="text-2xl text-paper" aria-hidden="true" />
                     <div>
                       <h3 class="font-display font-bold text-paper">{portal.name}</h3>
                       <p class="text-sm text-neutral-400 mt-1">{portal.note}</p>
@@ -614,20 +623,26 @@ const pageDescription =
             <div
               class="mt-8 flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40 max-w-[62ch]"
             >
-              <i
-                class="ph ph-power text-xl text-paper mt-0.5 shrink-0"
-                aria-hidden="true"></i>
+              <Icon
+                name="power"
+                class="text-xl text-paper mt-0.5 shrink-0"
+                aria-hidden="true"
+              />
               <p class="text-neutral-300 leading-relaxed">
                 You may delete your account at any time from
                 <span
                   class="inline-flex items-center gap-1.5 px-2 py-0.5 mx-0.5 rounded-sm bg-ink border border-ash/50 text-sm font-mono text-paper align-baseline"
-                  ><i
-                    class="ph ph-gear-six text-xs text-neutral-400"
-                    aria-hidden="true"></i>Settings</span
+                  ><Icon
+                    name="gear-six"
+                    class="text-xs text-neutral-400"
+                    aria-hidden="true"
+                  />Settings</span
                 >
-                <i
-                  class="ph ph-arrow-right text-xs text-neutral-500 mx-0.5"
-                  aria-hidden="true"></i>
+                <Icon
+                  name="arrow-right"
+                  class="text-xs text-neutral-500 mx-0.5"
+                  aria-hidden="true"
+                />
                 <span
                   class="inline-flex items-center gap-1.5 px-2 py-0.5 mx-0.5 rounded-sm bg-ink border border-ash/50 text-sm font-mono text-paper align-baseline"
                   >Delete Account</span
@@ -654,9 +669,11 @@ const pageDescription =
             <div
               class="flex items-start gap-4 p-7 md:p-9 border border-ash/40 rounded-sm bg-ink/40 max-w-[64ch]"
             >
-              <i
-                class="ph ph-warning text-2xl text-paper mt-0.5 shrink-0"
-                aria-hidden="true"></i>
+              <Icon
+                name="warning"
+                class="text-2xl text-paper mt-0.5 shrink-0"
+                aria-hidden="true"
+              />
               <p class="text-neutral-300 leading-relaxed">
                 The App is provided <strong class="font-semibold text-paper"
                   >&ldquo;as is&rdquo;</strong
@@ -690,7 +707,7 @@ const pageDescription =
               {
                 jurisdiction.map((j) => (
                   <div class="flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40">
-                    <i class={`ph ${j.icon} text-2xl text-stencil mt-0.5 shrink-0`} aria-hidden="true" />
+                    <Icon name={j.icon} class="text-2xl text-stencil mt-0.5 shrink-0" aria-hidden="true" />
                     <div>
                       <dt class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
                         {j.label}
@@ -734,9 +751,11 @@ const pageDescription =
                   <span
                     class="flex items-center justify-center w-11 h-11 rounded-sm bg-stencil/15 border border-stencil/40"
                   >
-                    <i
-                      class="ph ph-sparkle text-xl text-stencil"
-                      aria-hidden="true"></i>
+                    <Icon
+                      name="sparkle"
+                      class="text-xl text-stencil"
+                      aria-hidden="true"
+                    />
                   </span>
                   <span
                     class="text-[10px] font-mono uppercase tracking-widest text-stencil"
@@ -769,9 +788,11 @@ const pageDescription =
                 <p
                   class="mt-7 pt-5 border-t border-stencil/25 flex items-start gap-3 text-sm text-neutral-400 leading-relaxed max-w-[65ch]"
                 >
-                  <i
-                    class="ph ph-seal-check text-base text-stencil mt-0.5 shrink-0"
-                    aria-hidden="true"></i>
+                  <Icon
+                    name="seal-check"
+                    class="text-base text-stencil mt-0.5 shrink-0"
+                    aria-hidden="true"
+                  />
                   <span>
                     This disclosure satisfies App Store Review Guideline
                     5.1.2(i) and Google Play&rsquo;s AI-Generated Content policy
@@ -818,7 +839,7 @@ const pageDescription =
                   focusRing,
                 ]}
               >
-                <i class="ph ph-envelope-simple text-lg" aria-hidden="true"></i>
+                <Icon name="envelope-simple" class="text-lg" aria-hidden="true" />
                 legal@thestencilmaker.com
               </a>
             </div>
@@ -838,7 +859,7 @@ const pageDescription =
       focusRing,
     ]}
   >
-    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+    <Icon name="arrow-up" class="text-lg" aria-hidden="true" />
   </button>
 
   <Footer />

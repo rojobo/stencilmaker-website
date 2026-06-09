@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Footer from "@components/Footer.astro";
 import CustomCursor from "@components/CustomCursor.astro";
+import Icon from "@/components/Icon.astro";
 import { SITE } from "@/consts";
 
 // Statically prerender — the form posts to the dynamic /api/lead endpoint.
@@ -116,7 +117,7 @@ const pageDescription =
             focusRing,
           ]}
         >
-          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-left" class="text-sm" aria-hidden="true" />
           <span class="hidden sm:inline">Artists</span>
         </a>
         <a
@@ -128,7 +129,7 @@ const pageDescription =
         >
           <span class="hidden sm:inline">Get the app</span>
           <span class="sm:hidden">App</span>
-          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-up-right" class="text-sm" aria-hidden="true" />
         </a>
       </nav>
     </div>
@@ -146,9 +147,11 @@ const pageDescription =
         aria-hidden="true"
       >
       </div>
-      <i
-        class="ph ph-paper-plane-tilt pointer-events-none absolute -top-10 right-6 text-[16rem] leading-none text-paper/[0.03] hidden lg:block"
-        aria-hidden="true"></i>
+      <Icon
+        name="paper-plane-tilt"
+        class="pointer-events-none absolute -top-10 right-6 text-[16rem] leading-none text-paper/[0.03] hidden lg:block"
+        aria-hidden="true"
+      />
 
       <div class="relative z-10 max-w-7xl mx-auto">
         <div
@@ -200,7 +203,7 @@ const pageDescription =
               <!-- Name -->
               <div class="flex flex-col">
                 <label for="ap-name" class={labelClass}>
-                  <i class="ph ph-user text-sm" aria-hidden="true"></i>
+                  <Icon name="user" class="text-sm" aria-hidden="true" />
                   Name <span class="text-stencil" aria-hidden="true">*</span>
                 </label>
                 <input
@@ -218,8 +221,7 @@ const pageDescription =
               <!-- Email -->
               <div class="flex flex-col">
                 <label for="ap-email" class={labelClass}>
-                  <i class="ph ph-envelope-simple text-sm" aria-hidden="true"
-                  ></i>
+                  <Icon name="envelope-simple" class="text-sm" aria-hidden="true" />
                   Email <span class="text-stencil" aria-hidden="true">*</span>
                 </label>
                 <input
@@ -236,8 +238,7 @@ const pageDescription =
               <!-- Instagram -->
               <div class="flex flex-col">
                 <label for="ap-instagram" class={labelClass}>
-                  <i class="ph ph-instagram-logo text-sm" aria-hidden="true"></i
-                  >
+                  <Icon name="instagram-logo" class="text-sm" aria-hidden="true" />
                   Instagram
                 </label>
                 <input
@@ -254,7 +255,7 @@ const pageDescription =
               <!-- Portfolio -->
               <div class="flex flex-col">
                 <label for="ap-portfolio" class={labelClass}>
-                  <i class="ph ph-link-simple text-sm" aria-hidden="true"></i>
+                  <Icon name="link-simple" class="text-sm" aria-hidden="true" />
                   Portfolio link
                 </label>
                 <input
@@ -271,7 +272,7 @@ const pageDescription =
               <!-- Location / Studio -->
               <div class="flex flex-col">
                 <label for="ap-location" class={labelClass}>
-                  <i class="ph ph-map-pin text-sm" aria-hidden="true"></i>
+                  <Icon name="map-pin" class="text-sm" aria-hidden="true" />
                   Studio / City
                 </label>
                 <input
@@ -287,7 +288,7 @@ const pageDescription =
               <!-- Style -->
               <div class="flex flex-col">
                 <label for="ap-style" class={labelClass}>
-                  <i class="ph ph-pen-nib text-sm" aria-hidden="true"></i>
+                  <Icon name="pen-nib" class="text-sm" aria-hidden="true" />
                   Primary style
                 </label>
                 <div class="relative">
@@ -299,9 +300,11 @@ const pageDescription =
                     <option value="" selected>Select a style…</option>
                     {styles.map((s) => <option value={s}>{s}</option>)}
                   </select>
-                  <i
-                    class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none"
-                    aria-hidden="true"></i>
+                  <Icon
+                    name="caret-down"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none"
+                    aria-hidden="true"
+                  />
                 </div>
               </div>
             </div>
@@ -309,7 +312,7 @@ const pageDescription =
             <!-- Message -->
             <div class="flex flex-col mt-6">
               <label for="ap-message" class={labelClass}>
-                <i class="ph ph-chat-text text-sm" aria-hidden="true"></i>
+                <Icon name="chat-text" class="text-sm" aria-hidden="true" />
                 About your work
               </label>
               <textarea
@@ -353,9 +356,11 @@ const pageDescription =
                 ]}
               >
                 <span data-btn-label>Submit application</span>
-                <i
-                  class="ph ph-paper-plane-tilt text-lg transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  aria-hidden="true"></i>
+                <Icon
+                  name="paper-plane-tilt"
+                  class="text-lg transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  aria-hidden="true"
+                />
               </button>
 
               <p
@@ -370,9 +375,11 @@ const pageDescription =
             <p
               class="mt-7 pt-6 border-t border-ash/20 flex items-start gap-3 text-[11px] font-mono uppercase tracking-widest text-neutral-600 leading-relaxed"
             >
-              <i
-                class="ph ph-lock-simple text-sm mt-0.5 shrink-0"
-                aria-hidden="true"></i>
+              <Icon
+                name="lock-simple"
+                class="text-sm mt-0.5 shrink-0"
+                aria-hidden="true"
+              />
               <span>
                 We use your details only to review your application. No spam,
                 no sharing. <span class="text-neutral-500">* Required.</span>
@@ -389,9 +396,11 @@ const pageDescription =
             <span
               class="flex items-center justify-center w-16 h-16 rounded-full bg-stencil/15 border border-stencil/40 mb-7"
             >
-              <i
-                class="ph ph-check-circle text-3xl text-stencil"
-                aria-hidden="true"></i>
+              <Icon
+                name="check-circle"
+                class="text-3xl text-stencil"
+                aria-hidden="true"
+              />
             </span>
             <h2
               class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
@@ -411,7 +420,7 @@ const pageDescription =
                 focusRing,
               ]}
             >
-              <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+              <Icon name="arrow-left" class="text-sm" aria-hidden="true" />
               Back to the roster
             </a>
           </div>
@@ -428,8 +437,9 @@ const pageDescription =
             {
               nextSteps.map((s) => (
                 <li class="flex flex-col gap-3 p-5 border border-ash/30 rounded-sm bg-ink/40">
-                  <i
-                    class={`ph ${s.icon} text-2xl text-stencil`}
+                  <Icon
+                    name={s.icon}
+                    class="text-2xl text-stencil"
                     aria-hidden="true"
                   />
                   <h3 class="font-display font-bold text-paper">{s.title}</h3>

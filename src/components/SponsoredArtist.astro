@@ -5,6 +5,7 @@
 // Data is sourced from SPONSORED_ARTIST in consts.ts (single source of truth,
 // shared with the full /artists feature page).
 import { SPONSORED_ARTIST } from "@/consts";
+import Icon from "@/components/Icon.astro";
 
 const artist = {
   name: SPONSORED_ARTIST.name,
@@ -115,9 +116,7 @@ const artist = {
           class="group inline-flex items-center gap-3 bg-paper text-obsidian px-6 py-4 text-sm font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors shadow-lg"
         >
           View Portfolio
-          <i
-            class="ph ph-arrow-up-right transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            aria-hidden="true"></i>
+          <Icon name="arrow-up-right" class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
         </a>
         <a
           href={artist.instagram}
@@ -126,7 +125,7 @@ const artist = {
           aria-label={`${artist.name} on Instagram`}
           class="w-12 h-12 rounded-full border border-ash flex items-center justify-center hover:bg-paper hover:text-obsidian transition-colors"
         >
-          <i class="ph ph-instagram-logo text-xl" aria-hidden="true"></i>
+          <Icon name="instagram-logo" class="text-xl" aria-hidden="true" />
         </a>
       </div>
 
@@ -136,9 +135,7 @@ const artist = {
       >
         <span class="w-6 h-px bg-ash group-hover:bg-stencil transition-colors" aria-hidden="true"></span>
         Read the full feature
-        <i
-          class="ph ph-arrow-right transition-transform group-hover:translate-x-1"
-          aria-hidden="true"></i>
+        <Icon name="arrow-right" class="transition-transform group-hover:translate-x-1" aria-hidden="true" />
       </a>
     </div>
   </div>

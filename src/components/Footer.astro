@@ -1,5 +1,6 @@
 ---
 import { SITE } from "@/consts";
+import Icon from "@/components/Icon.astro";
 const year = new Date().getFullYear();
 ---
 
@@ -32,7 +33,7 @@ const year = new Date().getFullYear();
         rel="noopener"
         class="px-8 py-5 bg-paper text-obsidian text-sm font-bold uppercase tracking-widest rounded-sm hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(250,250,250,0.3)] transition-all duration-300 flex items-center justify-center gap-3"
       >
-        <i class="ph-fill ph-apple-logo text-xl" aria-hidden="true"></i>
+        <Icon name="apple-logo" weight="fill" class="text-xl" aria-hidden="true" />
         App Store
       </a>
       <a
@@ -40,7 +41,7 @@ const year = new Date().getFullYear();
         rel="noopener"
         class="px-8 py-5 bg-transparent border border-ash text-paper text-sm font-bold uppercase tracking-widest rounded-sm hover:border-paper transition-all duration-300 flex items-center justify-center gap-3"
       >
-        <i class="ph-fill ph-google-play-logo text-xl" aria-hidden="true"></i>
+        <Icon name="google-play-logo" weight="fill" class="text-xl" aria-hidden="true" />
         Google Play
       </a>
       <a
@@ -48,7 +49,7 @@ const year = new Date().getFullYear();
         rel="noopener"
         class="px-8 py-5 bg-transparent border border-ash text-paper text-sm font-bold uppercase tracking-widest rounded-sm hover:border-paper transition-all duration-300 flex items-center justify-center gap-3"
       >
-        <i class="ph ph-globe text-xl" aria-hidden="true"></i>
+        <Icon name="globe" class="text-xl" aria-hidden="true" />
         Web App
       </a>
     </div>

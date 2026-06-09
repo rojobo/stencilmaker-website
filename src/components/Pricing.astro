@@ -1,4 +1,5 @@
 ---
+import Icon from "@/components/Icon.astro";
 import { PRICING } from "@/consts";
 
 const { premium, credits, creditsPerGeneration, web } = PRICING;
@@ -139,7 +140,7 @@ const packs = [
           {
             subscriptions[0].features.map((f) => (
               <li class="flex items-start gap-3">
-                <i class="ph ph-check mt-0.5 text-stencil" aria-hidden="true" />
+                <Icon name="check" class="mt-0.5 text-stencil" aria-hidden="true" />
                 <span>{f}</span>
               </li>
             ))
@@ -192,7 +193,7 @@ const packs = [
             premiumFeatures.map((f) =>
               f.dynamic ? (
                 <li class="flex items-start gap-3">
-                  <i class="ph-fill ph-check-circle mt-0.5 text-stencil" aria-hidden="true" />
+                  <Icon name="check-circle" weight="fill" class="mt-0.5 text-stencil" aria-hidden="true" />
                   <span>
                     <span class="tabular-nums" data-cap data-monthly="5" data-yearly="10">
                       10
@@ -202,7 +203,7 @@ const packs = [
                 </li>
               ) : (
                 <li class="flex items-start gap-3">
-                  <i class="ph-fill ph-check-circle mt-0.5 text-stencil" aria-hidden="true" />
+                  <Icon name="check-circle" weight="fill" class="mt-0.5 text-stencil" aria-hidden="true" />
                   <span>{f.label}</span>
                 </li>
               ),
@@ -212,7 +213,7 @@ const packs = [
 
         <!-- Trial line — shown only on the Yearly plan -->
         <p data-trial class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-stencil mb-6">
-          <i class="ph ph-gift" aria-hidden="true"></i>
+          <Icon name="gift" aria-hidden="true" />
           {premium.trialDays}-day free trial
         </p>
 
@@ -291,7 +292,7 @@ const packs = [
                 ≈ {p.stencils} stencils
               </div>
               <div class="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-stencil mb-8 tabular-nums">
-                <i class="ph ph-currency-circle-dollar text-sm" aria-hidden="true" />
+                <Icon name="currency-circle-dollar" class="text-sm" aria-hidden="true" />
                 {p.webTotal} with USDC · {web.bonusMultiplier}× bonus
               </div>
 
@@ -332,7 +333,7 @@ const packs = [
           <div
             class="inline-flex items-center gap-2 px-3 py-1 bg-stencil/10 border border-stencil/40 rounded-full mb-6"
           >
-            <i class="ph-fill ph-lightning text-sm text-stencil" aria-hidden="true"></i>
+            <Icon name="lightning" weight="fill" class="text-sm text-stencil" aria-hidden="true" />
             <span class="text-[10px] uppercase font-mono tracking-widest text-stencil">
               Limited-time offer · On-chain USDC
             </span>
@@ -380,15 +381,15 @@ const packs = [
     <div class="mt-16 pt-10 border-t border-ash/30 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
       <ul class="flex flex-wrap items-center gap-x-6 gap-y-3" aria-label="Accepted payment methods">
         <li class="flex items-center gap-2 text-sm text-neutral-300">
-          <i class="ph-fill ph-apple-logo text-lg" aria-hidden="true"></i>
+          <Icon name="apple-logo" weight="fill" class="text-lg" aria-hidden="true" />
           App Store
         </li>
         <li class="flex items-center gap-2 text-sm text-neutral-300">
-          <i class="ph-fill ph-google-play-logo text-lg" aria-hidden="true"></i>
+          <Icon name="google-play-logo" weight="fill" class="text-lg" aria-hidden="true" />
           Google Play
         </li>
         <li class="flex items-center gap-2 text-sm text-neutral-300">
-          <i class="ph ph-currency-circle-dollar text-lg text-stencil" aria-hidden="true"></i>
+          <Icon name="currency-circle-dollar" class="text-lg text-stencil" aria-hidden="true" />
           USDC on the web
           <span class="text-[10px] font-mono uppercase tracking-widest text-stencil tabular-nums">
             {web.bonusMultiplier}× bonus

@@ -3,6 +3,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Footer from "@components/Footer.astro";
 import CustomCursor from "@components/CustomCursor.astro";
 import { SITE, PRICING } from "@/consts";
+import Icon from "@/components/Icon.astro";
 
 // Statically prerender — fixed help page (also App Store "Support URL").
 export const prerender = true;
@@ -149,7 +150,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
             focusRing,
           ]}
         >
-          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-left" class="text-sm" aria-hidden="true" />
           Home
         </a>
         <a
@@ -170,7 +171,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
         >
           <span class="hidden sm:inline">Get the app</span>
           <span class="sm:hidden">App</span>
-          <i class="ph ph-arrow-up-right text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-up-right" class="text-sm" aria-hidden="true" />
         </a>
       </nav>
     </div>
@@ -188,9 +189,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
         aria-hidden="true"
       >
       </div>
-      <i
-        class="ph ph-lifebuoy pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
-        aria-hidden="true"></i>
+      <Icon name="lifebuoy" class="pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block" aria-hidden="true" />
 
       <div class="relative z-10 max-w-7xl mx-auto">
         <div
@@ -255,9 +254,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
               >
                 On this page
               </span>
-              <i
-                class="ph ph-caret-down text-neutral-400 transition-transform duration-300 group-open:rotate-180"
-                aria-hidden="true"></i>
+              <Icon name="caret-down" class="text-neutral-400 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
             </summary>
             <nav aria-label="On this page" class="px-2 pb-3">
               <ol class="flex flex-col">
@@ -356,7 +353,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
                   focusRing,
                 ]}
               >
-                <i class="ph ph-envelope-simple text-lg" aria-hidden="true"></i>
+                <Icon name="envelope-simple" class="text-lg" aria-hidden="true" />
                 {SITE.supportEmail}
               </a>
             </div>
@@ -390,10 +387,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
                       <span class="font-display font-bold text-base md:text-lg text-paper">
                         {f.q}
                       </span>
-                      <i
-                        class="ph ph-plus shrink-0 text-neutral-400 transition-transform duration-300 group-open:rotate-45"
-                        aria-hidden="true"
-                      />
+                      <Icon name="plus" class="shrink-0 text-neutral-400 transition-transform duration-300 group-open:rotate-45" aria-hidden="true" />
                     </summary>
                     <div class="px-5 md:px-6 pb-6 -mt-1">
                       <p class="text-neutral-400 leading-relaxed max-w-[62ch]">
@@ -408,10 +402,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
                           ]}
                         >
                           {f.link.label}
-                          <i
-                            class="ph ph-arrow-right text-sm"
-                            aria-hidden="true"
-                          />
+                          <Icon name="arrow-right" class="text-sm" aria-hidden="true" />
                         </a>
                       )}
                     </div>
@@ -442,14 +433,11 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
                       focusRing,
                     ]}
                   >
-                    <i
-                      class={`ph ${l.icon} text-2xl text-paper mt-0.5 shrink-0`}
-                      aria-hidden="true"
-                    />
+                    <Icon name={l.icon} class="text-2xl text-paper mt-0.5 shrink-0" aria-hidden="true" />
                     <div>
                       <h3 class="font-display font-bold text-lg text-paper mb-1 flex items-center gap-2">
                         {l.title}
-                        <i class="ph ph-arrow-up-right text-sm text-neutral-500 group-hover:text-stencil group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true" />
+                        <Icon name="arrow-up-right" class="text-sm text-neutral-500 group-hover:text-stencil group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true" />
                       </h3>
                       <p class="text-sm text-neutral-400 leading-relaxed">
                         {l.detail}
@@ -475,7 +463,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
       focusRing,
     ]}
   >
-    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+    <Icon name="arrow-up" class="text-lg" aria-hidden="true" />
   </button>
 
   <Footer />

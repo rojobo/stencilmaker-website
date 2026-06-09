@@ -471,3 +471,86 @@ notifications, privacy-first analytics, and a security headers grade of A+.
 When you're ready for Phase 2 (image pipeline, font self-host, nonce CSP,
 Sentry, Lighthouse CI), pick items from
 [`LIBRARIES-AUDIT.md`](./LIBRARIES-AUDIT.md) in order.
+
+
+● I dug into the actual code (not the audit doc, which I'd already caught being stale). Here's the real status — and a genuinely useful finding about analytics.
+
+  Social / Open Graph — yes, fully optimized ✅
+
+  This is comprehensively done, better than the audit's "stubbed" label. In src/components/SEO.astro + JsonLd.astro, every page ships:
+
+  - Open Graph: og:type, og:site_name, og:title/description/url, og:image (resolved to an absolute URL — which scrapers require), og:image:width/height (1200×630), og:image:alt,
+  og:locale. The image file public/assets/og-image.png exists (93 KB).
+  - Twitter/X: summary_large_image card with title/description/image/site/creator.
+  - JSON-LD: Organization (+ sameAs), WebSite, SoftwareApplication, FAQPage — plus a second structured-data set on /artists.
+  - Canonical URLs, robots directives, even GEO-bot tags (GPTBot/ClaudeBot/PerplexityBot).
+
+  So a link drop in iMessage/Slack/X/LinkedIn/Bluesky will render a proper card. Two caveats to check before you lean on it:
+  1. Are the social handles real? JsonLd.astro lists twitter.com/stencilmaker, instagram.com/stencilmaker, tiktok.com/@stencilmaker in sameAs. The audit flagged "real social URLs"
+  as a stub — if those accounts don't exist, the sameAs is ignored by Google (harmless, but verify/replace).
+  2. One shared OG image for all pages — perfect for launch. Per-page dynamic OG images are a Phase-2 thing that only matters once you have a blog/case studies.
+
+  Analytics — your own privacy policy already made the decision 🎯
+
+  Right now no analytics is wired at all — I grepped source and the built dist/: no Cloudflare beacon, no PostHog, no GA. But here's the important part, straight from your
+  privacy.astro:
+
+  ▎ "Website analytics — This marketing website uses Cloudflare Web Analytics, which is cookieless — no tracking cookies are set, so no cookie-consent banner is shown."
+
+  And it separately scopes PostHog + Sentry to product/app telemetry ("Usage telemetry"), not the website. That's well-drafted — and it means:
+
+  - The website is already legally committed to Cloudflare Web Analytics. Your published policy claims you use it; you just haven't turned it on. So this isn't really a "which
+  tool?" choice — enabling Cloudflare Web Analytics makes your live privacy policy accurate. (Right now it slightly over-states — claims a tool that isn't running. Low risk, but
+  enabling it closes the gap.)
+  - Adding GA4 or default PostHog to the website would break that promise — both can set cookies → you'd suddenly need a consent banner → conversion drag. The audit's
+  "anti-patterns" section calls this out explicitly.
+
+  Recommendation: enable Cloudflare Web Analytics (cookieless, free, no banner, ~5 min). PostHog is the right tool for product funnels/session-replay inside the app (already
+  disclosed there) — and could be added to the website later as a Phase-3 layer, but only in cookieless/EU mode and with a one-line policy tweak. For a marketing site, Cloudflare
+  Web Analytics is the correct pick.
+
+  ▎ One Workers-specific catch: the "automatic injection" path is Pages-only. On your Worker you must use Manual setup — paste the beacon <script> into BaseLayout.astro's <head>.
+  ▎ I can wire that in the moment you have the beacon token.
+
+  Everything else in the audit — ground-truthed status
+
+  The audit's TL;DR table is itself stale now (it lists privacy/terms as "missing" — they exist). Real state:
+
+  Phase 1 (pre-launch):
+
+  ┌──────────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────┐
+  │             Item             │                                         Real status                                         │
+  ├──────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1.1 Cloudflare Web Analytics │ ❌ not wired (the one true gap — see above)                                                 │
+  ├──────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1.2 Turnstile                │ 🟡 in progress (you're doing it)                                                            │
+  ├──────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1.3 D1                       │ 🟡 in progress (IDs in, migration pending)                                                  │
+  ├──────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1.4 Resend                   │ 🟡 keys set                                                                                 │
+  ├──────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1.5 OG share image           │ ✅ done (file exists, wired)                                                                │
+  ├──────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1.6 Privacy + Terms          │ ✅ done — /privacy, /terms, plus /support & /delete-account                                 │
+  ├──────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1.7 Real CTAs                │ 🟡 playStoreUrl verified; appStoreUrl + webAppUrl still marked // TODO confirm in consts.ts │
+  └──────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  Phase 2 (polish — none started): astro:assets <Image> ❌ · Phosphor still CDN ❌ · nonce CSP (still 'unsafe-inline') ❌ · dynamic OG ❌ · Web Vitals reporting ❌ · self-hosted
+  fonts (still Google Fonts) ❌ · Lighthouse-CI (no .github/) ❌ · Sentry on the website ❌ (the app has it).
+
+  Phase 3 (growth — post-traffic): newsletter automation, A/B testing, PostHog funnels, CRM sync, support chat, affiliate, Stripe/upsell — all not started, all correctly deferred.
+
+  Phase 4 (content — month 2+): blog/MDX, case studies, /vs/* comparison pages, RSS, Pagefind search, CMS — none started.
+
+  So: is the site "optimized for all that"?
+
+  - SEO + social cards + structured data: yes, genuinely strong. ✅
+  - Analytics: no — but it's a 5-minute fix that your privacy policy is already waiting on. This is the one thing I'd do before (or right after) you push.
+  - Performance/security polish (Phase 2): solid baseline (CSP, SRI, preconnects, prerendered), but the byte-saving + hardening items are pending — none block launch.
+
+  Three quick things you can close before pushing: (1) the App Store + web-app URLs in consts.ts, (2) confirm the social handles in JsonLd.astro are real, (3) decide if you want
+  me to drop in the Cloudflare Web Analytics beacon once you grab the token.
+
+  Want me to (a) wire up the Cloudflare Web Analytics beacon, (b) refresh the audit's stale TL;DR table to match reality, and/or (c) fix the two TODO confirm CTA URLs? And do you
+  have the real App Store / web-app URLs + confirmed social handles handy?

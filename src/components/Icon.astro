@@ -1,0 +1,55 @@
+---
+/**
+ * Icon — inline, locally-vendored Phosphor SVG icon.
+ *
+ * Replaces the old `<i class="ph ph-name">` icon-font approach (which depended
+ * on a CDN web font that failed to load, rendering tofu boxes everywhere).
+ * Self-hosted, crisp at any size, themeable, zero network requests.
+ *
+ *   <Icon name="arrow-right" class="text-sm text-stencil" />
+ *   <Icon name="check-circle" weight="fill" class="text-stencil" />
+ *   <Icon name={item.icon} class="text-2xl text-paper" />   // accepts "eye" or "ph-eye"
+ *
+ * Sizing mirrors the font era: the SVG is 1em × 1em and inherits `currentColor`,
+ * so the existing `text-*` size/color utilities keep working unchanged.
+ */
+import { ICONS, ICONS_FILL, ICON_VIEWBOX } from "@/lib/icons";
+
+interface Props {
+  name: string;
+  weight?: "regular" | "fill";
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { name, weight = "regular", class: className, ...rest } = Astro.props;
+
+// Tolerate the legacy `ph-` prefix so data-driven names ("ph-eye") still resolve.
+const key = name.replace(/^ph-/, "");
+const inner = weight === "fill" ? (ICONS_FILL[key] ?? ICONS[key]) : ICONS[key];
+
+if (!inner && import.meta.env.DEV) {
+  console.warn(`[Icon] unknown icon name: "${name}" (weight: ${weight})`);
+}
+
+// Decorative by default; only expose to AT when the caller gives it a label.
+const a11y =
+  "aria-hidden" in rest || "aria-label" in rest ? {} : { "aria-hidden": "true" };
+---
+
+{
+  inner && (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={ICON_VIEWBOX}
+      width="1em"
+      height="1em"
+      fill="currentColor"
+      class={className}
+      style="vertical-align:-0.125em;flex-shrink:0"
+      {...a11y}
+      {...rest}
+      set:html={inner}
+    />
+  )
+}

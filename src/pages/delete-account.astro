@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Footer from "@components/Footer.astro";
 import CustomCursor from "@components/CustomCursor.astro";
+import Icon from "@/components/Icon.astro";
 import { SITE } from "@/consts";
 
 // Statically prerender — fixed compliance page (App Store account-deletion URL).
@@ -148,7 +149,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
             focusRing,
           ]}
         >
-          <i class="ph ph-arrow-left text-sm" aria-hidden="true"></i>
+          <Icon name="arrow-left" class="text-sm" aria-hidden="true" />
           Home
         </a>
         <a
@@ -185,9 +186,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
         aria-hidden="true"
       >
       </div>
-      <i
-        class="ph ph-trash-simple pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block"
-        aria-hidden="true"></i>
+      <Icon name="trash-simple" class="pointer-events-none absolute -top-10 right-6 text-[18rem] leading-none text-paper/[0.03] hidden lg:block" aria-hidden="true" />
 
       <div class="relative z-10 max-w-7xl mx-auto">
         <div
@@ -256,9 +255,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
               >
                 On this page
               </span>
-              <i
-                class="ph ph-caret-down text-neutral-400 transition-transform duration-300 group-open:rotate-180"
-                aria-hidden="true"></i>
+              <Icon name="caret-down" class="text-neutral-400 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
             </summary>
             <nav aria-label="On this page" class="px-2 pb-3">
               <ol class="flex flex-col">
@@ -374,9 +371,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
             <div
               class="mt-10 flex items-start gap-4 p-6 border border-amber-500/30 rounded-sm bg-amber-500/[0.07] max-w-[62ch]"
             >
-              <i
-                class="ph ph-warning text-xl text-amber-300 mt-0.5 shrink-0"
-                aria-hidden="true"></i>
+              <Icon name="warning" class="text-xl text-amber-300 mt-0.5 shrink-0" aria-hidden="true" />
               <div>
                 <p class="font-display font-bold text-amber-100 mb-1">
                   Cancel your subscription separately
@@ -441,7 +436,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
                   focusRing,
                 ]}
               >
-                <i class="ph ph-envelope-simple text-lg" aria-hidden="true"></i>
+                <Icon name="envelope-simple" class="text-lg" aria-hidden="true" />
                 {SITE.supportEmail}
               </a>
             </div>
@@ -472,10 +467,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
               {
                 removed.map((item) => (
                   <li class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ash/30 border border-ash/40 text-sm text-neutral-200">
-                    <i
-                      class="ph ph-x-circle text-base text-neutral-500"
-                      aria-hidden="true"
-                    />
+                    <Icon name="x-circle" class="text-base text-neutral-500" aria-hidden="true" />
                     {item}
                   </li>
                 ))
@@ -513,10 +505,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
                       i !== 0 && "border-t border-ash/20",
                     ]}
                   >
-                    <i
-                      class={`ph ${k.icon} text-2xl text-paper sm:mt-0.5 sm:order-1`}
-                      aria-hidden="true"
-                    />
+                    <Icon name={k.icon} class="text-2xl text-paper sm:mt-0.5 sm:order-1" aria-hidden="true" />
                     <div class="max-w-[58ch] order-3 sm:order-2">
                       <dt class="font-display font-bold text-lg text-paper mb-1">
                         {k.label}
@@ -559,9 +548,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
             </div>
 
             <div class="flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40 max-w-[62ch]">
-              <i
-                class="ph ph-clock-countdown text-xl text-paper mt-0.5 shrink-0"
-                aria-hidden="true"></i>
+              <Icon name="clock-countdown" class="text-xl text-paper mt-0.5 shrink-0" aria-hidden="true" />
               <p class="text-neutral-300 leading-relaxed">
                 Deletion requests — whether started in the app or by email — are
                 completed within <strong class="font-semibold text-paper"
@@ -602,7 +589,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
       focusRing,
     ]}
   >
-    <i class="ph ph-arrow-up text-lg" aria-hidden="true"></i>
+    <Icon name="arrow-up" class="text-lg" aria-hidden="true" />
   </button>
 
   <Footer />

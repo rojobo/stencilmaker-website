@@ -1,3 +1,7 @@
+---
+import Icon from "@/components/Icon.astro";
+---
+
 <section
   id="engine"
   class="relative w-full py-32 md:py-48 bg-obsidian border-t border-ash/30"
@@ -27,7 +31,7 @@
 
       <ul class="flex flex-col gap-6 mt-4">
         <li class="flex items-start gap-4">
-          <i class="ph ph-aperture text-2xl text-paper mt-1" aria-hidden="true"></i>
+          <Icon name="aperture" class="text-2xl text-paper mt-1" aria-hidden="true" />
           <div>
             <h3 class="font-bold text-paper mb-1">Contrast Isolation</h3>
             <p class="text-sm text-neutral-500">
@@ -36,7 +40,7 @@
           </div>
         </li>
         <li class="flex items-start gap-4">
-          <i class="ph ph-bezier-curve text-2xl text-paper mt-1" aria-hidden="true"></i>
+          <Icon name="bezier-curve" class="text-2xl text-paper mt-1" aria-hidden="true" />
           <div>
             <h3 class="font-bold text-paper mb-1">Vector-Grade Linework</h3>
             <p class="text-sm text-neutral-500">
@@ -89,7 +93,7 @@
           <div
             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-paper rounded-full flex items-center justify-center shadow-lg"
           >
-            <i class="ph ph-arrows-left-right text-obsidian text-sm" aria-hidden="true"></i>
+            <Icon name="arrows-left-right" class="text-obsidian text-sm" aria-hidden="true" />
           </div>
         </div>
 

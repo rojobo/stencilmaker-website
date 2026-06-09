@@ -1,32 +1,121 @@
 ---
 // Floating spatial navigation, anchored to the bottom of the viewport.
+import Icon from "@/components/Icon.astro";
+
 const links = [
   { href: "#vision", label: "Vision" },
   { href: "#engine", label: "The Engine" },
   { href: "#styles", label: "Styles" },
+  { href: "/artists", label: "Artists" },
 ];
 ---
 
 <nav
   aria-label="Primary"
-  class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 p-2 bg-ink/80 backdrop-blur-xl border border-ash/40 rounded-full shadow-2xl"
+  class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2"
 >
-  {
-    links.map(({ href, label }) => (
+  <!-- Mobile expandable menu — appears above the pill -->
+  <div
+    id="mobile-menu"
+    class="nav-menu md:hidden flex flex-col gap-1 p-2 bg-ink/90 backdrop-blur-xl border border-ash/40 rounded-2xl shadow-2xl"
+    role="menu"
+    aria-hidden="true"
+  >
+    {links.map(({ href, label }) => (
       <a
         href={href}
-        class="px-5 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase text-neutral-400 hover:text-paper hover:bg-ash/50 transition-colors duration-300"
+        role="menuitem"
+        class="block px-5 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase text-neutral-400 hover:text-paper hover:bg-ash/50 transition-colors duration-200 whitespace-nowrap"
       >
         {label}
       </a>
-    ))
-  }
-  <div class="w-px h-6 bg-ash/50 mx-2" aria-hidden="true"></div>
-  <a
-    href="#download"
-    class="flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold tracking-widest uppercase bg-paper text-obsidian hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(250,250,250,0.1)]"
-  >
-    <span>Download</span>
-    <i class="ph ph-arrow-down-right" aria-hidden="true"></i>
-  </a>
+    ))}
+  </div>
+
+  <!-- Pill -->
+  <div class="flex items-center gap-2 p-2 bg-ink/80 backdrop-blur-xl border border-ash/40 rounded-full shadow-2xl">
+
+    <!-- Desktop links -->
+    {links.map(({ href, label }) => (
+      <a
+        href={href}
+        class="hidden md:block px-5 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase text-neutral-400 hover:text-paper hover:bg-ash/50 transition-colors duration-300"
+      >
+        {label}
+      </a>
+    ))}
+
+    <div class="hidden md:block w-px h-6 bg-ash/50 mx-2" aria-hidden="true"></div>
+
+    <!-- Mobile menu toggle -->
+    <button
+      id="mobile-menu-toggle"
+      class="md:hidden flex items-center justify-center w-11 h-11 rounded-full text-neutral-400 hover:text-paper hover:bg-ash/50 transition-colors duration-200"
+      aria-label="Open navigation"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <Icon name="list" class="menu-icon-open text-lg" aria-hidden="true" />
+      <Icon name="x" class="menu-icon-close text-lg hidden" aria-hidden="true" />
+    </button>
+
+    <!-- Download CTA -->
+    <a
+      href="#download"
+      class="flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold tracking-widest uppercase bg-paper text-obsidian hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(250,250,250,0.1)]"
+    >
+      <span>Download</span>
+      <Icon name="arrow-down-right" aria-hidden="true" />
+    </a>
+  </div>
 </nav>
+
+<style>
+  .nav-menu {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .nav-menu.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = toggle?.querySelector('.menu-icon-open');
+  const iconClose = toggle?.querySelector('.menu-icon-close');
+
+  // Swap the hamburger <-> close glyph by toggling each SVG's `hidden` class.
+  function showCloseIcon(open: boolean) {
+    iconOpen?.classList.toggle('hidden', open);
+    iconClose?.classList.toggle('hidden', !open);
+  }
+
+  function closeMenu() {
+    menu?.classList.remove('open');
+    menu?.setAttribute('aria-hidden', 'true');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'Open navigation');
+    showCloseIcon(false);
+  }
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.contains('open');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      menu?.classList.add('open');
+      menu?.setAttribute('aria-hidden', 'false');
+      toggle?.setAttribute('aria-expanded', 'true');
+      toggle?.setAttribute('aria-label', 'Close navigation');
+      showCloseIcon(true);
+    }
+  });
+
+  menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+</script>
