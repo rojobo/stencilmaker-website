@@ -13,13 +13,19 @@ export const prerender = true;
    SOURCE OF TRUTH: StencilMaker/packages/legal-content/src/index.ts
    (the `TERMS` document + `TERMS_VERSION`). Content was reviewed and
    approved by counsel on 2026-05-12 and is App Store / Google Play ready.
+
+   AMENDED 2026-06-07 (version 2026.05.12 → 2026.06.07) to track the source
+   package and the API mirror (routers/legal.py). Section 09 was re-synced to
+   the verbatim `TERMS_AI_GENERATION_PARAGRAPH` after a prior paraphrase had
+   drifted from the App-Store-cited wording.
+
    The AI-generation disclosure (section 09) is legally load-bearing
    (Apple Review Guideline 5.1.2(i) + Google Play AI-Generated Content
    policy) and is reproduced VERBATIM from `TERMS_AI_GENERATION_PARAGRAPH`
    — do not reword it.
    --------------------------------------------------------------------------- */
-const TERMS_VERSION = "2026.05.12";
-const TERMS_UPDATED = "May 12, 2026";
+const TERMS_VERSION = "2026.06.07";
+const TERMS_UPDATED = "June 7, 2026";
 
 const meta = [
   { label: "Last updated", value: TERMS_UPDATED },
@@ -747,8 +753,8 @@ const pageDescription =
                       >responsible for reviewing the generated stencil before
                       applying it to skin</strong
                     >. StencilMaker does not store user-supplied prompts because
-                    users do not supply prompts — your stencil is generated
-                    from your style selection.
+                    users do not supply prompts — the prompt template is
+                    assembled server-side from your style selection.
                   </p>
                 </div>
 

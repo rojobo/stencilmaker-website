@@ -13,12 +13,21 @@ export const prerender = true;
    SOURCE OF TRUTH: StencilMaker/packages/legal-content/src/index.ts
    (the `PRIVACY` document + `PRIVACY_VERSION`). Content was reviewed and
    approved by counsel on 2026-05-12 and is App Store / Google Play ready.
+
+   AMENDED 2026-06-07 (version 2026.05.12 → 2026.06.07) to mirror the source
+   package and the API mirror (routers/legal.py): the data-export claim moved
+   from in-app Settings to the email channel (privacy@thestencilmaker.com,
+   30-day response); billing-records retention reworded to processor-held; the
+   delete cascade now lists payment-event records and uses "generations" (the
+   duplicate "stencils" entry was dropped); the processor list was reconciled
+   with the app source (xAI / Customer.io / Stripe added).
+
    The AI & generative-processing disclosure is legally load-bearing
    (Apple Review Guideline 5.1.2(i) + Google Play AI-Generated Content
    policy) — keep its wording in sync with the source package verbatim.
    --------------------------------------------------------------------------- */
-const PRIVACY_VERSION = "2026.05.12";
-const PRIVACY_UPDATED = "May 12, 2026";
+const PRIVACY_VERSION = "2026.06.07";
+const PRIVACY_UPDATED = "June 7, 2026";
 
 const meta = [
   { label: "Last updated", value: PRIVACY_UPDATED },
@@ -91,9 +100,16 @@ const notDo = [
 const processors = [
   { name: "Supabase", purpose: "Authentication, storage, database" },
   { name: "Vercel AI Gateway / Google Gemini", purpose: "Stencil generation" },
+  {
+    name: "xAI",
+    purpose:
+      "Fallback stencil generation when the primary provider declines an image",
+  },
   { name: "Sentry", purpose: "Crash reporting" },
   { name: "PostHog", purpose: "Product analytics" },
+  { name: "Customer.io", purpose: "Transactional and lifecycle messaging" },
   { name: "RevenueCat", purpose: "Subscription lifecycle" },
+  { name: "Stripe", purpose: "Subscription payments" },
   { name: "Coinbase Commerce", purpose: "USDC payments (web credit packs)" },
   {
     name: "Cloudflare",
@@ -123,16 +139,17 @@ const retention = [
   },
   {
     label: "Billing records",
-    duration: "7 years",
-    detail: "Retained to satisfy a legal requirement.",
+    duration: "Processor-held",
+    detail:
+      "Retained by our payment processors under their own legal obligations; our internal copies are deleted with your account.",
   },
 ] as const;
 
 const cascade = [
   "uploads",
-  "stencils",
   "generations",
   "device records",
+  "payment event records",
   "linked OAuth identities",
 ];
 
@@ -660,7 +677,7 @@ const pageDescription =
             </div>
 
             <p class="text-neutral-300 text-lg leading-relaxed max-w-[60ch]">
-              You can export your data or <a
+              You can <a
                 href="/delete-account/"
                 class:list={[
                   "text-paper underline decoration-ash hover:decoration-paper transition-colors rounded-sm",
@@ -671,6 +688,15 @@ const pageDescription =
                 ><i class="ph ph-gear-six text-xs text-neutral-400" aria-hidden="true"
                 ></i>Settings</span
               >.
+            </p>
+
+            <p class="mt-5 text-neutral-300 text-lg leading-relaxed max-w-[60ch]">
+              To request a copy of your data, email <a
+                href="mailto:privacy@thestencilmaker.com"
+                class:list={[
+                  "text-paper underline decoration-ash hover:decoration-paper transition-colors rounded-sm",
+                  focusRing,
+                ]}>privacy@thestencilmaker.com</a> — we respond within 30 days.
             </p>
 
             <div

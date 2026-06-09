@@ -1,7 +1,7 @@
 ---
 import { PRICING } from "@/consts";
 
-const { premium, credits, creditsPerGeneration } = PRICING;
+const { premium, credits, creditsPerGeneration, web } = PRICING;
 
 // Effective monthly rate when billed annually (≈ $5/mo). Rounded to whole $.
 const yearlyPerMonth = Math.round(premium.yearly / 12);
@@ -48,14 +48,22 @@ const packs = [
   PRICING.credits.starter,
   PRICING.credits.popular,
   PRICING.credits.pro,
-].map((p) => ({
-  name: p.name,
-  price: p.price.toFixed(2),
-  total: p.credits.toLocaleString("en-US"),
-  bonus: p.bonus.toLocaleString("en-US"),
-  stencils: Math.floor(p.credits / creditsPerGeneration),
-  featured: p.name === credits.popular.name,
-}));
+].map((p) => {
+  // Limited-time USDC web promo: double the standard bonus (see PRICING.web).
+  // webBonus = standard bonus × multiplier; webTotal = base credits + webBonus.
+  const baseCredits = p.credits - p.bonus;
+  const webBonus = p.bonus * web.bonusMultiplier;
+  return {
+    name: p.name,
+    price: p.price.toFixed(2),
+    total: p.credits.toLocaleString("en-US"),
+    bonus: p.bonus.toLocaleString("en-US"),
+    stencils: Math.floor(p.credits / creditsPerGeneration),
+    webBonus: webBonus.toLocaleString("en-US"),
+    webTotal: (baseCredits + webBonus).toLocaleString("en-US"),
+    featured: p.name === credits.popular.name,
+  };
+});
 ---
 
 <section id="pricing" data-billing="yearly" class="w-full py-32 bg-ink border-t border-ash/30">
@@ -279,8 +287,12 @@ const packs = [
               <div class="text-xs font-mono uppercase tracking-widest text-stencil mb-1 tabular-nums">
                 +{p.bonus} bonus
               </div>
-              <div class="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-8 tabular-nums">
+              <div class="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-2 tabular-nums">
                 ≈ {p.stencils} stencils
+              </div>
+              <div class="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-stencil mb-8 tabular-nums">
+                <i class="ph ph-currency-circle-dollar text-sm" aria-hidden="true" />
+                {p.webTotal} with USDC · {web.bonusMultiplier}× bonus
               </div>
 
               <a
@@ -302,6 +314,68 @@ const packs = [
       </div>
     </div>
 
+    <!-- Cutting-edge: crypto / USDC web checkout — bonus credits (web-only perk) -->
+    <div class="mt-6 relative overflow-hidden border border-stencil/40 bg-obsidian">
+      <div
+        class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-stencil to-transparent"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="pointer-events-none absolute -top-24 -right-24 w-[420px] h-[420px] bg-[radial-gradient(circle,rgba(79,70,229,0.18)_0%,transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative z-10 grid gap-10 p-8 md:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div class="max-w-xl">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 bg-stencil/10 border border-stencil/40 rounded-full mb-6"
+          >
+            <i class="ph-fill ph-lightning text-sm text-stencil" aria-hidden="true"></i>
+            <span class="text-[10px] uppercase font-mono tracking-widest text-stencil">
+              Limited-time offer · On-chain USDC
+            </span>
+          </div>
+          <h3 class="font-display text-2xl md:text-3xl font-bold tracking-tight mb-4">
+            Pay with crypto. Get
+            <span class="text-stencil">double bonus credits</span>.
+          </h3>
+          <p class="text-neutral-400 leading-relaxed max-w-lg">
+            For a limited time, buy any credit pack with <span
+              class="text-paper font-semibold">USDC</span
+            > on the web and we double the bonus — settled on-chain in seconds.
+            Same price, twice the bonus.
+          </p>
+        </div>
+
+        <!-- Per-pack totals with the doubled bonus when paid with USDC on the web -->
+        <ul
+          class="flex flex-col gap-2.5 lg:min-w-[17rem]"
+          aria-label="Credit packs with doubled bonus when paid with USDC on the web"
+        >
+          {
+            packs.map((p) => (
+              <li class="flex items-center justify-between gap-4 px-5 py-3 border border-ash/40 bg-ink/40">
+                <span class="text-xs font-mono uppercase tracking-widest text-neutral-400 tabular-nums">
+                  ${p.price}
+                </span>
+                <span class="flex items-baseline gap-2">
+                  <span class="font-display tabular-nums text-paper">
+                    {p.webTotal}
+                    <span class="text-neutral-500 text-xs font-sans"> cr</span>
+                  </span>
+                  <span class="text-stencil text-[10px] font-mono uppercase tracking-widest tabular-nums">
+                    +{p.webBonus} bonus
+                  </span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
     <!-- Payment methods + fine print -->
     <div class="mt-16 pt-10 border-t border-ash/30 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
       <ul class="flex flex-wrap items-center gap-x-6 gap-y-3" aria-label="Accepted payment methods">
@@ -314,8 +388,11 @@ const packs = [
           Google Play
         </li>
         <li class="flex items-center gap-2 text-sm text-neutral-300">
-          <i class="ph ph-currency-circle-dollar text-lg" aria-hidden="true"></i>
+          <i class="ph ph-currency-circle-dollar text-lg text-stencil" aria-hidden="true"></i>
           USDC on the web
+          <span class="text-[10px] font-mono uppercase tracking-widest text-stencil tabular-nums">
+            {web.bonusMultiplier}× bonus
+          </span>
         </li>
       </ul>
       <p class="text-[11px] font-mono uppercase tracking-widest text-neutral-500 max-w-md md:text-right text-balance">

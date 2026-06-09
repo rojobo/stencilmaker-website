@@ -57,6 +57,33 @@ export const PRICING = {
     popular: { name: "Popular", price: 9.99, credits: 1100, bonus: 100 },
     pro: { name: "Pro", price: 24.99, credits: 3000, bonus: 500 },
   },
+  /**
+   * LIMITED-TIME web/crypto promo. Credit packs already ship with a standard
+   * bonus (+50/+100/+500). Paying with USDC at thestencilmaker.com DOUBLES that
+   * bonus — same dollar price, twice the bonus credits. Structured as bonus
+   * credits (not a price cut) so it never undercuts the App Store / Google Play
+   * *price* (clear of Apple/Google anti-steering rules) while still being a real
+   * "more bang for your buck" offer.
+   *
+   * Effective per pack (base + bonusMultiplier × standard bonus):
+   *   Starter  $4.99 → +100 bonus →   600 credits
+   *   Popular  $9.99 → +200 bonus → 1,200 credits
+   *   Pro     $24.99 → +1,000 bonus → 3,500 credits
+   *
+   * SINGLE SOURCE OF TRUTH for the offer shown on the site. For this to be
+   * TRUTHFUL the app's Coinbase catalog must grant the doubled bonus in
+   *   StencilMaker/apps/api/.../models/credit.py (COINBASE_CREDIT_PACK_CATALOG
+   *     bonus_credits → 100/200/1000)
+   *   StencilMaker/apps/api/.../models/coinbase.py (COINBASE_PACK_CATALOG
+   *     credits → 600/1200/3500)
+   * As of last check those still grant the STANDARD bonus (50/100/500). Don't
+   * publish this copy until the app side is live. Owner is wiring it app-side.
+   */
+  web: {
+    method: "USDC",
+    bonusMultiplier: 2,
+    limitedTime: true,
+  },
 } as const;
 
 /**
