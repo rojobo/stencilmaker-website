@@ -2,7 +2,8 @@
 
 The public-facing marketing site for **StencilMaker** — AI-powered tattoo
 stencils for professional artists. Static-first Astro app deployed to
-Cloudflare Pages with a single dynamic Pages Function for lead capture.
+**Cloudflare Workers** (Static Assets) with a single dynamic Worker route
+(`/api/lead`) for lead capture.
 
 | Layer            | Choice                                              |
 | ---------------- | --------------------------------------------------- |
@@ -10,7 +11,7 @@ Cloudflare Pages with a single dynamic Pages Function for lead capture.
 | Styling          | [Tailwind v4](https://tailwindcss.com/) (CSS-first) |
 | Icons            | [Phosphor Icons](https://phosphoricons.com/) (SRI)  |
 | Fonts            | Syne + Manrope (Google Fonts, swap)                 |
-| Hosting          | [Cloudflare Pages](https://pages.cloudflare.com/)   |
+| Hosting          | [Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/) (Static Assets) |
 | Runtime          | Cloudflare Workers (via `@astrojs/cloudflare`)      |
 | Lead storage     | Cloudflare D1 (with KV fallback)                    |
 | Anti-bot         | Cloudflare Turnstile                                |
@@ -42,13 +43,15 @@ pnpm check
 # Production build (outputs to ./dist)
 pnpm build
 
-# Build + run the Cloudflare Pages emulator (Functions + Workers)
+# Build + run the Cloudflare Workers emulator (`wrangler dev`)
 pnpm preview:cf
 ```
 
 The dev server has HMR and reloads on file changes. The `preview:cf` script
 is the closest match to production — it runs the built `_worker.js` under
-Wrangler, with Cloudflare runtime APIs and bindings emulated locally.
+`wrangler dev`, with Cloudflare runtime APIs and bindings emulated locally.
+Local runtime secrets for that emulator come from a gitignored `.dev.vars`
+file (not `.env`); see `DEPLOY-CLOUDFLARE.md` §4.
 
 ---
 
@@ -57,7 +60,7 @@ Wrangler, with Cloudflare runtime APIs and bindings emulated locally.
 ```text
 .
 ├── astro.config.mjs      # Astro + Cloudflare adapter + Tailwind v4 + sitemap
-├── wrangler.toml         # Cloudflare Pages local config + binding stubs
+├── wrangler.toml         # Cloudflare Workers (Static Assets) config + binding stubs
 ├── tsconfig.json         # Strict TS, path aliases (@components, @layouts, …)
 ├── public/               # Files served verbatim at site root
 │   ├── _headers          # Security headers, CSP, cache policy
@@ -77,7 +80,7 @@ Wrangler, with Cloudflare runtime APIs and bindings emulated locally.
 │   ├── components/       # SEO, JsonLd, Nav, Hero, Pricing, LeadForm, …
 │   └── pages/
 │       ├── index.astro   # Marketing landing page (prerendered)
-│       └── api/lead.ts   # POST /api/lead — Cloudflare Pages Function
+│       └── api/lead.ts   # POST /api/lead — SSR route on the Cloudflare Worker
 └── dist/                 # Build output (gitignored)
 ```
 

@@ -12,7 +12,7 @@
 | ------ | ---- |
 | ✅ Shipped | Framework (Astro 5), styling (Tailwind v4), icons (Phosphor + SRI), fonts (Syne/Manrope), responsive layout, semantic HTML, single-page composition |
 | ✅ Shipped | SEO meta (title/desc/canonical/OG/Twitter), Schema.org JSON-LD (Organization + WebSite + SoftwareApplication + FAQPage), `robots.txt`, sitemap, `llms.txt`, `security.txt` |
-| ✅ Shipped | Cloudflare Pages config (`_headers` with CSP, `_redirects`, PWA manifest), Lead capture skeleton (form → Pages Function → optional D1/KV/Resend), reduced-motion respect |
+| ✅ Shipped | Cloudflare Workers (Static Assets) config (`_headers` with CSP, `_redirects`, PWA manifest), Lead capture skeleton (form → Worker route → optional D1/KV/Resend), reduced-motion respect |
 | 🟡 Stubbed | Cloudflare Turnstile site key, D1 database binding, Resend API key, Cloudflare Web Analytics token, real social URLs, OG share image, app-store URLs |
 | 🔴 Missing | Compiled vs. CDN Phosphor (still CDN), advanced image pipeline (`astro:assets`), Web Vitals reporting, error tracking (Sentry), A/B testing, privacy + terms pages, blog/MDX content layer |
 
@@ -70,10 +70,11 @@ for the exact dashboard clicks.
 ### 1.1 Cloudflare Web Analytics (cookieless, privacy-first)
 
 - **Why:** Real-user data on pageviews, referrers, country, device — without
-  cookies, without a banner. Built into Pages, free for any volume.
-- **How:** Pages dashboard → Web Analytics → enable for your domain. Paste
-  the snippet into `BaseLayout.astro` (one `<script>` line). Or skip the
-  snippet entirely and use the automatic injection from the Pages project.
+  cookies, without a banner. Free for any volume.
+- **How:** Cloudflare dashboard → Analytics & Logs → Web Analytics → add your
+  site (**Manual setup** — automatic injection is a Pages-only feature, not
+  available on a Worker). Paste the beacon snippet into `BaseLayout.astro`
+  (one `<script>` line), commit, push.
 - **Effort:** 5 min.
 
 ### 1.2 Cloudflare Turnstile (anti-bot for the lead form)
@@ -81,20 +82,21 @@ for the exact dashboard clicks.
 - **Why:** Stops form spam without a recaptcha v3 cookie or a hCaptcha
   challenge. Invisible 95% of the time. Free.
 - **How:** Cloudflare dashboard → Turnstile → add `thestencilmaker.com`
-  widget. Copy the site key into Pages env vars as
-  `PUBLIC_TURNSTILE_SITE_KEY`. Copy the secret key as `TURNSTILE_SECRET`.
-  `LeadForm.astro` already reads `PUBLIC_TURNSTILE_SITE_KEY` and the
-  Function in `src/pages/api/lead.ts` already verifies the token.
+  widget. The site key is a **build** variable (Worker → Settings → Builds →
+  `PUBLIC_TURNSTILE_SITE_KEY`, since Astro inlines it at build time). The
+  secret key is a **runtime** secret (`wrangler secret put TURNSTILE_SECRET`).
+  `LeadForm.astro` already reads `PUBLIC_TURNSTILE_SITE_KEY` and the route in
+  `src/pages/api/lead.ts` already verifies the token.
 - **Effort:** 10 min.
 
 ### 1.3 Cloudflare D1 (lead storage)
 
-- **Why:** Serverless SQLite. $0 for the first 100k reads/day. The lead
-  Function inserts on a unique-email constraint so refreshes don't
+- **Why:** Serverless SQLite. $0 for the first 5M rows read/day. The lead
+  route inserts on a unique-email constraint so refreshes don't
   duplicate.
-- **How:** `wrangler d1 create stencilmaker-leads`, paste the ID into
-  `wrangler.toml`, run the migration in `DEPLOY-CLOUDFLARE.md`, bind in
-  Pages project settings.
+- **How:** `wrangler d1 create stencilmaker-leads`, paste the ID into the
+  `[[d1_databases]]` block in `wrangler.toml` (the source of truth for the
+  Worker), then apply the migration per `DEPLOY-CLOUDFLARE.md` §6.
 - **Effort:** 15 min.
 
 ### 1.4 Resend (transactional email)
@@ -102,8 +104,9 @@ for the exact dashboard clicks.
 - **Why:** Notifies you (one line in your inbox) every time a lead signs
   up. Optional but high-signal.
 - **How:** Sign up at resend.com, verify `thestencilmaker.com` DNS, create
-  an API key, set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and
-  `LEAD_NOTIFY_EMAIL` in Pages env vars.
+  an API key, then set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and
+  `LEAD_NOTIFY_EMAIL` as Worker runtime secrets (`wrangler secret put …` or
+  Worker → Settings → Variables and Secrets).
 - **Effort:** 20 min (mostly DNS propagation).
 
 ### 1.5 Open Graph share image
@@ -213,8 +216,8 @@ for the exact dashboard clicks.
 
 ### 2.7 Lighthouse budget in CI
 
-- **Why:** Prevents regressions by failing PRs that drop scores. Pages
-  doesn't enforce this — you have to.
+- **Why:** Prevents regressions by failing PRs that drop scores. Workers
+  Builds doesn't enforce this — you have to.
 - **How:** Add `treosh/lighthouse-ci-action` to a GitHub Actions workflow
   on every PR, with budgets defined in `lighthouserc.json` (LCP < 2.5s,
   TBT < 200ms, CLS < 0.1, A11y > 95).
@@ -222,10 +225,10 @@ for the exact dashboard clicks.
 
 ### 2.8 Sentry for error tracking
 
-- **Why:** Surface client-side JS errors and Function exceptions before
+- **Why:** Surface client-side JS errors and Worker exceptions before
   customers complain.
 - **How:** `pnpm add @sentry/astro`. Add the integration to
-  `astro.config.mjs`. Set `SENTRY_DSN` in Pages env. Source maps are
+  `astro.config.mjs`. Set `SENTRY_DSN` as a Worker runtime secret. Source maps are
   uploaded by the integration automatically.
 - **Effort:** 30 min.
 
@@ -268,7 +271,7 @@ Costs assume the launch volumes (~10k visits/mo, ~500 leads/mo).
 
 | Vendor | Free tier covers launch? | First paid tier |
 | ------ | ------------------------ | --------------- |
-| Cloudflare Pages | ✅ Unlimited builds, 500/mo on free | $20/mo Workers Paid |
+| Cloudflare Workers | ✅ 100k req/day, 3,000 build-min/mo free | $5/mo Workers Paid |
 | Cloudflare Web Analytics | ✅ Unlimited | n/a |
 | Cloudflare Turnstile | ✅ Unlimited | n/a |
 | Cloudflare D1 | ✅ 100k reads, 5M rows | $5/mo for more |

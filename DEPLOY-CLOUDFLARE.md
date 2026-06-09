@@ -4,11 +4,10 @@
 > **This site deploys to Cloudflare Workers (Static Assets), not Cloudflare Pages.**
 > Cloudflare recommends Workers for new projects ([announcement, Apr 2025](https://blog.cloudflare.com/full-stack-development-on-cloudflare-workers/));
 > Pages is in maintenance mode. The repo is wired to **Workers Builds** (Git →
-> `pnpm build` → `wrangler deploy`). The **"Deploying as a Cloudflare Worker"**
-> section directly below is the source of truth. Sections **2, 10, 11** still
-> describe the old Pages flow (`wrangler pages deploy`, `wrangler pages dev`) and
-> are **superseded** — read them only for the D1/Resend/Turnstile/DNS sub-steps,
-> which are unchanged; ignore their `wrangler pages …` commands.
+> `pnpm build` → `wrangler deploy`). Every step below targets the **Worker**
+> (dashboard → Workers & Pages → the `stencilmaker` Worker), never a Pages
+> project. The **"Deploying as a Cloudflare Worker"** block directly below is the
+> quick reference; §1–§12 are the detailed walkthrough.
 
 Numbered, no-skip. Follow in order; later steps depend on earlier ones.
 Time estimate: **30 minutes** for a base deploy, **2 hours** including
@@ -100,7 +99,7 @@ pnpm build        # dist/ produced, no errors
 ```bash
 cd /home/bryan/StencilMakerWebsite
 git add .
-git commit -m "Migrate to Astro 5 + Cloudflare Pages stack"
+git commit -m "Migrate to Astro 5 + Cloudflare Workers stack"
 
 # If the repo doesn't exist remotely yet:
 gh repo create stencilmaker-website --private --source=. --remote=origin --push
@@ -114,42 +113,49 @@ contains `astro.config.mjs`, `wrangler.toml`, `src/`, and `public/`.
 
 ---
 
-## 2 — Create the Cloudflare Pages project
+## 2 — Connect the repo to Workers Builds
+
+This is a **Worker**, not a Pages project. Cloudflare builds from Git and runs
+`wrangler deploy` (no build-output-directory field — that's the Pages tell).
 
 1. Open [dash.cloudflare.com](https://dash.cloudflare.com/).
-2. Sidebar → **Workers & Pages** → **Create** → **Pages** tab → **Connect
-   to Git**.
+2. Sidebar → **Workers & Pages** → **Create** → **Workers** → **Import a
+   repository** (Connect to Git).
 3. Authorize GitHub if prompted, select the `stencilmaker-website` repo.
 4. **Set up builds and deployments:**
    - **Production branch:** `master` (or `main`)
-   - **Framework preset:** **Astro** (auto-detected; confirms `pnpm build`).
    - **Build command:** `pnpm install --frozen-lockfile && pnpm build`
-   - **Build output directory:** `dist`
-   - **Root directory:** (leave empty)
-   - **Environment variables (build):**
+   - **Deploy command:** `npx wrangler deploy`
+   - **Non-production branch deploy command:** leave default
+     (`npx wrangler versions upload`)
+   - **There is no Build-output-directory field** — output is the `[assets]`
+     directory in `wrangler.toml` (`./dist`).
+   - **Build variables** (Settings → Builds → *Build variables and secrets*):
      - `NODE_VERSION` = `22`
      - `PNPM_VERSION` = `10`
-5. Click **Save and Deploy**. The first build takes ~2 minutes.
-6. You get a free `*.pages.dev` URL — open it; you should see the live site.
+5. Click **Save and Deploy**. `wrangler deploy` auto-creates the
+   `stencilmaker` Worker on first run (no pre-created project needed).
+6. You get a free `*.workers.dev` URL — open it; you should see the live site.
 
-> If the first deploy fails, expand the build log. 95% of the time it's a
-> missing `NODE_VERSION` env var (Cloudflare defaults to 20.x; Astro 5 wants
-> 22). Add it under **Settings → Environment variables → Production**, then
-> redeploy from **Deployments → Retry**.
+> The Worker `name` in `wrangler.toml` **must equal** the connected Worker's
+> name or `wrangler deploy` errors on a name clash. If the first build fails,
+> expand the log — the usual cause is `NODE_VERSION` not set to `22` (add it
+> under **Settings → Builds → Build variables**, then retry the build).
 
 ---
 
 ## 3 — Wire up the custom domain
 
-1. Pages project → **Custom domains** → **Set up a custom domain**.
+1. The `stencilmaker` Worker → **Settings → Domains & Routes** → **Add** →
+   **Custom domain**.
 2. Enter `thestencilmaker.com`. Cloudflare detects whether the DNS zone is
    already on Cloudflare:
    - **Yes (Cloudflare Registrar or Cloudflare nameservers):** click
-     **Activate domain** — done in 60 seconds.
+     **Add domain** — done in 60 seconds.
    - **No (external registrar):** Cloudflare gives you NS records to set
      at your registrar. Propagation: 5 minutes to 48 hours.
 3. Add `www.thestencilmaker.com` as a second custom domain on the same
-   Pages project; Cloudflare auto-redirects it to the apex.
+   Worker; Cloudflare auto-redirects it to the apex.
 4. **Verify TLS:** wait for the SSL status to show "Active" (auto-issued
    via Universal SSL).
 5. **Force HTTPS:** Cloudflare dashboard → SSL/TLS → **Edge Certificates** →
@@ -163,12 +169,12 @@ site.
 ## 4 — Cloudflare Web Analytics (cookieless, no banner)
 
 1. Dashboard → **Analytics & Logs** → **Web Analytics** → **Add a site**.
-2. Choose **Automatic setup (via Pages)** — Cloudflare injects the snippet
-   into every HTML response. No code change required.
-3. (Optional) For more control, switch to **Manual setup**, copy the
-   beacon token, and add the snippet to `src/layouts/BaseLayout.astro`
-   inside the `<slot name="head" />`. Either path is fine; automatic is
-   faster.
+2. Choose **Manual setup** — automatic injection is a Pages-only convenience
+   and does not apply to a Worker. Copy the **beacon token** Cloudflare gives
+   you.
+3. Add the beacon snippet to `src/layouts/BaseLayout.astro` inside the
+   `<head>` (or the `<slot name="head" />`), commit, and push — the next
+   Workers build serves it on every page.
 4. Data starts flowing within ~5 minutes.
 
 ---
@@ -179,17 +185,24 @@ site.
 2. Settings:
    - **Site name:** `StencilMaker — production`
    - **Hostnames:** `thestencilmaker.com`, `www.thestencilmaker.com`,
-     and the Pages preview hostname (e.g. `stencilmaker.pages.dev`).
+     and the Worker preview hostname (e.g. `stencilmaker.<your-subdomain>.workers.dev`).
    - **Widget mode:** **Managed** (invisible 95% of the time).
 3. Save. Copy the **Site key** and **Secret key**.
-4. Pages project → **Settings → Environment variables → Production**, add:
-   - `PUBLIC_TURNSTILE_SITE_KEY` = the **site key** (note the `PUBLIC_`
-     prefix — that's how Astro exposes it to client-side code).
-   - `TURNSTILE_SECRET` = the **secret key** (server-only).
-5. Repeat for the **Preview** environment so the widget loads on PR
-   previews too.
-6. Trigger a redeploy: **Deployments** → **⋯** → **Retry deployment**.
-7. Visit `/#updates`; the Turnstile widget renders below the form.
+4. Add the two keys to the **Worker** — they go to **two different places**:
+   - **Site key → a _build_ variable.** The `stencilmaker` Worker →
+     **Settings → Builds → Build variables and secrets** → add
+     `PUBLIC_TURNSTILE_SITE_KEY` = the **site key**. Astro inlines
+     `import.meta.env.PUBLIC_*` **at build time**, so it must exist during the
+     cloud `pnpm build`. A local `.env` does **not** reach the cloud build.
+   - **Secret key → a _runtime_ secret.** Same Worker →
+     **Settings → Variables and Secrets** → add `TURNSTILE_SECRET` = the
+     **secret key** (type: Secret), or run `wrangler secret put TURNSTILE_SECRET`.
+   These are separate stores — build variables are **not** readable at runtime,
+   and runtime secrets are not present during the build.
+5. **Re-run the build** so the new site key gets inlined: push a commit, or use
+   **Deployments → Retry build**. (Editing a runtime secret alone does *not*
+   rebuild the HTML, so the site key won't appear until you rebuild.)
+6. Visit `/#updates`; the Turnstile widget renders below the form.
 
 ---
 
@@ -221,18 +234,27 @@ database_id = "abcdef12-3456-7890-abcd-ef1234567890"
 Open `wrangler.toml`, uncomment the `[[d1_databases]]` block, paste the
 `database_id` from step 6.1, commit, and push.
 
-### 6.3 Bind it in the Pages project
+### 6.3 Bind it to the Worker (in `wrangler.toml`)
 
-Pages project → **Settings → Functions → D1 database bindings** →
-**Add binding**:
-- **Variable name:** `DB`
-- **D1 database:** `stencilmaker-leads`
+`wrangler.toml` is the **source of truth** for a Git-deployed Worker —
+`wrangler deploy` reconciles bindings from it on every build, so a binding
+added only in the dashboard can be overwritten. Uncomment the
+`[[d1_databases]]` block, paste the `database_id` from step 6.1, commit, push:
 
-Save. Pages will redeploy.
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "stencilmaker-leads"
+database_id = "<id printed by `wrangler d1 create`>"
+```
+
+(You *can* also bind it in the dashboard — Worker → **Settings → Bindings →
+Add → D1 database**, variable name `DB` — but keep it in `wrangler.toml` too,
+or the next deploy may drop it.)
 
 ### 6.4 Create the `leads` table
 
-Save this as `migrations/0001_init.sql`:
+This repo already ships `migrations/0001_init.sql`:
 
 ```sql
 CREATE TABLE IF NOT EXISTS leads (
@@ -248,12 +270,15 @@ CREATE TABLE IF NOT EXISTS leads (
 CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads(created_at);
 ```
 
-Apply it:
+Apply it to production with the migrations workflow (tracked, idempotent — it
+records applied migrations in a `d1_migrations` table so it never double-runs):
 
 ```bash
-pnpm exec wrangler d1 execute stencilmaker-leads \
-  --remote --file=./migrations/0001_init.sql
+pnpm exec wrangler d1 migrations apply stencilmaker-leads --remote
 ```
+
+> Use `--local` instead of `--remote` to set up the local dev DB.
+> `wrangler deploy` does **not** run migrations — you apply them yourself here.
 
 Verify:
 
@@ -293,17 +318,21 @@ The row should be there.
 1. Resend → **API Keys → Create** → scope **Sending access**. Copy it.
 2. Decide on a sender — e.g. `hello@thestencilmaker.com`.
 
-### 7.3 Add to Pages env
+### 7.3 Add the Resend values to the Worker (runtime)
 
-Pages → Settings → Environment variables → Production:
+These are read at **runtime** via `locals.runtime.env`, so set them as Worker
+secrets/vars — `.env` is never read at runtime. Either run:
 
-| Name | Value |
-| ---- | ----- |
-| `RESEND_API_KEY` | `re_…` |
-| `RESEND_FROM_EMAIL` | `hello@thestencilmaker.com` |
-| `LEAD_NOTIFY_EMAIL` | your personal inbox |
+```bash
+wrangler secret put RESEND_API_KEY      # paste the re_… key
+wrangler secret put RESEND_FROM_EMAIL   # hello@thestencilmaker.com
+wrangler secret put LEAD_NOTIFY_EMAIL   # your personal inbox
+```
 
-Redeploy. Submit the form; you should receive the lead email within seconds.
+…or add them in the dashboard: Worker → **Settings → Variables and Secrets**.
+(`RESEND_FROM_EMAIL` and `LEAD_NOTIFY_EMAIL` aren't secret — you may instead put
+`RESEND_FROM_EMAIL` under `[vars]` in `wrangler.toml`.) Submit the form; you
+should receive the lead email within seconds.
 
 ---
 
@@ -360,22 +389,21 @@ Run through this checklist against the live site at
 git push origin master
 ```
 
-Pages auto-builds and deploys. Preview deploys are created for every
-branch and PR.
+Workers Builds auto-builds and runs `wrangler deploy`. Non-production branches
+get a preview version via `wrangler versions upload`.
 
 ### Manual deploy
 
 For hotfixes or out-of-CI deploys:
 
 ```bash
-pnpm build
-pnpm exec wrangler pages deploy ./dist --project-name=stencilmaker
+pnpm deploy   # = astro build && cp .assetsignore dist/ && wrangler deploy
 ```
 
 ### Roll back
 
-Pages project → **Deployments** → choose any prior successful deploy →
-**⋯ → Rollback**. Single click; takes 10 seconds.
+The `stencilmaker` Worker → **Deployments** → pick a prior version →
+**Rollback** (or `wrangler rollback`). Takes seconds.
 
 ---
 
@@ -389,17 +417,27 @@ the Workers cache API, etc. For high-fidelity local testing:
 pnpm preview:cf
 ```
 
-Runs `astro build && wrangler pages dev ./dist`. To exercise the D1
-binding locally without hitting production, use a local SQLite database:
+Runs `astro build && wrangler dev`. Runtime secrets for the emulator come from
+a gitignored **`.dev.vars`** file (one `KEY=value` per line) — *not* `.env`:
+
+```ini
+# .dev.vars  (local only; gitignored)
+TURNSTILE_SECRET=...
+RESEND_API_KEY=re_...
+RESEND_FROM_EMAIL=hello@thestencilmaker.com
+LEAD_NOTIFY_EMAIL=you@example.com
+```
+
+To exercise the D1 binding locally without touching production, apply the
+migration to the **local** dev DB first:
 
 ```bash
-# One-time: apply the migration to the local DB.
-pnpm exec wrangler d1 execute stencilmaker-leads \
-  --local --file=./migrations/0001_init.sql
+# One-time: apply the migration to the local dev DB.
+pnpm exec wrangler d1 migrations apply stencilmaker-leads --local
 
 # Then:
 pnpm preview:cf
-# Hit http://localhost:8788/ — bindings work, D1 writes go to the local DB.
+# Hit the printed localhost URL — bindings work, D1 writes go to the local DB.
 ```
 
 ---
@@ -408,17 +446,17 @@ pnpm preview:cf
 
 | Symptom | Fix |
 | ------- | --- |
-| Deploy step fails with `Project not found … [code: 8000007]` | The Git build is **Workers Builds**, but `wrangler pages deploy` (a *Pages* command) was being run — it calls the Pages API for a project that doesn't exist. Fix: deploy as a Worker. `wrangler.toml` must be a Workers config (`main` + `[assets]`, no `pages_build_output_dir`) and the Deploy command must be `npx wrangler deploy`. See "Deploying as a Cloudflare Worker" below. |
+| Deploy step fails with `Project not found … [code: 8000007]` | The Git build is **Workers Builds**, but `wrangler pages deploy` (a *Pages* command) was being run — it calls the Pages API for a project that doesn't exist. Fix: deploy as a Worker. `wrangler.toml` must be a Workers config (`main` + `[assets]`, no `pages_build_output_dir`) and the Deploy command must be `npx wrangler deploy`. See "Deploying as a Cloudflare Worker" above. |
 | `wrangler deploy` fails: name in config must match the Worker | `name` in `wrangler.toml` must equal the Worker your build is connected to (dashboard → Workers & Pages → the connected Worker). Make them match (edit `name`, or rename the Worker). |
-| Build fails with `Cannot find module 'astro'` | `NODE_VERSION` not set to 22 in Pages env. Add it, retry deploy. |
+| Build fails with `Cannot find module 'astro'` | `NODE_VERSION` not set to `22` in the Worker's **Build variables** (Settings → Builds). Add it, retry the build. |
 | Build fails with `pnpm: command not found` | Add `PNPM_VERSION=10` to env (or switch build command to use `corepack enable && pnpm build`). |
-| Lead form returns 500 | Pages → **Functions logs**. Most common: D1 binding mis-named (must be `DB`) or Turnstile secret missing. |
+| Lead form returns 500 | Worker → **Logs** (or `wrangler tail`). Most common: D1 binding mis-named (must be `DB`) or Turnstile secret missing. |
 | Turnstile widget shows "Network Error" | Hostname for the widget doesn't include `thestencilmaker.com`. Add it in Turnstile settings. |
 | Resend mail not sending | DNS records didn't propagate, or DKIM is not verified. Re-check `Domains` page on Resend. |
-| `https://thestencilmaker.com/` returns Cloudflare 522 | Custom domain assigned but Pages hasn't been published yet. Wait for the latest deploy to finish. |
+| `https://thestencilmaker.com/` returns Cloudflare 522 | Custom domain assigned but the latest Workers build hasn't published yet. Wait for it to finish. |
 | CSP errors in browser console | A new script CDN you added isn't in `public/_headers`. Update the `Content-Security-Policy` line. |
 | Sitemap shows internal-only routes | The sitemap integration filter in `astro.config.mjs` already excludes `/api/*`. To exclude more, edit the `filter` callback. |
-| Pages preview shows old build | Hard-reload (`Cmd+Shift+R`). Cloudflare caches HTML at the edge for ~5 minutes per the `_headers` rules. |
+| Stale build still showing | Hard-reload (`Cmd+Shift+R`). Cloudflare caches HTML at the edge for ~5 minutes per the `_headers` rules. |
 | API route returns 404 | Confirm `output: "server"` in `astro.config.mjs` and `export const prerender = false` in `src/pages/api/lead.ts`. |
 | Lighthouse complains "Avoid an excessive DOM size" | Already minor on this page. Phase 2 of the audit (`astro:assets`) removes redundant `<img>` markup. |
 

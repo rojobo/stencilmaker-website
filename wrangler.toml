@@ -24,20 +24,35 @@ binding = "ASSETS"
 enabled = true
 
 # ---------------------------------------------------------------------------
-# Bindings — uncomment once each resource is provisioned. src/pages/api/lead.ts
-# reads these via `locals.runtime?.env` (DB, LEADS_KV, RESEND_*, LEAD_NOTIFY_EMAIL).
-# On Workers, set secrets with `wrangler secret put NAME` or in the Worker's
-# dashboard Settings — they no longer come from a Pages project. See DEPLOY-CLOUDFLARE.md.
+# Bindings & env — this file is the SOURCE OF TRUTH for a Git-deployed Worker.
+# `wrangler deploy` (run by Workers Builds on every push) reconciles bindings
+# from here, so a binding added only in the dashboard can be overwritten — keep
+# them in this file and commit. src/pages/api/lead.ts reads them via
+# `locals.runtime?.env` (DB, LEADS_KV, RESEND_*, LEAD_NOTIFY_EMAIL).
+#
+# WHERE EACH VALUE LIVES (see DEPLOY-CLOUDFLARE.md §4 — three separate places):
+#   • DB / LEADS_KV ........ here (uncomment once provisioned; paste the real id).
+#   • Runtime SECRETS ...... NOT here. `wrangler secret put TURNSTILE_SECRET`
+#     (+ RESEND_API_KEY, RESEND_FROM_EMAIL, LEAD_NOTIFY_EMAIL) or Worker dashboard
+#     → Settings → Variables and Secrets. Never put secrets in [vars] (plaintext).
+#   • PUBLIC_TURNSTILE_SITE_KEY ... NOT here and NOT a secret. It is a BUILD
+#     variable (dashboard → the Worker → Settings → Builds), because Astro inlines
+#     import.meta.env.PUBLIC_* at build time. A .env file does NOT reach the
+#     cloud build. For local `wrangler dev`, runtime secrets go in `.dev.vars`.
 # ---------------------------------------------------------------------------
 
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "stencilmaker-leads"
-# database_id = "REPLACE_WITH_D1_ID"
+# Uncomment after `wrangler d1 create stencilmaker-leads` and paste the printed id:
+[[d1_databases]]
+binding = "DB"
+database_name = "stencilmaker-leads"
+database_id = "6fc99f32-a9c1-49e2-a416-e26a08d59c8a"
 
-# [[kv_namespaces]]
-# binding = "LEADS_KV"
-# id = "REPLACE_WITH_KV_ID"
+# Uncomment after `wrangler kv namespace create LEADS_KV` and paste the printed id:
+[[kv_namespaces]]
+binding = "LEADS_KV"
+id = "dc889197fadb4450850f2da69271d274"
 
+# Non-secret runtime vars only (visible in source). RESEND_FROM_EMAIL can live
+# here OR be set as a runtime var/secret in the dashboard — pick one place.
 # [vars]
 # RESEND_FROM_EMAIL = "hello@thestencilmaker.com"

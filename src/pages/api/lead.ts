@@ -1,23 +1,30 @@
 import type { APIRoute } from "astro";
 
 /**
- * Lead capture endpoint, deployed as a Cloudflare Pages Function via the
- * @astrojs/cloudflare adapter. Validates a Turnstile token (if configured),
- * persists the lead to D1 or KV (if bound), and emails a notification via
- * Resend (if configured).
+ * Lead capture endpoint — an SSR route on the Cloudflare Worker (Static Assets),
+ * built by the @astrojs/cloudflare adapter. Validates a Turnstile token (if
+ * configured), persists the lead to D1 or KV (if bound), and emails a
+ * notification via Resend (if configured).
  *
  * Until those bindings are set, the route logs the lead and returns 200
  * so local development and previews still work end-to-end.
  *
- * Env vars (set in Pages dashboard → Settings → Environment variables):
+ * Runtime secrets — read below via `locals.runtime?.env`. Set them with
+ * `wrangler secret put NAME` or in the Worker dashboard → Settings → Variables
+ * and Secrets. They are NOT read from a .env file at runtime; for local
+ * `wrangler dev` emulation put them in `.dev.vars`. See DEPLOY-CLOUDFLARE.md §4.
  *   TURNSTILE_SECRET     — server secret for Cloudflare Turnstile.
  *   RESEND_API_KEY       — Resend API key for transactional email.
  *   RESEND_FROM_EMAIL    — verified sender, e.g. hello@thestencilmaker.com.
  *   LEAD_NOTIFY_EMAIL    — where new-lead notifications go.
+ * (The Turnstile *site* key is the build-time `PUBLIC_TURNSTILE_SITE_KEY` —
+ * a Workers Build variable, not a runtime secret. See LeadForm.astro.)
  *
- * Bindings (configured in wrangler.toml or Pages dashboard):
+ * Bindings — configured in wrangler.toml (the source of truth for this
+ * Git-deployed Worker; `wrangler deploy` reconciles them on every build):
  *   DB        — D1 database with a `leads` table (see DEPLOY-CLOUDFLARE.md).
- *   LEADS_KV  — KV namespace fallback if D1 isn't bound.
+ *   LEADS_KV  — KV namespace; required to persist artist applications, and
+ *               the fallback store for newsletter leads if D1 isn't bound.
  */
 
 export const prerender = false;
