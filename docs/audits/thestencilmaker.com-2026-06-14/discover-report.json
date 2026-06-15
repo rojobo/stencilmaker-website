@@ -1,0 +1,40 @@
+{
+  "base": "https://thestencilmaker.com",
+  "host": "thestencilmaker.com",
+  "sitemap": {
+    "found": true,
+    "url": "https://thestencilmaker.com/sitemap-index.xml",
+    "hosts": [
+      "thestencilmaker.com"
+    ],
+    "count": 7,
+    "domainMismatch": false,
+    "robotsSitemap": "https://thestencilmaker.com/sitemap-index.xml",
+    "robotsSitemapHost": "thestencilmaker.com"
+  },
+  "robotsDisallow": [
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/",
+    "/api/",
+    "/",
+    "/",
+    "/",
+    "/"
+  ],
+  "crawl": {
+    "count": 7,
+    "depth": 2
+  },
+  "diffs": {
+    "inSitemapNotCrawled": [],
+    "crawledNotInSitemap": []
+  },
+  "flags": []
+}

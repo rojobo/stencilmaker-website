@@ -1,0 +1,13 @@
+# Fix M9 — disclose the paid/material connection (FTC). consts.ts:97 records
+# Bruno as a *paid* partner; the public disclosure omits it.
+--- a/src/pages/artists.astro
++++ b/src/pages/artists.astro
+@@ -779,7 +779,7 @@
+             aria-hidden="true"
+           />
+           <span>
+-            Bruno is a featured StencilMaker partner. We celebrate his craft and
++            Bruno is a paid featured StencilMaker partner. We celebrate his craft and
+             workflow &mdash; we don&rsquo;t speak for his tools or technique.
+           </span>
+         </p>

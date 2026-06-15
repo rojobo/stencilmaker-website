@@ -1,0 +1,11 @@
+{
+  "routes": [
+    "/",
+    "/artists",
+    "/artists/apply",
+    "/delete-account",
+    "/privacy",
+    "/support",
+    "/terms"
+  ]
+}

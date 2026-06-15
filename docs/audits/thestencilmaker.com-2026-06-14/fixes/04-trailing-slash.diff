@@ -1,0 +1,23 @@
+# Fix M3 — make canonical / og:url / internal <a href> all use the trailing-slash
+# form the sitemap and Cloudflare already serve, so canonical stops disagreeing with
+# the sitemap and header clicks stop eating a 307 redirect.
+#
+# Astro trailingSlash:"always" makes generated links + Astro.url.pathname carry the
+# slash, which flows into BaseLayout.astro:19's canonical (new URL(pathname, SITE.url)).
+# TEST WITH A BUILD before deploying (`pnpm build && pnpm preview:cf`) and re-check a
+# couple of pages' rendered <link rel="canonical"> + nav hrefs.
+#
+# NOTE: the redirect *status code* (currently 307, prefer 308) is Cloudflare Workers
+# Static Assets' auto-trailing-slash behavior, not set here — once links/canonical use
+# the slash form the redirect is rarely hit, but if you want a true 308 add an explicit
+# rule in public/_redirects or a Cloudflare redirect rule.
+--- a/astro.config.mjs
++++ b/astro.config.mjs
+@@ -6,6 +6,7 @@
+ export default defineConfig({
+   site: "https://thestencilmaker.com",
+   output: "server",
++  trailingSlash: "always",
+   adapter: cloudflare({
+     platformProxy: { enabled: true },
+     imageService: "compile",

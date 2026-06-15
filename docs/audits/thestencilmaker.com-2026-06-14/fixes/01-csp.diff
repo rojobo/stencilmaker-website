@@ -1,0 +1,10 @@
+# Fix M1 + M2 — CSP: add fonts.googleapis.com to connect-src (kills the
+# per-page console error); remove unused unpkg.com / cdn.jsdelivr.net origins.
+# Apply to public/_headers (line 50). Review, then `git apply` from repo root.
+--- a/public/_headers
++++ b/public/_headers
+@@ -47,4 +47,4 @@
+   # Content Security Policy. 'unsafe-inline' for scripts is required by Astro's
+   # hydration scripts and JSON-LD; upgrade to nonce-based CSP in Phase 2.
+-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://cdn.jsdelivr.net; connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
++  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com; connect-src 'self' https://fonts.googleapis.com https://challenges.cloudflare.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests

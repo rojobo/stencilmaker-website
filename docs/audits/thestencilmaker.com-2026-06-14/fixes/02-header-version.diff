@@ -1,0 +1,14 @@
+# Fix L4 — version string spacing: "v 2.0" -> "v2.0".
+# (Note: the surrounding text-neutral-500 class is also a color-contrast
+#  offender, H3 — bump to text-neutral-400 in the same pass if desired.)
+--- a/src/components/Header.astro
++++ b/src/components/Header.astro
+@@ -21,7 +21,7 @@
+   </a>
+   <div class="pointer-events-auto hidden md:block">
+     <span class="text-xs font-mono text-neutral-500 uppercase tracking-widest">
+-      v 2.0 // Neural Engine architecture
++      v2.0 // Neural Engine architecture
+     </span>
+   </div>
+ </header>
