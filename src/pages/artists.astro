@@ -99,7 +99,7 @@ const personLd = {
 const profileLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
-  url: `${SITE.url}/artists`,
+  url: `${SITE.url}/artists/`,
   name: pageTitle,
   isPartOf: { "@id": `${SITE.url}#website` },
   about: { "@id": `${SITE.url}/artists#${A.slug}` },
@@ -115,7 +115,7 @@ const breadcrumbLd = {
       "@type": "ListItem",
       position: 2,
       name: "Featured Artists",
-      item: `${SITE.url}/artists`,
+      item: `${SITE.url}/artists/`,
     },
   ],
 };
@@ -779,7 +779,7 @@ const breadcrumbLd = {
             aria-hidden="true"
           />
           <span>
-            Bruno is a featured StencilMaker partner. We celebrate his craft and
+            Bruno is a paid featured StencilMaker partner. We celebrate his craft and
             workflow — we don&rsquo;t speak for his tools or technique.
           </span>
         </p>

@@ -16,7 +16,11 @@ const {
   pathname = Astro.url.pathname,
 } = Astro.props;
 
-const canonical = new URL(pathname, SITE.url).toString();
+// Always declare the canonical with the trailing slash the site enforces
+// (Cloudflare redirects /x -> /x/) so canonical/og:url match the sitemap and
+// never point at a URL that redirects.
+const canonicalPath = pathname.endsWith("/") ? pathname : `${pathname}/`;
+const canonical = new URL(canonicalPath, SITE.url).toString();
 ---
 
 <!doctype html>
