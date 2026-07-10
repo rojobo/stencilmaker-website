@@ -28,9 +28,9 @@ export const SITE = {
   language: "en",
   themeColor: "#0a0a0a",
   accentColor: "#4f46e5",
-  appStoreUrl: "https://apps.apple.com/app/stencilmaker", // TODO confirm
+  appStoreUrl: "https://apps.apple.com/us/app/thestencilmaker/id6768630775",
   playStoreUrl: "https://play.google.com/store/apps/details?id=com.stencilmaker.app", // verified app id (apps/mobile/app.json)
-  webAppUrl: "https://app.thestencilmaker.com", // TODO confirm
+  webAppUrl: "https://app.thestencilmaker.com",
   supportEmail: "support@thestencilmaker.com",
   pressEmail: "press@thestencilmaker.com",
 } as const;
