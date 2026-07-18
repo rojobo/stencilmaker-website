@@ -45,12 +45,12 @@ enabled = true
 [[d1_databases]]
 binding = "DB"
 database_name = "stencilmaker-leads"
-database_id = "69fd3f64-c54b-4c58-a665-6f4e829a4879"
+database_id = "6fc99f32-a9c1-49e2-a416-e26a08d59c8a"
 
 # Uncomment after `wrangler kv namespace create LEADS_KV` and paste the printed id:
 [[kv_namespaces]]
 binding = "LEADS_KV"
-id = "9a33069191fc470dbcc4f1a36354986a"
+id = "dc889197fadb4450850f2da69271d274"
 
 # Non-secret runtime vars only (visible in source). RESEND_FROM_EMAIL can live
 # here OR be set as a runtime var/secret in the dashboard — pick one place.
