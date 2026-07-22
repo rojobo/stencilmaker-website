@@ -12,7 +12,7 @@ const links = [
 
 <nav
   aria-label="Primary"
-  class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+  class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none"
 >
   <!-- Mobile expandable menu — appears above the pill -->
   <div
@@ -33,7 +33,7 @@ const links = [
   </div>
 
   <!-- Pill -->
-  <div class="flex items-center gap-2 p-2 bg-ink/80 backdrop-blur-xl border border-ash/40 rounded-full shadow-2xl">
+  <div class="pointer-events-auto flex items-center gap-2 p-2 bg-ink/80 backdrop-blur-xl border border-ash/40 rounded-full shadow-2xl">
 
     <!-- Desktop links -->
     {links.map(({ href, label }) => (
