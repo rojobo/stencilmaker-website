@@ -48,6 +48,16 @@ import Icon from "@/components/Icon.astro";
             </p>
           </div>
         </li>
+        <li class="flex items-start gap-4">
+          <Icon name="stack-simple" class="text-2xl text-paper mt-1" aria-hidden="true" />
+          <div>
+            <h3 class="font-bold text-paper mb-1">Referencer Overlay</h3>
+            <p class="text-sm text-neutral-500">
+              Generates a translucent overlay of the original reference atop
+              your stencil, so you can trace with the source detail still in view.
+            </p>
+          </div>
+        </li>
       </ul>
     </div>
 
@@ -83,7 +93,7 @@ import Icon from "@/components/Icon.astro";
             decoding="async"
           />
           <div
-            class="absolute bottom-6 left-6 px-4 py-2 bg-obsidian/80 backdrop-blur-md text-paper border border-ash/50 text-xs font-bold uppercase tracking-widest rounded-sm"
+            class="absolute top-6 left-6 md:top-auto md:bottom-6 px-4 py-2 bg-obsidian/80 backdrop-blur-md text-paper border border-ash/50 text-xs font-bold uppercase tracking-widest rounded-sm"
           >
             Input (Reference)
           </div>

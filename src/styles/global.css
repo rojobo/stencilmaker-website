@@ -17,6 +17,23 @@
   --color-ash: #333333;
   --color-paper: #fafafa;
   --color-stencil: #4f46e5;
+  /* Lighter tint for small/regular-weight text on dark backgrounds — #4f46e5
+     only clears WCAG AA (4.5:1) at large/bold sizes or as a non-text accent
+     (icons, borders, dots), where the 3:1 threshold applies instead. */
+  --color-stencil-text: #818cf8;
+
+  /* neutral-500 (Tailwind default #737373) measures ~3.9-4.2:1 against this
+     site's dark backgrounds, below WCAG AA — every use here is on a dark
+     background, so raise it sitewide to the neutral-400 value (~7.3-7.9:1). */
+  --color-neutral-500: #a3a3a3;
+  /* neutral-600 (Tailwind default #525252) measures ~2.5:1 — fails even the
+     relaxed 3:1 large-text threshold. Raised just enough to clear AA (4.5:1)
+     while staying visibly dimmer than the neutral-500 override above. */
+  --color-neutral-600: #8a8a8a;
+  /* neutral-700 (Tailwind default #404040) measures ~1.9:1 — same failure,
+     one shade further. Raised just enough to clear AA on both dark tokens
+     while staying the dimmest of the three. */
+  --color-neutral-700: #808080;
 
   /* Typography */
   --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;

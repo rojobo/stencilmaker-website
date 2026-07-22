@@ -63,9 +63,9 @@ const steps = [
 const removed = [
   "Profile & sign-in",
   "Uploads",
-  "Stencils",
   "Generations",
   "Device records",
+  "Payment event records",
   "Linked OAuth identities",
 ];
 
@@ -73,9 +73,9 @@ const kept = [
   {
     icon: "ph-receipt",
     label: "Billing & transaction records",
-    duration: "Up to 7 years",
+    duration: "Processor-held",
     detail:
-      "Retained only to meet legal, tax, and accounting obligations, kept separate from your profile, and never used to re-create your account.",
+      "Retained by our payment processors under their own legal obligations; our internal copies are deleted with your account.",
   },
 ];
 
@@ -320,7 +320,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
             class="scroll-mt-24 pb-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">01</span>
+              <span class="font-mono text-sm text-stencil-text">01</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -394,7 +394,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">02</span>
+              <span class="font-mono text-sm text-stencil-text">02</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -449,7 +449,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">03</span>
+              <span class="font-mono text-sm text-stencil-text">03</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -488,7 +488,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">04</span>
+              <span class="font-mono text-sm text-stencil-text">04</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -496,7 +496,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
               </h2>
             </div>
 
-            <dl class="flex flex-col">
+            <div class="flex flex-col">
               {
                 kept.map((k, i) => (
                   <div
@@ -506,21 +506,21 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
                     ]}
                   >
                     <Icon name={k.icon} class="text-2xl text-paper sm:mt-0.5 sm:order-1" aria-hidden="true" />
-                    <div class="max-w-[58ch] order-3 sm:order-2">
+                    <dl class="max-w-[58ch] order-3 sm:order-2">
                       <dt class="font-display font-bold text-lg text-paper mb-1">
                         {k.label}
                       </dt>
                       <dd class="text-neutral-400 leading-relaxed">
                         {k.detail}
                       </dd>
-                    </div>
+                    </dl>
                     <span class="order-2 sm:order-3 inline-flex w-fit items-center px-3 py-1.5 rounded-sm bg-ink border border-ash/40 font-mono text-sm tabular-nums text-paper whitespace-nowrap">
                       {k.duration}
                     </span>
                   </div>
                 ))
               }
-            </dl>
+            </div>
 
             <p class="text-sm text-neutral-400 leading-relaxed max-w-[60ch] mt-6">
               For the full picture, see the retention table in our{" "}
@@ -539,7 +539,7 @@ const pageDescription = `How to delete your ${SITE.name} account and data — fr
           <!-- 05 — Timeline -->
           <section id="timeline" data-section class="scroll-mt-24 pt-16">
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">05</span>
+              <span class="font-mono text-sm text-stencil-text">05</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >

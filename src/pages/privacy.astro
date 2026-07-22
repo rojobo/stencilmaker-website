@@ -432,7 +432,7 @@ const pageDescription =
             class="scroll-mt-24 pb-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">01</span>
+              <span class="font-mono text-sm text-stencil-text">01</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -440,7 +440,7 @@ const pageDescription =
               </h2>
             </div>
 
-            <dl class="flex flex-col">
+            <div class="flex flex-col">
               {
                 collected.map((c, i) => (
                   <div
@@ -454,18 +454,18 @@ const pageDescription =
                       class="text-2xl text-paper sm:mt-0.5"
                       aria-hidden="true"
                     />
-                    <div class="max-w-[60ch]">
+                    <dl class="max-w-[60ch]">
                       <dt class="font-display font-bold text-lg text-paper mb-1.5">
                         {c.term}
                       </dt>
                       <dd class="text-neutral-400 leading-relaxed">
                         {c.detail}
                       </dd>
-                    </div>
+                    </dl>
                   </div>
                 ))
               }
-            </dl>
+            </div>
           </section>
 
           <!-- 02 — AI & generative processing (legally load-bearing callout) -->
@@ -475,7 +475,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">02</span>
+              <span class="font-mono text-sm text-stencil-text">02</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -504,7 +504,7 @@ const pageDescription =
                     />
                   </span>
                   <span
-                    class="text-[10px] font-mono uppercase tracking-widest text-stencil"
+                    class="text-[10px] font-mono uppercase tracking-widest text-stencil-text"
                   >
                     Disclosure &amp; consent
                   </span>
@@ -562,7 +562,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">03</span>
+              <span class="font-mono text-sm text-stencil-text">03</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -596,7 +596,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-4">
-              <span class="font-mono text-sm text-stencil">04</span>
+              <span class="font-mono text-sm text-stencil-text">04</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -697,7 +697,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">05</span>
+              <span class="font-mono text-sm text-stencil-text">05</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -760,7 +760,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">06</span>
+              <span class="font-mono text-sm text-stencil-text">06</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -768,7 +768,7 @@ const pageDescription =
               </h2>
             </div>
 
-            <dl class="flex flex-col">
+            <div class="flex flex-col">
               {
                 retention.map((r, i) => (
                   <div
@@ -777,25 +777,25 @@ const pageDescription =
                       i !== 0 && "border-t border-ash/20",
                     ]}
                   >
-                    <div class="sm:order-1 order-2">
+                    <dl class="sm:order-1 order-2">
                       <dt class="font-display font-bold text-paper">
                         {r.label}
                       </dt>
                       <dd class="text-sm text-neutral-400 mt-1">{r.detail}</dd>
-                    </div>
+                    </dl>
                     <span class="sm:order-2 order-1 inline-flex w-fit items-center px-3 py-1.5 rounded-sm bg-ink border border-ash/40 font-mono text-sm tabular-nums text-paper whitespace-nowrap">
                       {r.duration}
                     </span>
                   </div>
                 ))
               }
-            </dl>
+            </div>
           </section>
 
           <!-- 07 — Contact -->
           <section id="contact" data-section class="scroll-mt-24 pt-16">
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">07</span>
+              <span class="font-mono text-sm text-stencil-text">07</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >

@@ -112,6 +112,7 @@ const pageDescription =
       >
         <a
           href="/artists/"
+          aria-label="Back to Artists"
           class:list={[
             "inline-flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-sm text-neutral-400 hover:text-paper transition-colors",
             focusRing,
@@ -428,11 +429,11 @@ const pageDescription =
 
         <!-- ---- Sidebar: what happens next ---- -->
         <aside class="lg:sticky lg:top-28 lg:self-start">
-          <p
+          <h2
             class="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-6"
           >
             What happens next
-          </p>
+          </h2>
           <ul class="flex flex-col gap-4">
             {
               nextSteps.map((s) => (

@@ -36,7 +36,7 @@ const subscriptions = [
     period: "mo",
     sub: "Billed monthly",
     features: [
-      "5 stencils / day",
+      "Unlimited stencils",
       "All style engines unlocked",
       "PNG, PDF & SVG export",
       "Cloud gallery — keep every stencil",
@@ -54,7 +54,7 @@ const subscriptions = [
     period: "yr",
     sub: `≈ $${yearlyPerMonth}/mo · billed yearly`,
     features: [
-      "10 stencils / day",
+      "Unlimited stencils",
       "All style engines unlocked",
       "PNG, PDF & SVG export",
       "Cloud gallery — keep every stencil",
@@ -204,7 +204,7 @@ const packs = [
               </ul>
 
               {s.trial && (
-                <p class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-stencil mb-6">
+                <p class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-stencil-text mb-6">
                   <Icon name="gift" aria-hidden="true" />
                   {premium.trialDays}-day free trial
                 </p>
@@ -284,13 +284,13 @@ const packs = [
                 </span>
                 <span class="text-sm text-neutral-400 font-sans">credits</span>
               </div>
-              <div class="text-xs font-mono uppercase tracking-widest text-stencil mb-1 tabular-nums">
+              <div class="text-xs font-mono uppercase tracking-widest text-stencil-text mb-1 tabular-nums">
                 +{p.bonus} bonus
               </div>
               <div class="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-2 tabular-nums">
                 ≈ {p.stencils} stencils
               </div>
-              <div class="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-stencil mb-8 tabular-nums">
+              <div class="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-stencil-text mb-8 tabular-nums">
                 <Icon name="currency-circle-dollar" class="text-sm" aria-hidden="true" />
                 {p.webTotal} with USDC · {web.bonusMultiplier}× bonus
               </div>
@@ -332,7 +332,7 @@ const packs = [
               class="inline-flex items-center gap-2 px-3 py-1 bg-stencil/10 border border-stencil/40 rounded-full mb-6"
             >
               <Icon name="lightning" weight="fill" class="text-sm text-stencil" aria-hidden="true" />
-              <span class="text-[10px] uppercase font-mono tracking-widest text-stencil">
+              <span class="text-[10px] uppercase font-mono tracking-widest text-stencil-text">
                 Limited-time offer · On-chain USDC
               </span>
             </div>
@@ -364,7 +364,7 @@ const packs = [
                       {p.webTotal}
                       <span class="text-neutral-500 text-xs font-sans"> cr</span>
                     </span>
-                    <span class="text-stencil text-[10px] font-mono uppercase tracking-widest tabular-nums">
+                    <span class="text-stencil-text text-[10px] font-mono uppercase tracking-widest tabular-nums">
                       +{p.webBonus} bonus
                     </span>
                   </span>
@@ -390,7 +390,7 @@ const packs = [
         <li class="flex items-center gap-2 text-sm text-neutral-300">
           <Icon name="currency-circle-dollar" class="text-lg text-stencil" aria-hidden="true" />
           USDC on the web
-          <span class="text-[10px] font-mono uppercase tracking-widest text-stencil tabular-nums">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-stencil-text tabular-nums">
             {web.bonusMultiplier}× bonus
           </span>
         </li>

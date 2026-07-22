@@ -39,7 +39,7 @@ const faqs = [
   },
   {
     q: "How does pricing work?",
-    a: `The Free plan includes one generation per day, plus 10 free stencils to start. Premium is $${PRICING.premium.monthly.toFixed(2)}/month or $${PRICING.premium.yearly.toFixed(2)}/year (save ${PRICING.premium.yearlySavingsPct}%, with a ${PRICING.premium.trialDays}-day free trial on the annual plan) and raises your daily limit. You can also buy credit packs that never expire.`,
+    a: `The Free plan includes one generation per day, plus 10 free stencils to start. Premium is $${PRICING.premium.monthly.toFixed(2)}/month or $${PRICING.premium.yearly.toFixed(2)}/year (save ${PRICING.premium.yearlySavingsPct}%, with a ${PRICING.premium.trialDays}-day free trial on the annual plan) and unlocks unlimited stencils per day. You can also buy credit packs that never expire.`,
     link: { href: "/#pricing", label: "See full pricing" },
   },
   {
@@ -319,7 +319,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
             class="scroll-mt-24 pb-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">01</span>
+              <span class="font-mono text-sm text-stencil-text">01</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -366,7 +366,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">02</span>
+              <span class="font-mono text-sm text-stencil-text">02</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -397,7 +397,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
                         <a
                           href={f.link.href}
                           class:list={[
-                            "mt-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-paper hover:text-stencil transition-colors rounded-sm",
+                            "mt-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-paper hover:text-stencil-text transition-colors rounded-sm",
                             focusRing,
                           ]}
                         >
@@ -415,7 +415,7 @@ const pageDescription = `Get help with ${SITE.name}: contact support, answers to
           <!-- 03 — Account & data -->
           <section id="account" data-section class="scroll-mt-24 pt-16">
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">03</span>
+              <span class="font-mono text-sm text-stencil-text">03</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >

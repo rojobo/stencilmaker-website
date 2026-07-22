@@ -384,7 +384,7 @@ const pageDescription =
             class="scroll-mt-24 pb-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">01</span>
+              <span class="font-mono text-sm text-stencil-text">01</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -441,7 +441,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">02</span>
+              <span class="font-mono text-sm text-stencil-text">02</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -494,7 +494,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">03</span>
+              <span class="font-mono text-sm text-stencil-text">03</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -542,7 +542,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-4">
-              <span class="font-mono text-sm text-stencil">04</span>
+              <span class="font-mono text-sm text-stencil-text">04</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -572,7 +572,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-4">
-              <span class="font-mono text-sm text-stencil">05</span>
+              <span class="font-mono text-sm text-stencil-text">05</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -608,7 +608,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">06</span>
+              <span class="font-mono text-sm text-stencil-text">06</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -658,7 +658,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">07</span>
+              <span class="font-mono text-sm text-stencil-text">07</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -690,7 +690,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">08</span>
+              <span class="font-mono text-sm text-stencil-text">08</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -703,23 +703,23 @@ const pageDescription =
               and disputes are resolved in the courts of Delaware.
             </p>
 
-            <dl class="grid gap-4 sm:grid-cols-2 max-w-[62ch]">
+            <div class="grid gap-4 sm:grid-cols-2 max-w-[62ch]">
               {
                 jurisdiction.map((j) => (
                   <div class="flex items-start gap-4 p-6 border border-ash/30 rounded-sm bg-ink/40">
                     <Icon name={j.icon} class="text-2xl text-stencil mt-0.5 shrink-0" aria-hidden="true" />
-                    <div>
+                    <dl>
                       <dt class="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
                         {j.label}
                       </dt>
                       <dd class="font-display font-bold text-paper mt-1.5">
                         {j.value}
                       </dd>
-                    </div>
+                    </dl>
                   </div>
                 ))
               }
-            </dl>
+            </div>
           </section>
 
           <!-- 09 — AI generation (legally load-bearing callout, verbatim text) -->
@@ -729,7 +729,7 @@ const pageDescription =
             class="scroll-mt-24 py-16 border-b border-ash/30"
           >
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">09</span>
+              <span class="font-mono text-sm text-stencil-text">09</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
@@ -758,7 +758,7 @@ const pageDescription =
                     />
                   </span>
                   <span
-                    class="text-[10px] font-mono uppercase tracking-widest text-stencil"
+                    class="text-[10px] font-mono uppercase tracking-widest text-stencil-text"
                   >
                     Generative AI disclosure
                   </span>
@@ -806,7 +806,7 @@ const pageDescription =
           <!-- 10 — Contact -->
           <section id="contact" data-section class="scroll-mt-24 pt-16">
             <div class="flex items-baseline gap-4 mb-8">
-              <span class="font-mono text-sm text-stencil">10</span>
+              <span class="font-mono text-sm text-stencil-text">10</span>
               <h2
                 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-paper"
               >
